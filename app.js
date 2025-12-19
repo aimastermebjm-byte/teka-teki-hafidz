@@ -37,9 +37,19 @@ function initApp() {
     if (typeof auth !== 'undefined') {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // User is signed in
+                // User is signed in (Parent)
                 checkUserRole(user);
             } else {
+                // No Firebase user. Check if we have a local child session
+                const savedSession = localStorage.getItem('tekateki_session');
+                if (savedSession) {
+                    const session = JSON.parse(savedSession);
+                    if (session.role === 'child') {
+                        // Restore child session
+                        reloadChildSession(session.data);
+                        return;
+                    }
+                }
                 showScreen('login-screen');
             }
         });
@@ -223,10 +233,95 @@ function showChildGame() {
         juzBadges.appendChild(badge);
     });
 
-    // Update difficulty based on total score
-    updateDifficultyDisplay();
+    // Display Level
+    const currentLevel = currentChild.level || 1;
+    document.getElementById('difficulty-info').innerHTML =
+        `<span class="badge badge-level">Level ${currentLevel}</span>`;
+
+    // Show Badges/Achievements
+    checkAndShowBadges();
 
     showGameCard('game-start');
+}
+
+async function reloadChildSession(childData) {
+    // Reload fresh data from DB if possible
+    if (typeof db !== 'undefined' && db && childData.id) {
+        try {
+            const doc = await db.collection('children').doc(childData.id).get();
+            if (doc.exists) {
+                currentChild = { id: doc.id, ...doc.data() };
+            } else {
+                currentChild = childData;
+            }
+        } catch (e) {
+            currentChild = childData;
+        }
+    } else {
+        currentChild = childData;
+    }
+    currentRole = 'child';
+    showChildGame();
+    showToast('Selamat datang kembali, ' + currentChild.name + '!', 'success');
+}
+
+function checkAndShowBadges() {
+    // Placeholder for gamification logic
+    // e.g. Unlock badges based on level
+    const level = currentChild.level || 1;
+    const juzBadges = document.getElementById('juz-badges');
+
+    // Add Level Badge
+    if (level >= 5) {
+        const b = document.createElement('span');
+        b.className = 'juz-badge badge-gold';
+        b.innerHTML = '🏆 Pejuang Hafalan';
+        juzBadges.appendChild(b);
+    }
+    if (level >= 10) {
+        const b = document.createElement('span');
+        b.className = 'juz-badge badge-platinum';
+        b.innerHTML = '👑 Hafidz Cilik';
+        juzBadges.appendChild(b);
+    }
+
+    // Add "Lihat Skor" button to header if not exists
+    const headerRight = document.querySelector('#child-game-screen .header-right');
+    if (!document.getElementById('btn-view-score-child')) {
+        const btn = document.createElement('button');
+        btn.id = 'btn-view-score-child';
+        btn.className = 'btn-icon';
+        btn.innerHTML = '<i class="fas fa-trophy"></i>';
+        btn.onclick = showChildScoreHistory;
+        btn.title = 'Lihat Skor Saya';
+        headerRight.insertBefore(btn, headerRight.firstChild);
+    }
+}
+
+function showChildScoreHistory() {
+    // Show a modal with scores
+    // For simplicity, we can reuse logic or create a simple alert/modal
+    // Ideally, replicate the score table
+    showDashboardTab('scores'); // This is for parent. We need a child version.
+    // For now, let's use a simple alert or reuse the score tab logic but inside a modal?
+    // Let's build a quick modal for child scores
+    const modalHTML = `
+        <div id="child-score-modal" class="modal active">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🏆 Riwayat Skor Saya</h3>
+                    <button class="btn-close" onclick="closeModal('child-score-modal'); this.closest('.modal').remove();">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Total Skor: <strong>${getTotalScore()}</strong></p>
+                    <p>Level Saat Ini: <strong>${currentChild.level || 1}</strong></p>
+                    <hr style="margin: 10px 0; opacity: 0.2">
+                    <small>Terus bermain untuk menaikkan level!</small>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
 // ========================================
@@ -496,14 +591,38 @@ function generateQuestions() {
         }
     });
 
-    // Shuffle and pick questions based on difficulty
+    // Shuffle all candidates first to ensure randomness of Juz and Position
     shuffleArray(allAyahs);
 
-    let questionCount = 5;
-    if (gameState.difficulty === 'medium') questionCount = 8;
-    if (gameState.difficulty === 'hard') questionCount = 10;
+    let level = currentChild.level || 1;
+    let questionCount = 5 + Math.floor((level - 1) / 2); // Increase 1 question every 2 levels
+    if (questionCount > 15) questionCount = 15; // Max 15 questions
 
-    const selectedQuestions = allAyahs.slice(0, Math.min(questionCount, allAyahs.length));
+    // Ensure Distinct Surahs if possible
+    const selectedQuestions = [];
+    const usedSurahs = new Set();
+
+    // First pass: try to pick unique surahs
+    for (const item of allAyahs) {
+        if (selectedQuestions.length >= questionCount) break;
+        if (!usedSurahs.has(item.surah)) {
+            selectedQuestions.push(item);
+            usedSurahs.add(item.surah);
+        }
+    }
+
+    // Second pass: fill if not enough
+    if (selectedQuestions.length < questionCount) {
+        for (const item of allAyahs) {
+            if (selectedQuestions.length >= questionCount) break;
+            if (!selectedQuestions.includes(item)) {
+                selectedQuestions.push(item);
+            }
+        }
+    }
+
+    // Randomize order of selected questions again
+    shuffleArray(selectedQuestions);
 
     // Generate options for each question
     gameState.questions = selectedQuestions.map(q => {
@@ -516,10 +635,11 @@ function generateQuestions() {
 
         shuffleArray(wrongOptions);
 
-        // Number of wrong options based on difficulty
-        let wrongCount = 2;
-        if (gameState.difficulty === 'medium') wrongCount = 3;
-        if (gameState.difficulty === 'hard') wrongCount = 3;
+        // Options count based on Level
+        let totalOptions = 3; // Default 3 (A, B, C)
+        if (level >= 5) totalOptions = 4; // A, B, C, D
+
+        let wrongCount = totalOptions - 1;
 
         for (let i = 0; i < wrongCount && i < wrongOptions.length; i++) {
             options.push(wrongOptions[i]);
@@ -566,7 +686,12 @@ function showQuestion() {
     question.options.forEach((option, index) => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
-        btn.textContent = option.text;
+
+        // Add A, B, C, D labels
+        const labels = ['A', 'B', 'C', 'D', 'E'];
+        const labelText = labels[index] || '';
+
+        btn.innerHTML = `<span class="option-label">${labelText}.</span> ${option.text}`;
         btn.onclick = () => selectAnswer(index);
         optionsContainer.appendChild(btn);
     });
@@ -583,10 +708,21 @@ function startTimer() {
         clearInterval(gameState.timer);
     }
 
-    // Timer based on difficulty
-    gameState.timeLeft = 30;
-    if (gameState.difficulty === 'medium') gameState.timeLeft = 25;
-    if (gameState.difficulty === 'hard') gameState.timeLeft = 20;
+    // Timer based on Level or Parent Setting
+    let baseTime = 30;
+
+    // Check if parent set a custom timer for this child
+    if (currentChild && currentChild.timerDuration) {
+        baseTime = parseInt(currentChild.timerDuration);
+    } else {
+        // Fallback or Scaling logic
+        const level = currentChild.level || 1;
+        if (level < 5) baseTime = 30;
+        else if (level < 10) baseTime = 25;
+        else baseTime = 20;
+    }
+
+    gameState.timeLeft = baseTime;
 
     document.getElementById('timer').textContent = gameState.timeLeft;
 
@@ -737,7 +873,14 @@ function endGame() {
     if (percentage >= 80) {
         emoji = '🏆';
         title = 'Mumtaz!';
-        message = 'Hafalan kamu sangat lancar!';
+        message = 'Hafalan kamu sangat lancar! Naik Level! 🚀';
+
+        // Level Up
+        if (currentChild) {
+            currentChild.level = (currentChild.level || 1) + 1;
+            saveChildProgress();
+        }
+
     } else if (percentage >= 60) {
         emoji = '🌟';
         title = 'Jayyid Jiddan!';
@@ -777,9 +920,34 @@ function saveScore() {
     };
 
     if (typeof db !== 'undefined' && db) {
-        // Save to Firebase
         db.collection('scores').add(scoreData).catch(console.error);
     }
+}
+
+async function saveChildProgress() {
+    if (!currentChild) return;
+
+    // Save Level to DB
+    if (typeof db !== 'undefined' && db && currentChild.id) {
+        try {
+            await db.collection('children').doc(currentChild.id).update({
+                level: currentChild.level
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    // Update session
+    localStorage.setItem('tekateki_session', JSON.stringify({
+        role: 'child',
+        data: currentChild
+    }));
+
+    // Update list in local storage
+    const children = JSON.parse(localStorage.getItem('tekateki_children') || '[]');
+    const result = children.map(c => c.username === currentChild.username ? currentChild : c);
+    localStorage.setItem('tekateki_children', JSON.stringify(result));
 
     // Always save to local storage as backup
     const scores = JSON.parse(localStorage.getItem('tekateki_scores') || '[]');
@@ -1287,6 +1455,7 @@ function showAddChildModal() {
     document.getElementById('new-child-name').value = '';
     document.getElementById('new-child-username').value = '';
     document.getElementById('new-child-pin').value = '';
+    document.getElementById('new-child-timer').value = '30';
 
     // Reset checkboxes
     document.querySelectorAll('#new-child-juz input').forEach(cb => {
@@ -1308,6 +1477,7 @@ async function addChild() {
     const name = document.getElementById('new-child-name').value.trim();
     const username = document.getElementById('new-child-username').value.trim().toLowerCase();
     const pin = document.getElementById('new-child-pin').value.trim();
+    const timerDuration = parseInt(document.getElementById('new-child-timer').value) || 30;
 
     // Get selected juz
     const selectedJuz = [];
@@ -1339,6 +1509,7 @@ async function addChild() {
             pin,
             avatar: selectedAvatar,
             assignedJuz: selectedJuz,
+            timerDuration: timerDuration,
             parentId: currentParent.uid || currentParent.id,
             createdAt: new Date().toISOString()
         };
@@ -1398,6 +1569,8 @@ async function editChildJuz(childId) {
         cb.checked = (child.assignedJuz || []).includes(parseInt(cb.value));
     });
 
+    document.getElementById('edit-child-timer').value = child.timerDuration || 30;
+
     document.getElementById('edit-juz-modal').classList.remove('hidden');
 }
 
@@ -1406,6 +1579,8 @@ async function saveChildJuz() {
     document.querySelectorAll('#edit-child-juz input:checked').forEach(cb => {
         selectedJuz.push(parseInt(cb.value));
     });
+
+    const timerDuration = parseInt(document.getElementById('edit-child-timer').value) || 30;
 
     if (selectedJuz.length === 0) {
         showToast('Pilih minimal 1 juz!', 'error');
@@ -1417,13 +1592,15 @@ async function saveChildJuz() {
     try {
         if (typeof db !== 'undefined' && db) {
             await db.collection('children').doc(editingChildId).update({
-                assignedJuz: selectedJuz
+                assignedJuz: selectedJuz,
+                timerDuration: timerDuration
             });
         } else {
             const children = JSON.parse(localStorage.getItem('tekateki_children') || '[]');
             const index = children.findIndex(c => c.id === editingChildId);
             if (index !== -1) {
                 children[index].assignedJuz = selectedJuz;
+                children[index].timerDuration = timerDuration;
                 localStorage.setItem('tekateki_children', JSON.stringify(children));
             }
         }
@@ -1517,6 +1694,29 @@ function showLoading(show) {
 }
 
 function filterScores() {
-    // TODO: Implement score filtering
-    loadScoresTable();
+    const childId = document.getElementById('score-filter-child').value;
+    const period = document.getElementById('score-filter-period').value;
+
+    let filteredScores = window.dashboardScores || [];
+
+    if (childId !== 'all') {
+        filteredScores = filteredScores.filter(s => s.childId === childId);
+    }
+
+    if (period !== 'all') {
+        const now = new Date();
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+        filteredScores = filteredScores.filter(s => {
+            const date = s.date && s.date.toDate ? s.date.toDate() : new Date(s.date);
+            if (period === 'today') return date >= startOfDay;
+            if (period === 'week') return date >= startOfWeek;
+            if (period === 'month') return date >= startOfMonth;
+            return true;
+        });
+    }
+
+    renderScoresTable(filteredScores);
 }
