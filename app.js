@@ -823,18 +823,24 @@ function subscribeToDashboardData() {
                 showToast("Gagal memuat data anak", "error");
             });
 
-        // Listen to Scores Data
+        // Listen to Scores Data - CLIENT SIDE SORTING (No Index Required)
         unsubscribeScores = db.collection('scores')
             .where('parentId', '==', currentParent.uid)
-            .orderBy('date', 'desc')
             .limit(100)
             .onSnapshot((snapshot) => {
-                const scores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                let scores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Manual Sort (Terbaru di atas)
+                scores.sort((a, b) => {
+                    const dateA = a.date && a.date.toDate ? a.date.toDate() : new Date(a.date);
+                    const dateB = b.date && b.date.toDate ? b.date.toDate() : new Date(b.date);
+                    return dateB - dateA;
+                });
+
                 updateScoresUI(scores);
             }, (error) => {
                 console.error("Error getting scores:", error);
-                // Tip: Firestore requires an index for compound queries (parentId + date). 
-                // Check console for link to create index.
+                showToast("Gagal memuat skor: " + error.message, "error");
             });
     } else {
         // Fallback for Local Storage (No real-time listener, just load once)
