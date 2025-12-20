@@ -1781,15 +1781,24 @@ function filterScores() {
 // ========================================
 
 function showLeaderboard(surahNumber = null) {
-    const modal = document.getElementById('leaderboard-modal');
-    
+    console.log('Attemping to open leaderboard...');
+    let modal = document.getElementById('leaderboard-modal');
+
+    // Fallback if getElementById fails (rare but possible in some cache states)
+    if (!modal) {
+        console.warn('getElementById failed, trying querySelector...');
+        modal = document.querySelector('#leaderboard-modal');
+    }
+
     // Safety check: Ensure modal exists in DOM
     if (!modal) {
-        console.error('Leaderboard modal not found! Please refresh the page (Ctrl+F5 or Cmd+Shift+R)');
-        alert('Silakan refresh halaman ini terlebih dahulu (tekan Ctrl+F5 atau Ctrl+R)');
+        console.error('CRITICAL: Leaderboard modal not found in DOM!');
+        console.log('Body content:', document.body.innerHTML.slice(-500)); // Log end of body to check if modal is there
+        alert('Gagal memuat modal. Mohon refresh halaman (Ctrl+R) karena ada update sistem.');
         return;
     }
-    
+
+    console.log('Modal found, opening...');
     modal.classList.remove('hidden');
 
     // Auto-detect best surah if none provided
