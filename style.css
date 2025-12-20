@@ -1913,27 +1913,45 @@ body {
     }
 
     .header-right {
-        gap: 8px;
+        gap: 6px;
     }
 
     .stats-container {
-        gap: 8px;
+        gap: 6px;
+        flex-wrap: nowrap;
     }
 
-    .stat-item {
-        padding: 6px 10px;
-        font-size: 0.85rem;
-    }
-
+    /* Total Score - TETAP TAMPIL, LEBIH COMPACT */
     .total-score-display {
+        font-size: 0.9rem !important;
+        padding: 6px 12px !important;
+        white-space: nowrap;
+    }
+
+    .total-score-display span {
+        font-size: 0.65rem !important;
+    }
+
+    /* Hide Level di mobile untuk save space */
+    .level-display {
         display: none;
-        /* Hide on mobile to save space */
+    }
+
+    /* Skor & Streak lebih kecil */
+    .stat-item {
+        padding: 5px 8px;
+        font-size: 0.75rem;
     }
 
     .score-display,
     .streak-display {
-        font-size: 0.8rem;
-        padding: 4px 8px;
+        font-size: 0.75rem;
+        padding: 5px 8px;
+    }
+
+    .score-display span,
+    .streak-display span {
+        font-size: 0.6rem;
     }
 
     .game-card {
