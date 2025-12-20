@@ -269,7 +269,7 @@ async function showChildGame() {
         `<span class="badge badge-level">Level ${currentLevel}</span>`;
 
     // Show Badges/Achievements
-    // checkAndShowBadges(); // HAPUS: Button riwayat skor tidak diperlukan
+    checkAndShowBadges(); // Tampilkan badge level (tanpa button riwayat)
     renderAchievements();
 
     showGameCard('game-start');
@@ -329,45 +329,53 @@ async function reloadChildSession(childData) {
 
 function checkAndShowBadges() {
     const level = currentChild.level || 1;
-    const juzBadges = document.getElementById('juz-badges');
 
-    // Add Level Badges based on milestones
+    // Get or create level badges container
+    let levelBadgesContainer = document.getElementById('level-badges-container');
+    if (!levelBadgesContainer) {
+        // Create new container for level badges after juz badges
+        const juzInfo = document.querySelector('.juz-info');
+        if (juzInfo) {
+            levelBadgesContainer = document.createElement('div');
+            levelBadgesContainer.id = 'level-badges-container';
+            levelBadgesContainer.className = 'level-badges-container';
+            levelBadgesContainer.innerHTML = '<p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 12px;">🏅 Pencapaian:</p>';
+            juzInfo.appendChild(levelBadgesContainer);
+        }
+    } else {
+        // Clear existing badges (keep the title)
+        const badges = levelBadgesContainer.querySelectorAll('.level-badge');
+        badges.forEach(b => b.remove());
+    }
+
+    // Add Level Badges based on milestones (VERTIKAL)
     if (level >= 3) {
-        const b = document.createElement('span');
-        b.className = 'juz-badge badge-bronze';
+        const b = document.createElement('div');
+        b.className = 'level-badge badge-bronze';
         b.innerHTML = '🌟 Bintang Hafalan';
-        juzBadges.appendChild(b);
+        levelBadgesContainer.appendChild(b);
     }
     if (level >= 5) {
-        const b = document.createElement('span');
-        b.className = 'juz-badge badge-gold';
+        const b = document.createElement('div');
+        b.className = 'level-badge badge-gold';
         b.innerHTML = '🏆 Pejuang Hafalan';
-        juzBadges.appendChild(b);
+        levelBadgesContainer.appendChild(b);
     }
     if (level >= 10) {
-        const b = document.createElement('span');
-        b.className = 'juz-badge badge-platinum';
+        const b = document.createElement('div');
+        b.className = 'level-badge badge-platinum';
         b.innerHTML = '👑 Hafidz Cilik';
-        juzBadges.appendChild(b);
+        levelBadgesContainer.appendChild(b);
     }
     if (level >= 15) {
-        const b = document.createElement('span');
-        b.className = 'juz-badge badge-diamond';
+        const b = document.createElement('div');
+        b.className = 'level-badge badge-diamond';
         b.innerHTML = '💎 Master Quran';
-        juzBadges.appendChild(b);
+        levelBadgesContainer.appendChild(b);
     }
 
-    // Add "Lihat Skor" button to header if not exists
-    const headerRight = document.querySelector('#child-game-screen .header-right');
-    if (!document.getElementById('btn-view-score-child')) {
-        const btn = document.createElement('button');
-        btn.id = 'btn-view-score-child';
-        btn.className = 'btn-icon';
-        btn.innerHTML = '<i class="fas fa-trophy"></i>';
-        btn.onclick = showChildScoreHistory;
-        btn.title = 'Lihat Skor Saya';
-        headerRight.insertBefore(btn, headerRight.firstChild);
-    }
+    // HAPUS: Tidak buat button riwayat skor lagi
+    // Button sudah tidak diperlukan
 }
 
 function showChildScoreHistory() {

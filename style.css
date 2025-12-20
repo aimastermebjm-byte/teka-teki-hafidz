@@ -809,6 +809,36 @@ body {
     box-shadow: 0 2px 5px rgba(0, 206, 209, 0.4);
 }
 
+/* Level Badges Container - VERTIKAL */
+.level-badges-container {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #EEE;
+}
+
+.level-badge {
+    display: block;
+    /* Block untuk stack vertikal */
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    /* Jarak antar badge */
+    text-align: left;
+    transition: var(--transition-normal);
+}
+
+.level-badge:last-child {
+    margin-bottom: 0;
+    /* Badge terakhir tidak ada margin */
+}
+
+.level-badge:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
 /* Quiz Screen */
 #game-quiz {
     position: relative;
