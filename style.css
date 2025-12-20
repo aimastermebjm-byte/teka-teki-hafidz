@@ -1862,3 +1862,79 @@ body {
         grid-template-columns: 1fr 1fr;
     }
 }
+
+/* Achievements Section */
+.achievements-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #EEE;
+    text-align: left;
+}
+
+.achievements-section p {
+    color: var(--text-light);
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.achievements-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    min-height: 50px;
+}
+
+.achievement-badge {
+    background: linear-gradient(135deg, #fff, #f0f0f0);
+    border: 2px solid #e0e0e0;
+    padding: 8px 12px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    animation: popIn 0.3s ease;
+}
+
+.achievement-badge.unlocked {
+    background: linear-gradient(135deg, #FFD700, #FDB931);
+    border-color: #FDB931;
+    color: #444;
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+}
+
+.achievement-badge i {
+    color: #FFC107;
+    font-size: 1.1rem;
+}
+
+.achievement-badge:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.empty-state-small {
+    font-size: 0.8rem;
+    color: #999;
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

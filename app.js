@@ -245,8 +245,40 @@ function showChildGame() {
 
     // Show Badges/Achievements
     checkAndShowBadges();
+    renderAchievements();
 
     showGameCard('game-start');
+}
+
+function renderAchievements() {
+    const list = document.getElementById('achievements-list');
+    if (!list) return; // Guard clause
+
+    if (!currentChild || !currentChild.hafalanProgress) {
+        list.innerHTML = '<p class="empty-state-small">Belum ada surah yang hafal lengkap. Ayo main!</p>';
+        return;
+    }
+
+    const attempts = currentChild.hafalanProgress;
+    let badges = [];
+
+    for (const [surahNum, data] of Object.entries(attempts)) {
+        if (data.isCompleted) {
+            badges.push(data);
+        }
+    }
+
+    if (badges.length === 0) {
+        list.innerHTML = '<p class="empty-state-small">Belum ada surah yang hafal lengkap. Ayo main!</p>';
+        return;
+    }
+
+    list.innerHTML = badges.map(b => `
+        <div class="achievement-badge unlocked">
+            <i class="fas fa-medal"></i>
+            <span>${b.surahName}</span>
+        </div>
+    `).join('');
 }
 
 async function reloadChildSession(childData) {
@@ -664,6 +696,8 @@ function generateQuestions() {
 
         return {
             surah: q.surah,
+            surahNumber: q.surahNumber,
+            ayahNumber: q.answer.num, // The ayah being guessed
             juz: q.juz,
             questionText: q.question.text,
             options: options,
@@ -813,6 +847,9 @@ function selectAnswer(selectedIndex) {
 
         document.getElementById('current-score').textContent = gameState.score;
         document.getElementById('streak-count').textContent = gameState.streak;
+
+        // Update Hafalan Progress
+        updateAyahProgress(question.surahNumber, question.ayahNumber, question.surah);
 
         showFeedback(true, getCorrectMessage());
     } else {
@@ -1735,4 +1772,122 @@ function filterScores() {
     }
 
     renderScoresTable(filteredScores);
+}
+// ========================================
+// HAFALAN PROGRESS & BADGES
+// ========================================
+
+function updateAyahProgress(surahNumber, ayahNumber, surahName) {
+    if (!currentChild) return;
+
+    if (!currentChild.hafalanProgress) {
+        currentChild.hafalanProgress = {};
+    }
+
+    if (!currentChild.hafalanProgress[surahNumber]) {
+        currentChild.hafalanProgress[surahNumber] = {
+            surahName: surahName,
+            ayahs: {},
+            isCompleted: false
+        };
+    }
+
+    const surahProgress = currentChild.hafalanProgress[surahNumber];
+
+    // Init ayah progress if needed
+    if (!surahProgress.ayahs[ayahNumber]) {
+        surahProgress.ayahs[ayahNumber] = 0;
+    }
+
+    // Increment correct count
+    surahProgress.ayahs[ayahNumber]++;
+
+    // Check completion condition
+    checkSurahCompletion(surahNumber);
+
+    // Save progress
+    saveChildProgress();
+}
+
+function checkSurahCompletion(surahNumber) {
+    const surahProgress = currentChild.hafalanProgress[surahNumber];
+    if (surahProgress.isCompleted) return;
+
+    // Get total ayahs for this surah from quranData
+    // We need to find the surah object in quranData
+    // Since quranData is by Juz, we may need to search or lookup
+    // Optimization: We can find it from the first ayah of the surah progress theoretically, but better specific lookup
+
+    let totalAyahs = 0;
+    let found = false;
+
+    // Search in quranData (Juz 1-4, 27-30)
+    for (const juzNum in quranData) {
+        const juz = quranData[juzNum];
+        const surahData = juz.surahs.find(s => s.number === parseInt(surahNumber));
+        if (surahData) {
+            totalAyahs = surahData.ayahs.length;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) return; // Should not happen if data is consistent
+
+    // Logic: Do we need to memorize ALL ayahs?
+    // Note: The game asks "Connect the verse". So for Surah with N ayahs, there are N-1 transitions.
+    // Transition 1->2, 2->3, ..., (N-1)->N.
+    // So we track N-1 items.
+    // Let's assume completion if all N-1 transitions are correct >= 2 times.
+
+    let completedCount = 0;
+    const requiredCorrect = 2; // Threshold
+    const requiredTransitions = totalAyahs - 1;
+
+    for (let i = 2; i <= totalAyahs; i++) {
+        if (surahProgress.ayahs[i] && surahProgress.ayahs[i] >= requiredCorrect) {
+            completedCount++;
+        }
+    }
+
+    if (completedCount >= requiredTransitions && requiredTransitions > 0) {
+        // SURAH COMPLETED!
+        surahProgress.isCompleted = true;
+        surahProgress.completedAt = new Date().toISOString();
+
+        // Show Special Notification
+        showBadgeUnlockModal(surahProgress.surahName);
+    }
+}
+
+function showBadgeUnlockModal(surahName) {
+    // Create and show modal
+    const modalId = 'badge-unlock-modal';
+
+    // Remove if exists
+    const existing = document.getElementById(modalId);
+    if (existing) existing.remove();
+
+    const html = `
+        <div id="${modalId}" class="modal active" style="z-index: 2000;">
+            <div class="modal-content" style="text-align: center;">
+                <div class="result-animation">
+                    <div class="confetti"></div>
+                </div>
+                <div style="font-size: 5rem; margin-bottom: 20px;">🏅</div>
+                <h2 class="card-title rainbow-text">Maa Syaa Allah!</h2>
+                <h3 style="margin-bottom: 15px; color: var(--primary);">Hafalan Baru Selesai!</h3>
+                <p style="font-size: 1.2rem; margin-bottom: 20px;">
+                    Kamu sudah menghafal surat <br><strong>${surahName}</strong>
+                </p>
+                <button class="btn-play pulse" onclick="document.getElementById('${modalId}').remove()">
+                    Alhamdulillah!
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', html);
+    const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3'); // Victory sound placeholder
+    audio.play().catch(e => { }); // Ignore autoplay errors
 }
