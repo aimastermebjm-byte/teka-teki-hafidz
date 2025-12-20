@@ -1533,11 +1533,9 @@ async function addChild() {
     const pin = document.getElementById('new-child-pin').value.trim();
     const timerDuration = parseInt(document.getElementById('new-child-timer').value) || 30;
 
-    // Get selected juz
-    const selectedJuz = [];
-    document.querySelectorAll('#new-child-juz input:checked').forEach(cb => {
-        selectedJuz.push(parseInt(cb.value));
-    });
+    // Get selected juz from dropdown
+    const juzSelect = document.getElementById('new-child-juz');
+    const selectedJuz = Array.from(juzSelect.selectedOptions).map(opt => parseInt(opt.value));
 
     if (!name || !username || !pin) {
         showToast('Lengkapi semua data!', 'error');
@@ -1621,9 +1619,10 @@ async function editChildJuz(childId) {
 
     document.getElementById('edit-child-name').textContent = child.name;
 
-    // Set checkboxes
-    document.querySelectorAll('#edit-child-juz input').forEach(cb => {
-        cb.checked = (child.assignedJuz || []).includes(parseInt(cb.value));
+    // Set dropdown selected options
+    const juzSelect = document.getElementById('edit-child-juz');
+    Array.from(juzSelect.options).forEach(opt => {
+        opt.selected = (child.assignedJuz || []).includes(parseInt(opt.value));
     });
 
     document.getElementById('edit-child-timer').value = child.timerDuration || 30;
@@ -1632,10 +1631,9 @@ async function editChildJuz(childId) {
 }
 
 async function saveChildJuz() {
-    const selectedJuz = [];
-    document.querySelectorAll('#edit-child-juz input:checked').forEach(cb => {
-        selectedJuz.push(parseInt(cb.value));
-    });
+    // Get selected juz from dropdown
+    const juzSelect = document.getElementById('edit-child-juz');
+    const selectedJuz = Array.from(juzSelect.selectedOptions).map(opt => parseInt(opt.value));
 
     const timerDuration = parseInt(document.getElementById('edit-child-timer').value) || 30;
 
@@ -1876,27 +1874,76 @@ function renderScoreLeaderboard() {
     const tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = '<tr><td colspan="4" class="text-center">Memuat data skor...</td></tr>';
 
-    let scoresData = [];
-
     if (typeof db !== 'undefined' && db) {
-        // Fetch High Scores from 'scores' collection
-        // Order by score DESC, limit 20
-        db.collection('scores')
-            .orderBy('score', 'desc')
-            .limit(20)
-            .get()
-            .then(snapshot => {
-                snapshot.forEach(doc => scoresData.push(doc.data()));
-                renderScoreTableRows(scoresData);
+        // Fetch ALL children and their scores
+        Promise.all([
+            db.collection('children').get(),
+            db.collection('scores').get()
+        ])
+            .then(([childrenSnapshot, scoresSnapshot]) => {
+                const childrenMap = new Map();
+
+                // Create map of all children
+                childrenSnapshot.forEach(doc => {
+                    const child = { id: doc.id, ...doc.data() };
+                    childrenMap.set(child.id, {
+                        name: child.name,
+                        level: child.level || 1,
+                        totalScore: 0
+                    });
+                });
+
+                // Sum scores per child
+                scoresSnapshot.forEach(doc => {
+                    const score = doc.data();
+                    const childId = score.childId;
+                    if (childrenMap.has(childId)) {
+                        childrenMap.get(childId).totalScore += score.score || 0;
+                    }
+                });
+
+                // Convert to array and sort by total score
+                const leaderboardData = Array.from(childrenMap.values())
+                    .filter(child => child.totalScore > 0) // Only show children with scores
+                    .sort((a, b) => b.totalScore - a.totalScore)
+                    .slice(0, 20); // Top 20
+
+                renderScoreTableRows(leaderboardData);
             })
             .catch(err => {
-                console.error("Error fetching scores:", err);
+                console.error("Error fetching leaderboard:", err);
                 tbody.innerHTML = '<tr><td colspan="4" class="text-center">Gagal memuat data</td></tr>';
             });
     } else {
-        // Local Storage Simulation
-        // We don't really have a 'scores' list in local storage in the same way, maybe in 'tekateki_session' or just skip
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Mode Ofline: Data skor tidak tersedia</td></tr>';
+        // Local Storage
+        const children = JSON.parse(localStorage.getItem('tekateki_children') || '[]');
+        const scores = JSON.parse(localStorage.getItem('tekateki_scores') || '[]');
+
+        const childrenMap = new Map();
+
+        // Create map of all children
+        children.forEach(child => {
+            childrenMap.set(child.id, {
+                name: child.name,
+                level: child.level || 1,
+                totalScore: 0
+            });
+        });
+
+        // Sum scores per child
+        scores.forEach(score => {
+            if (childrenMap.has(score.childId)) {
+                childrenMap.get(score.childId).totalScore += score.score || 0;
+            }
+        });
+
+        // Convert to array and sort
+        const leaderboardData = Array.from(childrenMap.values())
+            .filter(child => child.totalScore > 0)
+            .sort((a, b) => b.totalScore - a.totalScore)
+            .slice(0, 20);
+
+        renderScoreTableRows(leaderboardData);
     }
 }
 
@@ -1919,9 +1966,9 @@ function renderScoreTableRows(data) {
 
         tr.innerHTML = `
             <td class="text-center font-bold">${badge}</td>
-            <td>${item.childName}</td>
-            <td class="text-center font-bold text-primary">${item.score}</td>
-            <td class="text-center">${item.difficulty || '-'}</td>
+            <td>${item.name}</td>
+            <td class="text-center font-bold text-primary">${item.totalScore}</td>
+            <td class="text-center">Level ${item.level}</td>
         `;
         tbody.appendChild(tr);
     });
