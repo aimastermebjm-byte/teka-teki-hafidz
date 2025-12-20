@@ -1782,6 +1782,14 @@ function filterScores() {
 
 function showLeaderboard(surahNumber = null) {
     const modal = document.getElementById('leaderboard-modal');
+    
+    // Safety check: Ensure modal exists in DOM
+    if (!modal) {
+        console.error('Leaderboard modal not found! Please refresh the page (Ctrl+F5 or Cmd+Shift+R)');
+        alert('Silakan refresh halaman ini terlebih dahulu (tekan Ctrl+F5 atau Ctrl+R)');
+        return;
+    }
+    
     modal.classList.remove('hidden');
 
     // Auto-detect best surah if none provided
