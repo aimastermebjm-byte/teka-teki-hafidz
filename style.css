@@ -732,6 +732,20 @@ body {
     box-shadow: 0 2px 5px rgba(229, 228, 226, 0.4);
 }
 
+.badge-bronze {
+    background: linear-gradient(135deg, #CD7F32, #8B4513);
+    color: white;
+    border: 1px solid #8B4513;
+    box-shadow: 0 2px 5px rgba(205, 127, 50, 0.4);
+}
+
+.badge-diamond {
+    background: linear-gradient(135deg, #B9F2FF, #00CED1);
+    color: #006666;
+    border: 1px solid #00CED1;
+    box-shadow: 0 2px 5px rgba(0, 206, 209, 0.4);
+}
+
 /* Quiz Screen */
 #game-quiz {
     position: relative;
@@ -818,6 +832,7 @@ body {
 .question-text {
     font-family: 'Amiri', serif;
     font-size: 2.7rem;
+    font-weight: 700;
     color: var(--text-dark);
     line-height: 2;
     direction: rtl;
@@ -841,11 +856,22 @@ body {
     padding: 18px 20px;
     font-family: 'Amiri', serif;
     font-size: 2.1rem;
+    font-weight: 700;
     direction: rtl;
     cursor: pointer;
     transition: var(--transition-normal);
     text-align: center;
     line-height: 1.8;
+}
+
+.option-label {
+    color: var(--secondary);
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.2rem;
+    margin-left: 15px;
+    display: inline-block;
+    min-width: 30px;
 }
 
 .option-btn:hover:not(:disabled) {

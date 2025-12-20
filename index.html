@@ -122,6 +122,14 @@
                 </div>
                 <div class="header-right">
                     <div class="stats-container">
+                        <div class="stat-item level-display">
+                            <i class="fas fa-layer-group"></i>
+                            <span>Lv. </span><span id="current-level">1</span>
+                        </div>
+                        <div class="stat-item total-score-display">
+                            <i class="fas fa-coins"></i>
+                            <span id="total-score-header">0</span>
+                        </div>
                         <div class="stat-item score-display">
                             <i class="fas fa-star"></i>
                             <span id="current-score">0</span>
@@ -411,7 +419,8 @@
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-clock"></i> Waktu Menjawab (detik)</label>
-                        <input type="number" id="new-child-timer" placeholder="Default: 30" min="10" max="300" value="30">
+                        <input type="number" id="new-child-timer" placeholder="Default: 30" min="10" max="300"
+                            value="30">
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-smile"></i> Pilih Avatar</label>
@@ -453,36 +462,36 @@
                         <label class="juz-checkbox"><input type="checkbox" value="29"> Juz 29</label>
                         <label class="juz-checkbox"><input type="checkbox" value="30"> Juz 30</label>
                     </div>
-                    </div>
-                    <div class="form-group" style="margin-top: 20px;">
-                        <label><i class="fas fa-clock"></i> Waktu Menjawab (detik)</label>
-                        <input type="number" id="edit-child-timer" placeholder="Default: 30" min="10" max="300">
-                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn-secondary" onclick="closeModal('edit-juz-modal')">Batal</button>
-                    <button class="btn-primary" onclick="saveChildJuz()">
-                        <i class="fas fa-save"></i> Simpan
-                    </button>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label><i class="fas fa-clock"></i> Waktu Menjawab (detik)</label>
+                    <input type="number" id="edit-child-timer" placeholder="Default: 30" min="10" max="300">
                 </div>
             </div>
-        </div>
-
-        <!-- TOAST NOTIFICATION -->
-        <div id="toast" class="toast hidden">
-            <div class="toast-content">
-                <i class="toast-icon fas fa-check-circle"></i>
-                <span class="toast-message">Pesan notifikasi</span>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('edit-juz-modal')">Batal</button>
+                <button class="btn-primary" onclick="saveChildJuz()">
+                    <i class="fas fa-save"></i> Simpan
+                </button>
             </div>
         </div>
+    </div>
 
-        <!-- LOADING OVERLAY -->
-        <div id="loading-overlay" class="loading-overlay hidden">
-            <div class="loading-spinner">
-                <div class="spinner"></div>
-                <p>Memuat...</p>
-            </div>
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <i class="toast-icon fas fa-check-circle"></i>
+            <span class="toast-message">Pesan notifikasi</span>
         </div>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Memuat...</p>
+        </div>
+    </div>
     </div>
 
     <!-- Firebase SDK -->

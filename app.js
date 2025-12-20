@@ -221,6 +221,12 @@ function showChildGame() {
     document.getElementById('display-child-name').textContent = currentChild.name;
     document.getElementById('child-avatar').textContent = currentChild.avatar || '👶';
 
+    // Update Level and Total Score in Header
+    const currentLevel = currentChild.level || 1;
+    const totalScore = getTotalScore();
+    document.getElementById('current-level').textContent = currentLevel;
+    document.getElementById('total-score-header').textContent = totalScore;
+
     // Show assigned juz
     const juzBadges = document.getElementById('juz-badges');
     juzBadges.innerHTML = '';
@@ -233,8 +239,7 @@ function showChildGame() {
         juzBadges.appendChild(badge);
     });
 
-    // Display Level
-    const currentLevel = currentChild.level || 1;
+    // Display Level in card
     document.getElementById('difficulty-info').innerHTML =
         `<span class="badge badge-level">Level ${currentLevel}</span>`;
 
@@ -266,12 +271,16 @@ async function reloadChildSession(childData) {
 }
 
 function checkAndShowBadges() {
-    // Placeholder for gamification logic
-    // e.g. Unlock badges based on level
     const level = currentChild.level || 1;
     const juzBadges = document.getElementById('juz-badges');
 
-    // Add Level Badge
+    // Add Level Badges based on milestones
+    if (level >= 3) {
+        const b = document.createElement('span');
+        b.className = 'juz-badge badge-bronze';
+        b.innerHTML = '🌟 Bintang Hafalan';
+        juzBadges.appendChild(b);
+    }
     if (level >= 5) {
         const b = document.createElement('span');
         b.className = 'juz-badge badge-gold';
@@ -282,6 +291,12 @@ function checkAndShowBadges() {
         const b = document.createElement('span');
         b.className = 'juz-badge badge-platinum';
         b.innerHTML = '👑 Hafidz Cilik';
+        juzBadges.appendChild(b);
+    }
+    if (level >= 15) {
+        const b = document.createElement('span');
+        b.className = 'juz-badge badge-diamond';
+        b.innerHTML = '💎 Master Quran';
         juzBadges.appendChild(b);
     }
 
@@ -1544,8 +1559,7 @@ async function addChild() {
 
         closeModal('add-child-modal');
         showToast('Anak berhasil ditambahkan!', 'success');
-        loadDashboardData();
-        loadChildrenList();
+        // Data will auto-refresh via real-time listener
     } catch (error) {
         console.error('Add child error:', error);
         showToast('Terjadi kesalahan!', 'error');
@@ -1557,10 +1571,14 @@ async function addChild() {
 async function editChildJuz(childId) {
     editingChildId = childId;
 
-    const children = await getChildren();
+    // Use cached data from real-time listener instead of deprecated getChildren()
+    const children = window.dashboardChildren || [];
     const child = children.find(c => c.id === childId);
 
-    if (!child) return;
+    if (!child) {
+        showToast('Data anak tidak ditemukan!', 'error');
+        return;
+    }
 
     document.getElementById('edit-child-name').textContent = child.name;
 
@@ -1607,8 +1625,7 @@ async function saveChildJuz() {
 
         closeModal('edit-juz-modal');
         showToast('Setting juz berhasil disimpan!', 'success');
-        loadChildrenList();
-        loadChildSettings();
+        // Data will auto-refresh via real-time listener
     } catch (error) {
         console.error('Save juz error:', error);
         showToast('Terjadi kesalahan!', 'error');
@@ -1647,8 +1664,7 @@ async function deleteChild(childId) {
         }
 
         showToast('Anak berhasil dihapus!', 'success');
-        loadDashboardData();
-        loadChildrenList();
+        // Data will auto-refresh via real-time listener
     } catch (error) {
         console.error('Delete child error:', error);
         showToast('Terjadi kesalahan!', 'error');
