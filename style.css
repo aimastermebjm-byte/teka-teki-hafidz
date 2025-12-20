@@ -1874,70 +1874,73 @@ body {
         grid-template-columns: 1fr;
     }
 
-    /* Fixed Header for Mobile */
+    /* Header Mobile - ALLOW 2 ROWS */
     .game-header,
     .dashboard-header {
         padding: 10px 15px;
-        flex-wrap: nowrap;
-        /* Prevent wrapping */
-        gap: 10px;
-        height: 70px;
-        /* Fixed height */
+        flex-wrap: wrap;
+        /* ALLOW wrapping untuk 2 baris */
+        gap: 8px;
+        height: auto;
+        /* Auto height untuk wrap */
+        min-height: 60px;
     }
 
     .header-left {
         gap: 8px;
-        flex: 1;
-        /* Allow taking space */
-        min-width: 0;
-        /* Enable truncation */
+        flex: 0 0 auto;
     }
 
-    /* Hide text on small screens, show only avatar */
+    .header-center {
+        display: none;
+        /* Hide title di mobile */
+    }
+
     .avatar-container {
-        gap: 8px;
+        gap: 6px;
     }
 
     .child-name {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        max-width: 80px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 100px;
-        /* Limit width */
     }
 
-    .game-title {
-        display: none;
-        /* Hide title on mobile to save space */
+    .avatar {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
     }
 
     .header-right {
+        flex: 1 1 100%;
+        /* Full width di baris kedua */
         gap: 6px;
+        justify-content: flex-start;
     }
 
     .stats-container {
         gap: 6px;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
+        /* Allow wrap jika perlu */
+        width: 100%;
     }
 
-    /* Total Score - TETAP TAMPIL, LEBIH COMPACT */
+    /* Total Score - Compact */
     .total-score-display {
-        font-size: 0.9rem !important;
-        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+        padding: 6px 10px !important;
         white-space: nowrap;
     }
 
-    .total-score-display span {
-        font-size: 0.65rem !important;
-    }
-
-    /* Hide Level di mobile untuk save space */
+    /* Hide Level di mobile */
     .level-display {
         display: none;
     }
 
-    /* Skor & Streak lebih kecil */
+    /* Skor & Streak compact */
     .stat-item {
         padding: 5px 8px;
         font-size: 0.75rem;
@@ -1949,9 +1952,11 @@ body {
         padding: 5px 8px;
     }
 
-    .score-display span,
-    .streak-display span {
-        font-size: 0.6rem;
+    /* Buttons lebih kecil */
+    .btn-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
     }
 
     .game-card {
@@ -1975,27 +1980,46 @@ body {
         padding: 12px;
     }
 
-    /* Modal Adjustments */
+    /* Modal Adjustments - BIGGER CLOSE BUTTON */
     .modal-content {
-        width: 90%;
-        max-height: 80vh;
+        width: 95%;
+        max-width: 500px;
+        max-height: 85vh;
         margin: 20px auto;
-        display: flex;
-        flex-direction: column;
+    }
+
+    .modal-header {
+        padding: 15px 20px;
+    }
+
+    .modal-header h3 {
+        font-size: 1rem;
+    }
+
+    /* CLOSE BUTTON LEBIH BESAR DI MOBILE */
+    .btn-close {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 2rem !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        min-width: 45px;
     }
 
     .modal-body {
         overflow-y: auto;
-        padding-right: 5px;
-        /* For scrollbar space */
+        padding: 20px 15px;
     }
 
-    .juz-selector {
-        grid-template-columns: 1fr 1fr;
-        /* Force 2 columns on mobile */
-        max-height: none;
-        /* Let modal handle scroll */
-        gap: 8px;
+    /* DROPDOWN SELECT - LEBIH TINGGI */
+    select[multiple] {
+        min-height: 200px !important;
+        font-size: 1rem !important;
+        padding: 12px !important;
+    }
+
+    select[multiple] option {
+        padding: 12px !important;
+        font-size: 1rem !important;
     }
 
     .juz-checkbox {
@@ -2046,20 +2070,28 @@ body {
     }
 
     .child-name {
-        display: none;
-        /* Hide name on very small screens, show only avatar */
+        font-size: 0.75rem !important;
+        max-width: 60px !important;
     }
 
     .overview-cards {
         grid-template-columns: 1fr;
     }
 
-    .nav-btn span {
-        display: none;
+    /* Dashboard Nav - Horizontal Scroll */
+    .dashboard-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
     }
 
     .nav-btn {
-        padding: 12px;
+        padding: 12px 20px;
+        flex-shrink: 0;
+    }
+
+    .nav-btn span {
+        font-size: 0.85rem;
     }
 
     /* Ensure achievements fit */
@@ -2070,6 +2102,17 @@ body {
     .achievement-badge {
         padding: 6px 10px;
         font-size: 0.75rem;
+    }
+
+    /* Stats lebih kecil lagi */
+    .stat-item {
+        padding: 4px 6px;
+        font-size: 0.7rem;
+    }
+
+    .total-score-display {
+        font-size: 0.8rem !important;
+        padding: 5px 8px !important;
     }
 }
 
