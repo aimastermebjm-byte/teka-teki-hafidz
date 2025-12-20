@@ -24,6 +24,210 @@ let gameState = {
 };
 
 // ========================================
+// GAMIFICATION - SOUNDS, COMBO, MESSAGES
+// ========================================
+
+// Sound Effects (using Web Audio API for child-friendly sounds)
+const gameSounds = {
+    correct: null,
+    combo: null,
+    levelUp: null,
+    wrong: null
+};
+
+// Initialize sounds with base64 encoded short beeps (no external files needed)
+function initSounds() {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        gameSounds.audioContext = audioContext;
+        gameSounds.initialized = true;
+    } catch (e) {
+        console.log('Audio not supported');
+        gameSounds.initialized = false;
+    }
+}
+
+function playSound(type) {
+    if (!gameSounds.initialized) initSounds();
+    if (!gameSounds.audioContext) return;
+
+    const ctx = gameSounds.audioContext;
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    // Different sounds for different events
+    switch (type) {
+        case 'correct':
+            oscillator.frequency.value = 523.25; // C5
+            gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+            oscillator.start(ctx.currentTime);
+            oscillator.stop(ctx.currentTime + 0.3);
+            break;
+        case 'combo':
+            // Ascending notes for combo
+            [523, 659, 784].forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.1 + 0.15);
+                osc.start(ctx.currentTime + i * 0.1);
+                osc.stop(ctx.currentTime + i * 0.1 + 0.15);
+            });
+            break;
+        case 'levelUp':
+            // Celebratory ascending scale
+            [261, 329, 392, 523, 659, 784].forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.2);
+                osc.start(ctx.currentTime + i * 0.08);
+                osc.stop(ctx.currentTime + i * 0.08 + 0.2);
+            });
+            break;
+        case 'wrong':
+            oscillator.frequency.value = 200;
+            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+            oscillator.start(ctx.currentTime);
+            oscillator.stop(ctx.currentTime + 0.2);
+            break;
+    }
+}
+
+// Motivational Messages (Islami & Personal)
+const motivationalMessages = {
+    correct: [
+        "MasyaAllah, hebat sekali! 🌟",
+        "SubhanAllah! Hafalanmu mantap! 💪",
+        "Allahu Akbar! Terus semangat! 🚀",
+        "Tabarakallah! Lanjutkan! ⭐",
+        "Barakallah! Kamu pintar! 🎉",
+        "MasyaAllah, luar biasa! 🏆",
+        "Alhamdulillah, benar! 😊",
+        "Keren banget! Ayo terus! 🔥",
+        "Hafalan kamu bagus sekali! 💫",
+        "Semangat terus ya! 🌈"
+    ],
+    combo: [
+        "COMBO x{streak}! 🔥",
+        "WOW! {streak}x COMBO! ⚡",
+        "ON FIRE! 🔥🔥🔥",
+        "LUAR BIASA! COMBO {streak}! 💥",
+        "AMAZING! {streak} BERTURUT! ⭐"
+    ],
+    levelUp: [
+        "SELAMAT! Level naik! 🎉",
+        "HEBAT! Kamu naik level! 🏆",
+        "MANTAP! Level baru! 🚀"
+    ]
+};
+
+function getMotivationalMessage(type, streak = 0) {
+    const messages = motivationalMessages[type];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+
+    // Replace placeholders
+    let message = randomMessage.replace('{streak}', streak);
+    if (currentChild && currentChild.name) {
+        message = message.replace('{name}', currentChild.name);
+    }
+    return message;
+}
+
+// Show Combo Popup
+function showComboPopup(streak) {
+    if (streak < 3) return; // Only show for streak 3+
+
+    playSound('combo');
+
+    // Create popup
+    const popup = document.createElement('div');
+    popup.className = 'combo-popup';
+
+    let comboClass = 'combo-3';
+    let comboText = `COMBO x${streak}! 🔥`;
+
+    if (streak >= 10) {
+        comboClass = 'combo-10';
+        comboText = `🔥 ON FIRE x${streak}! 🔥`;
+    } else if (streak >= 5) {
+        comboClass = 'combo-5';
+        comboText = `⚡ COMBO x${streak}! ⚡`;
+    }
+
+    popup.innerHTML = `<div class="combo-text ${comboClass}">${comboText}</div>`;
+    document.body.appendChild(popup);
+
+    // Screen shake for high combo
+    if (streak >= 5) {
+        document.body.classList.add('screen-shake');
+        setTimeout(() => document.body.classList.remove('screen-shake'), 400);
+    }
+
+    // Remove popup after animation
+    setTimeout(() => popup.remove(), 800);
+}
+
+// Create Confetti
+function createConfetti() {
+    const container = document.createElement('div');
+    container.className = 'confetti-container';
+    document.body.appendChild(container);
+
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+        container.appendChild(confetti);
+    }
+
+    // Remove after animation
+    setTimeout(() => container.remove(), 4000);
+}
+
+// Show Level Up Modal
+function showLevelUpModal(newLevel, badgeName = null) {
+    playSound('levelUp');
+    createConfetti();
+
+    const modal = document.createElement('div');
+    modal.className = 'level-up-modal';
+    modal.onclick = () => modal.remove();
+
+    let badgeHTML = '';
+    if (badgeName) {
+        badgeHTML = `<div class="level-up-badge">${badgeName}</div>`;
+    }
+
+    modal.innerHTML = `
+        <div class="level-up-content" onclick="event.stopPropagation()">
+            <h2>🎉 LEVEL UP! 🎉</h2>
+            <div class="level-number">Level ${newLevel}</div>
+            ${badgeHTML}
+            <p>${getMotivationalMessage('levelUp')}</p>
+            <button class="btn-play" onclick="this.closest('.level-up-modal').remove()">
+                <i class="fas fa-check"></i> Mantap!
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+}
+
+// ========================================
 // INITIALIZATION
 // ========================================
 
@@ -866,6 +1070,9 @@ function selectAnswer(selectedIndex) {
     });
 
     if (isCorrect) {
+        // 🔊 Play correct sound
+        playSound('correct');
+
         // Calculate points
         let points = 10;
         if (gameState.difficulty === 'medium') points = 15;
@@ -888,6 +1095,9 @@ function selectAnswer(selectedIndex) {
         document.getElementById('current-score').textContent = gameState.score;
         document.getElementById('streak-count').textContent = gameState.streak;
 
+        // 🔥 Show Combo Popup for streak 3+
+        showComboPopup(gameState.streak);
+
         // Update Total Score REALTIME (skor lama + skor game ini)
         const totalScoreElement = document.getElementById('total-score-header');
         if (totalScoreElement) {
@@ -901,8 +1111,12 @@ function selectAnswer(selectedIndex) {
         const timeTaken = (gameState.timerDuration || 30) - gameState.timeLeft;
         updateAyahProgress(question.surahNumber, question.ayahNumber, question.surah, timeTaken);
 
-        showFeedback(true, getCorrectMessage());
+        // 💬 Use motivational message
+        showFeedback(true, getMotivationalMessage('correct'));
     } else {
+        // 🔊 Play wrong sound
+        playSound('wrong');
+
         gameState.streak = 0;
         document.getElementById('streak-count').textContent = '0';
         showFeedback(false, getWrongMessage());
@@ -979,8 +1193,20 @@ function endGame() {
 
         // Level Up
         if (currentChild) {
-            currentChild.level = (currentChild.level || 1) + 1;
+            const oldLevel = currentChild.level || 1;
+            currentChild.level = oldLevel + 1;
             saveChildProgress();
+
+            // 🎉 Show Level Up Modal with confetti!
+            let newBadge = null;
+            if (currentChild.level === 3) newBadge = '🌟 Bintang Hafalan';
+            else if (currentChild.level === 5) newBadge = '🏆 Pejuang Hafalan';
+            else if (currentChild.level === 10) newBadge = '👑 Hafidz Cilik';
+            else if (currentChild.level === 15) newBadge = '💎 Master Quran';
+
+            setTimeout(() => {
+                showLevelUpModal(currentChild.level, newBadge);
+            }, 500);
         }
 
     } else if (percentage >= 60) {
