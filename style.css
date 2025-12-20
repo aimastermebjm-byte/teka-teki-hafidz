@@ -1413,7 +1413,38 @@ body {
     border-color: var(--primary);
 }
 
-/* Scores Table */
+/* Juz Selector */
+.juz-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.juz-checkbox {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.juz-checkbox:hover {
+    background: #e9ecef;
+}
+
+.juz-checkbox input {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+
 .scores-table-container {
     background: white;
     border-radius: var(--radius-lg);
@@ -1827,25 +1858,34 @@ body {
 
     /* Modal Adjustments */
     .modal-content {
-        width: 95%;
-        max-height: 85vh;
-        /* Allow some space */
-        margin: 0 10px;
+        width: 90%;
+        max-height: 80vh;
+        margin: 20px auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-body {
+        overflow-y: auto;
+        padding-right: 5px;
+        /* For scrollbar space */
     }
 
     .juz-selector {
         grid-template-columns: 1fr 1fr;
-        /* Force 2 cols */
+        /* Force 2 columns on mobile */
+        max-height: none;
+        /* Let modal handle scroll */
         gap: 8px;
     }
 
     .juz-checkbox {
-        padding: 10px;
-        font-size: 0.85rem;
-        justify-content: flex-start;
-        /* Align left */
-        white-space: nowrap;
-        /* Prevent breaking if possible */
+        padding: 12px;
+        /* Larger touch target */
+        font-size: 0.9rem;
+        background: white;
+        /* Clearer on mobile */
+        border-color: #dee2e6;
     }
 }
 
