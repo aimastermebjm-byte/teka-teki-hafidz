@@ -1780,22 +1780,45 @@ function filterScores() {
 // LEADERBOARD SYSTEM
 // ========================================
 
-function showLeaderboard(surahNumber = 1) { // Default Al-Fatihah
+function showLeaderboard(surahNumber = null) {
     const modal = document.getElementById('leaderboard-modal');
     modal.classList.remove('hidden');
 
+    // Auto-detect best surah if none provided
+    if (!surahNumber && currentChild && currentChild.hafalanProgress) {
+        let bestSurah = 1;
+        let maxCount = -1;
+
+        Object.entries(currentChild.hafalanProgress).forEach(([surahId, data]) => {
+            let count = 0;
+            // Count memorized ayahs
+            if (data.ayahs) {
+                Object.values(data.ayahs).forEach(a => {
+                    const c = typeof a === 'object' ? a.count : a;
+                    if (c >= 2) count++;
+                });
+            }
+            if (count > maxCount) {
+                maxCount = count;
+                bestSurah = surahId;
+            }
+        });
+        surahNumber = bestSurah;
+    } else if (!surahNumber) {
+        surahNumber = 1; // Fallback
+    }
+
+    // Initialize Tabs
+    setupLeaderboardTabs();
+
     // Set Surah Filter
     const select = document.getElementById('leaderboard-surah-select');
-    // Populate options if empty
     if (select.options.length <= 1) {
         select.innerHTML = '';
-
-        // Flatten surahs
         const allSurahs = {};
         Object.values(quranData).forEach(juz => {
             juz.surahs.forEach(s => allSurahs[s.number] = s.surah);
         });
-
         Object.keys(allSurahs).sort((a, b) => a - b).forEach(num => {
             const opt = document.createElement('option');
             opt.value = num;
@@ -1807,7 +1830,93 @@ function showLeaderboard(surahNumber = 1) { // Default Al-Fatihah
         select.value = surahNumber;
     }
 
+    // Default to Hafalan Tab
+    switchLeaderboardTab('hafalan');
     renderGlobalLeaderboard(surahNumber);
+}
+
+function setupLeaderboardTabs() {
+    const header = document.querySelector('#leaderboard-modal .modal-header');
+    if (!header.querySelector('.leaderboard-tabs')) {
+        const tabs = document.createElement('div');
+        tabs.className = 'leaderboard-tabs';
+        tabs.innerHTML = `
+            <button class="tab-btn active" onclick="switchLeaderboardTab('hafalan')">Hafalan Surah</button>
+            <button class="tab-btn" onclick="switchLeaderboardTab('score')">Skor Tertinggi</button>
+        `;
+        // Insert after H3
+        header.insertBefore(tabs, header.querySelector('.btn-close'));
+    }
+}
+
+function switchLeaderboardTab(tab) {
+    document.querySelectorAll('.leaderboard-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.leaderboard-tabs .tab-btn[onclick*="${tab}"]`).classList.add('active');
+
+    if (tab === 'hafalan') {
+        document.getElementById('leaderboard-filters').style.display = 'block';
+        document.getElementById('leaderboard-body').innerHTML = '<tr><td colspan="4" class="text-center">Memuat data hafalan...</td></tr>';
+        const surahNum = document.getElementById('leaderboard-surah-select').value;
+        renderGlobalLeaderboard(surahNum);
+    } else {
+        document.getElementById('leaderboard-filters').style.display = 'none';
+        renderScoreLeaderboard();
+    }
+}
+
+function renderScoreLeaderboard() {
+    const tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = '<tr><td colspan="4" class="text-center">Memuat data skor...</td></tr>';
+
+    let scoresData = [];
+
+    if (typeof db !== 'undefined' && db) {
+        // Fetch High Scores from 'scores' collection
+        // Order by score DESC, limit 20
+        db.collection('scores')
+            .orderBy('score', 'desc')
+            .limit(20)
+            .get()
+            .then(snapshot => {
+                snapshot.forEach(doc => scoresData.push(doc.data()));
+                renderScoreTableRows(scoresData);
+            })
+            .catch(err => {
+                console.error("Error fetching scores:", err);
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Gagal memuat data</td></tr>';
+            });
+    } else {
+        // Local Storage Simulation
+        // We don't really have a 'scores' list in local storage in the same way, maybe in 'tekateki_session' or just skip
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Mode Ofline: Data skor tidak tersedia</td></tr>';
+    }
+}
+
+function renderScoreTableRows(data) {
+    const tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = '';
+
+    if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Belum ada rekor skor</td></tr>';
+        return;
+    }
+
+    data.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        let badge = '';
+        if (index === 0) badge = '🥇';
+        else if (index === 1) badge = '🥈';
+        else if (index === 2) badge = '🥉';
+        else badge = index + 1;
+
+        tr.innerHTML = `
+            <td class="text-center font-bold">${badge}</td>
+            <td>${item.childName}</td>
+            <td class="text-center font-bold text-primary">${item.score}</td>
+            <td class="text-center">${item.difficulty || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 function renderGlobalLeaderboard(surahNumber) {
