@@ -9,14 +9,14 @@
     "description": "Aplikasi Teka-Teki Hafalan Al-Quran untuk Anak",
     "icons": [
         {
-            "src": "https://cdn-icons-png.flaticon.com/512/2641/2641611.png",
+            "src": "assets/app-icon.jpg",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/jpeg"
         },
         {
-            "src": "https://cdn-icons-png.flaticon.com/512/2641/2641611.png",
+            "src": "assets/app-icon.jpg",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/jpeg"
         }
     ]
 }

@@ -8,7 +8,7 @@ const ASSETS_TO_CACHE = [
     './quran-data.js',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@300;400;500;600;700&display=swap',
-    'https://cdn-icons-png.flaticon.com/512/2641/2641611.png'
+    './assets/app-icon.jpg'
 ];
 
 // Install Event
