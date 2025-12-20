@@ -512,6 +512,15 @@ body {
     height: 80px;
 }
 
+.game-header .btn-icon {
+    background: rgba(108, 99, 255, 0.1);
+    color: var(--primary);
+}
+
+.game-header .btn-icon:hover {
+    background: rgba(108, 99, 255, 0.2);
+}
+
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -606,81 +615,6 @@ body {
 
 #child-game-screen.active {
     display: flex;
-}
-
-/* Game Header */
-.game-header {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.header-left,
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.avatar-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.avatar {
-    width: 45px;
-    height: 45px;
-    background: white;
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.child-name {
-    color: white;
-    font-weight: 700;
-    font-size: 1rem;
-}
-
-.game-title {
-    font-family: 'Fredoka One', cursive;
-    color: white;
-    font-size: 1.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.stats-container {
-    display: flex;
-    gap: 15px;
-}
-
-.stat-item {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 15px;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: white;
-    font-weight: 700;
-}
-
-.score-display i {
-    color: var(--gold);
-}
-
-.streak-display i {
-    color: var(--secondary);
 }
 
 /* Game Main */
