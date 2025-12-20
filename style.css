@@ -2029,16 +2029,16 @@ body {
     }
 
     .question-text {
-        font-size: 1.8rem;
-        /* Increased from 1.4rem */
+        font-size: 2.5rem;
+        /* BESAR di mobile */
         line-height: 1.6;
         font-weight: 700;
     }
 
     .option-btn {
-        font-size: 1.1rem;
-        /* Decreased size */
-        padding: 12px;
+        font-size: 2.3rem;
+        /* BESAR di mobile, hampir sama pertanyaan */
+        padding: 14px;
     }
 
     /* Modal Adjustments - BETTER FIT MOBILE */
