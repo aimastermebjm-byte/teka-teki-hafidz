@@ -521,6 +521,20 @@ body {
     background: rgba(108, 99, 255, 0.2);
 }
 
+/* Ensure all game header elements are visible */
+.game-header .game-title {
+    color: var(--primary) !important;
+}
+
+.game-header .child-name {
+    color: var(--text-dark) !important;
+}
+
+.game-header .stat-item {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+}
+
 .dashboard-header {
     display: flex;
     justify-content: space-between;
