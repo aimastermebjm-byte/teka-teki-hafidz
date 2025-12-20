@@ -1556,9 +1556,11 @@ async function addChild() {
     const pin = document.getElementById('new-child-pin').value.trim();
     const timerDuration = parseInt(document.getElementById('new-child-timer').value) || 30;
 
-    // Get selected juz from dropdown
-    const juzSelect = document.getElementById('new-child-juz');
-    const selectedJuz = Array.from(juzSelect.selectedOptions).map(opt => parseInt(opt.value));
+    // Get selected juz from checkboxes
+    const selectedJuz = [];
+    document.querySelectorAll('#new-child-juz input:checked').forEach(cb => {
+        selectedJuz.push(parseInt(cb.value));
+    });
 
     if (!name || !username || !pin) {
         showToast('Lengkapi semua data!', 'error');
@@ -1642,10 +1644,9 @@ async function editChildJuz(childId) {
 
     document.getElementById('edit-child-name').textContent = child.name;
 
-    // Set dropdown selected options
-    const juzSelect = document.getElementById('edit-child-juz');
-    Array.from(juzSelect.options).forEach(opt => {
-        opt.selected = (child.assignedJuz || []).includes(parseInt(opt.value));
+    // Set checkboxes
+    document.querySelectorAll('#edit-child-juz input').forEach(cb => {
+        cb.checked = (child.assignedJuz || []).includes(parseInt(cb.value));
     });
 
     document.getElementById('edit-child-timer').value = child.timerDuration || 30;
@@ -1654,9 +1655,11 @@ async function editChildJuz(childId) {
 }
 
 async function saveChildJuz() {
-    // Get selected juz from dropdown
-    const juzSelect = document.getElementById('edit-child-juz');
-    const selectedJuz = Array.from(juzSelect.selectedOptions).map(opt => parseInt(opt.value));
+    // Get selected juz from checkboxes
+    const selectedJuz = [];
+    document.querySelectorAll('#edit-child-juz input:checked').forEach(cb => {
+        selectedJuz.push(parseInt(cb.value));
+    });
 
     const timerDuration = parseInt(document.getElementById('edit-child-timer').value) || 30;
 

@@ -1498,7 +1498,7 @@ body {
     border-color: var(--primary);
 }
 
-/* Juz Selector */
+/* Juz Selector - OLD (still used somewhere) */
 .juz-selector {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -1508,26 +1508,45 @@ body {
     overflow-y: auto;
 }
 
+/* Juz Selector Grid - NEW GRID SYSTEM */
+.juz-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 kolom di desktop */
+    gap: 10px;
+    margin-top: 10px;
+    max-height: 250px;
+    /* Limit tinggi agar tidak memanjang */
+    overflow-y: auto;
+    /* Scroll jika banyak */
+    padding: 5px;
+}
+
 .juz-checkbox {
     display: flex;
     align-items: center;
-    padding: 8px 12px;
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
+    justify-content: center;
+    padding: 12px 8px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
     font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 .juz-checkbox:hover {
-    background: #e9ecef;
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    border-color: var(--primary);
+    transform: translateY(-2px);
 }
 
 .juz-checkbox input {
-    margin-right: 8px;
-    width: 16px;
-    height: 16px;
+    margin-right: 6px;
+    width: 18px;
+    height: 18px;
 }
 
 .scores-table-container {
@@ -2010,25 +2029,23 @@ body {
         padding: 20px 15px;
     }
 
-    /* DROPDOWN SELECT - LEBIH TINGGI */
-    select[multiple] {
-        min-height: 200px !important;
-        font-size: 1rem !important;
-        padding: 12px !important;
-    }
-
-    select[multiple] option {
-        padding: 12px !important;
-        font-size: 1rem !important;
+    /* JUZ SELECTOR GRID - 2 KOLOM DI MOBILE */
+    .juz-selector-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        /* 2 kolom di mobile */
+        gap: 8px;
+        max-height: 300px;
     }
 
     .juz-checkbox {
-        padding: 12px;
+        padding: 14px 10px !important;
         /* Larger touch target */
-        font-size: 0.9rem;
-        background: white;
-        /* Clearer on mobile */
-        border-color: #dee2e6;
+        font-size: 0.95rem !important;
+    }
+
+    .juz-checkbox input {
+        width: 20px !important;
+        height: 20px !important;
     }
 }
 
