@@ -1836,17 +1836,8 @@ function showLeaderboard(surahNumber = null) {
 }
 
 function setupLeaderboardTabs() {
-    const header = document.querySelector('#leaderboard-modal .modal-header');
-    if (!header.querySelector('.leaderboard-tabs')) {
-        const tabs = document.createElement('div');
-        tabs.className = 'leaderboard-tabs';
-        tabs.innerHTML = `
-            <button class="tab-btn active" onclick="switchLeaderboardTab('hafalan')">Hafalan Surah</button>
-            <button class="tab-btn" onclick="switchLeaderboardTab('score')">Skor Tertinggi</button>
-        `;
-        // Insert after H3
-        header.insertBefore(tabs, header.querySelector('.btn-close'));
-    }
+    // Tabs are now static in HTML, no need to inject dynamically
+    // Just ensure listeners or states if needed (handled by onclick)
 }
 
 function switchLeaderboardTab(tab) {

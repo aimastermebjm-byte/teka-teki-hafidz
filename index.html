@@ -144,6 +144,10 @@
                             <span id="streak-count">0</span>
                         </div>
                     </div>
+                    <button class="btn-icon" onclick="showLeaderboard()" title="Peringkat Global"
+                        style="margin-right: 8px;">
+                        <i class="fas fa-trophy"></i>
+                    </button>
                     <button class="btn-icon" onclick="logoutChild()" title="Keluar">
                         <i class="fas fa-door-open"></i>
                     </button>
@@ -497,6 +501,45 @@
         <div class="toast-content">
             <i class="toast-icon fas fa-check-circle"></i>
             <span class="toast-message">Pesan notifikasi</span>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD MODAL -->
+    <div id="leaderboard-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-trophy"></i> Peringkat Global</h3>
+                <div class="leaderboard-tabs">
+                    <button class="tab-btn active" onclick="switchLeaderboardTab('hafalan')">Hafalan Surah</button>
+                    <button class="tab-btn" onclick="switchLeaderboardTab('score')">Skor Tertinggi</button>
+                </div>
+                <button class="btn-close" onclick="closeModal('leaderboard-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id="leaderboard-filters">
+                    <label>Pilih Surah:</label>
+                    <select id="leaderboard-surah-select" onchange="renderGlobalLeaderboard(this.value)"
+                        style="width:100%; padding:10px; border-radius:8px;">
+                        <option value="1">1. Al-Fatihah</option>
+                    </select>
+                </div>
+
+                <div class="scores-table-container" style="margin-top:15px; max-height:400px; overflow-y:auto;">
+                    <table class="scores-table">
+                        <thead>
+                            <tr>
+                                <th width="15%">#</th>
+                                <th>Nama</th>
+                                <th width="20%">Hafal</th>
+                                <th width="20%">Waktu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Data rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
