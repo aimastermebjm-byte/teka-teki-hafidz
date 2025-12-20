@@ -248,7 +248,9 @@ async function showChildGame() {
         totalScore = scores.filter(s => s.childId === currentChild.id)
             .reduce((total, s) => total + s.score, 0);
     }
-    document.getElementById('total-score-header').textContent = totalScore;
+    const totalScoreElement = document.getElementById('total-score-header');
+    totalScoreElement.textContent = totalScore;
+    totalScoreElement.setAttribute('data-previous-total', totalScore); // Save untuk realtime update
 
     // Show assigned juz
     const juzBadges = document.getElementById('juz-badges');
@@ -611,6 +613,13 @@ function startGame() {
         return;
     }
 
+    // Reset total score tracking untuk game baru
+    const totalScoreElement = document.getElementById('total-score-header');
+    if (totalScoreElement) {
+        const currentTotal = parseInt(totalScoreElement.textContent) || 0;
+        totalScoreElement.setAttribute('data-previous-total', currentTotal);
+    }
+
     showGameCard('game-quiz');
     showQuestion();
 }
@@ -870,6 +879,14 @@ function selectAnswer(selectedIndex) {
 
         document.getElementById('current-score').textContent = gameState.score;
         document.getElementById('streak-count').textContent = gameState.streak;
+
+        // Update Total Score REALTIME (skor lama + skor game ini)
+        const totalScoreElement = document.getElementById('total-score-header');
+        if (totalScoreElement) {
+            const previousTotalScore = parseInt(totalScoreElement.getAttribute('data-previous-total') || '0');
+            const newTotalScore = previousTotalScore + gameState.score;
+            totalScoreElement.textContent = newTotalScore;
+        }
 
         // Update Hafalan Progress
         // Calculate time taken for this specific question
