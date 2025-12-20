@@ -849,7 +849,9 @@ function selectAnswer(selectedIndex) {
         document.getElementById('streak-count').textContent = gameState.streak;
 
         // Update Hafalan Progress
-        updateAyahProgress(question.surahNumber, question.ayahNumber, question.surah);
+        // Calculate time taken for this specific question
+        const timeTaken = (gameState.timerDuration || 30) - gameState.timeLeft;
+        updateAyahProgress(question.surahNumber, question.ayahNumber, question.surah, timeTaken);
 
         showFeedback(true, getCorrectMessage());
     } else {
@@ -1773,11 +1775,128 @@ function filterScores() {
 
     renderScoresTable(filteredScores);
 }
+
 // ========================================
-// HAFALAN PROGRESS & BADGES
+// LEADERBOARD SYSTEM
 // ========================================
 
-function updateAyahProgress(surahNumber, ayahNumber, surahName) {
+function showLeaderboard(surahNumber = 1) { // Default Al-Fatihah
+    const modal = document.getElementById('leaderboard-modal');
+    modal.classList.remove('hidden');
+
+    // Set Surah Filter
+    const select = document.getElementById('leaderboard-surah-select');
+    // Populate options if empty
+    if (select.options.length <= 1) {
+        select.innerHTML = '';
+
+        // Flatten surahs
+        const allSurahs = {};
+        Object.values(quranData).forEach(juz => {
+            juz.surahs.forEach(s => allSurahs[s.number] = s.surah);
+        });
+
+        Object.keys(allSurahs).sort((a, b) => a - b).forEach(num => {
+            const opt = document.createElement('option');
+            opt.value = num;
+            opt.textContent = `${num}. ${allSurahs[num]}`;
+            if (num == surahNumber) opt.selected = true;
+            select.appendChild(opt);
+        });
+    } else {
+        select.value = surahNumber;
+    }
+
+    renderGlobalLeaderboard(surahNumber);
+}
+
+function renderGlobalLeaderboard(surahNumber) {
+    const tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = '<tr><td colspan="4" class="text-center">Memuat data...</td></tr>';
+
+    let childrenData = [];
+
+    // Fetch all children
+    if (typeof db !== 'undefined' && db) {
+        // Firestore
+        db.collection('children').get().then(snapshot => {
+            snapshot.forEach(doc => childrenData.push(doc.data()));
+            processLeaderboardData(childrenData, surahNumber);
+        });
+    } else {
+        // Local Storage
+        childrenData = JSON.parse(localStorage.getItem('tekateki_children') || '[]');
+        processLeaderboardData(childrenData, surahNumber);
+    }
+}
+
+function processLeaderboardData(children, surahNumber) {
+    const tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = '';
+
+    // Sort logic
+    const rankings = children.map(child => {
+        let count = 0;
+        let totalBestTime = 0;
+
+        if (child.hafalanProgress && child.hafalanProgress[surahNumber]) {
+            const progress = child.hafalanProgress[surahNumber];
+
+            // Calculate Score
+            Object.values(progress.ayahs).forEach(ayah => {
+                const data = typeof ayah === 'object' ? ayah : { count: ayah, bestTime: 999 };
+                if (data.count >= 2) {
+                    count++;
+                    totalBestTime += (data.bestTime === 999 ? 0 : data.bestTime);
+                }
+            });
+        }
+
+        return {
+            name: child.name,
+            avatar: child.avatar,
+            count: count,
+            time: totalBestTime
+        };
+    })
+        .filter(r => r.count > 0) // Only show those who have started
+        .sort((a, b) => {
+            if (b.count !== a.count) return b.count - a.count; // Priority 1: Count DESC
+            return a.time - b.time; // Priority 2: Time ASC (lower is better)
+        });
+
+    // Render Top 10
+    const top10 = rankings.slice(0, 10);
+
+    if (top10.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Belum ada data untuk surah ini</td></tr>';
+        return;
+    }
+
+    top10.forEach((rank, index) => {
+        const tr = document.createElement('tr');
+        let badge = '';
+        if (index === 0) badge = '🥇';
+        else if (index === 1) badge = '🥈';
+        else if (index === 2) badge = '🥉';
+        else badge = index + 1;
+
+        tr.innerHTML = `
+            <td class="text-center font-bold">${badge}</td>
+            <td>
+                <div style="display:flex; align-items:center; gap:8px;">
+                   <div style="font-size:1.2rem;">${rank.avatar}</div>
+                   <div>${rank.name}</div>
+                </div>
+            </td>
+            <td class="text-center">${rank.count} Ayat</td>
+            <td class="text-center font-mono">${rank.time.toFixed(1)}s</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function updateAyahProgress(surahNumber, ayahNumber, surahName, timeTaken) {
     if (!currentChild) return;
 
     if (!currentChild.hafalanProgress) {
@@ -1796,11 +1915,27 @@ function updateAyahProgress(surahNumber, ayahNumber, surahName) {
 
     // Init ayah progress if needed
     if (!surahProgress.ayahs[ayahNumber]) {
-        surahProgress.ayahs[ayahNumber] = 0;
+        surahProgress.ayahs[ayahNumber] = {
+            count: 0,
+            bestTime: 999
+        };
+    }
+
+    // Handle legacy data structure (if count was just number)
+    if (typeof surahProgress.ayahs[ayahNumber] === 'number') {
+        surahProgress.ayahs[ayahNumber] = {
+            count: surahProgress.ayahs[ayahNumber],
+            bestTime: 999
+        };
     }
 
     // Increment correct count
-    surahProgress.ayahs[ayahNumber]++;
+    surahProgress.ayahs[ayahNumber].count++;
+
+    // Update best time (faster is smaller number)
+    if (timeTaken && timeTaken < surahProgress.ayahs[ayahNumber].bestTime) {
+        surahProgress.ayahs[ayahNumber].bestTime = timeTaken;
+    }
 
     // Check completion condition
     checkSurahCompletion(surahNumber);
@@ -1810,34 +1945,11 @@ function updateAyahProgress(surahNumber, ayahNumber, surahName) {
 }
 
 function checkSurahCompletion(surahNumber) {
-    const surahProgress = currentChild.hafalanProgress[surahNumber];
-    if (surahProgress.isCompleted) return;
+    const progress = currentChild.hafalanProgress[surahNumber];
+    if (!progress) return;
 
-    // Get total ayahs for this surah from quranData
-    // We need to find the surah object in quranData
-    // Since quranData is by Juz, we may need to search or lookup
-    // Optimization: We can find it from the first ayah of the surah progress theoretically, but better specific lookup
-
+    // Get total ayahs for this surah
     let totalAyahs = 0;
-    let found = false;
-
-    // Search in quranData (Juz 1-4, 27-30)
-    for (const juzNum in quranData) {
-        const juz = quranData[juzNum];
-        const surahData = juz.surahs.find(s => s.number === parseInt(surahNumber));
-        if (surahData) {
-            totalAyahs = surahData.ayahs.length;
-            found = true;
-            break;
-        }
-    }
-
-    if (!found) return; // Should not happen if data is consistent
-
-    // Logic: Do we need to memorize ALL ayahs?
-    // Note: The game asks "Connect the verse". So for Surah with N ayahs, there are N-1 transitions.
-    // Transition 1->2, 2->3, ..., (N-1)->N.
-    // So we track N-1 items.
     // Let's assume completion if all N-1 transitions are correct >= 2 times.
 
     let completedCount = 0;
