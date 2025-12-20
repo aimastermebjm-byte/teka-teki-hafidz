@@ -540,7 +540,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 15px 30px;
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    background: linear-gradient(135deg, #43e97b, #38f9d7) !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
@@ -549,13 +549,22 @@ body {
 }
 
 .dashboard-header h1 {
-    color: white;
+    color: white !important;
     font-size: 1.2rem;
     margin: 0;
 }
 
 .dashboard-header .parent-name {
-    color: white;
+    color: white !important;
+}
+
+.dashboard-header .btn-icon {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+.dashboard-header .btn-icon:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
 }
 
 .header-left,
