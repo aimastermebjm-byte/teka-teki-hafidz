@@ -1243,6 +1243,28 @@ body {
     color: var(--primary);
 }
 
+/* Header */
+.game-header,
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: white;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 80px;
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 /* Tab Header */
 .tab-header {
     display: flex;
@@ -1786,7 +1808,8 @@ body {
     }
 
     /* Fixed Header for Mobile */
-    .game-header {
+    .game-header,
+    .dashboard-header {
         padding: 10px 15px;
         flex-wrap: nowrap;
         /* Prevent wrapping */
@@ -1833,6 +1856,17 @@ body {
     .stat-item {
         padding: 6px 10px;
         font-size: 0.85rem;
+    }
+
+    .total-score-display {
+        display: none;
+        /* Hide on mobile to save space */
+    }
+
+    .score-display,
+    .streak-display {
+        font-size: 0.8rem;
+        padding: 4px 8px;
     }
 
     .game-card {
