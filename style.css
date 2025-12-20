@@ -1740,126 +1740,132 @@ body {
    RESPONSIVE DESIGN
 ======================================== */
 
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
 @media (max-width: 768px) {
     .login-card {
-        padding: 30px 25px;
+        padding: 30px 20px;
     }
 
     .role-selector {
         grid-template-columns: 1fr;
     }
 
+    /* Fixed Header for Mobile */
     .game-header {
-        padding: 12px 15px;
-        flex-wrap: wrap;
+        padding: 10px 15px;
+        flex-wrap: nowrap;
+        /* Prevent wrapping */
         gap: 10px;
+        height: 70px;
+        /* Fixed height */
     }
 
-    .header-center {
-        order: -1;
-        width: 100%;
-        text-align: center;
+    .header-left {
+        gap: 8px;
+        flex: 1;
+        /* Allow taking space */
+        min-width: 0;
+        /* Enable truncation */
+    }
+
+    /* Hide text on small screens, show only avatar */
+    .avatar-container {
+        gap: 8px;
+    }
+
+    .child-name {
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100px;
+        /* Limit width */
     }
 
     .game-title {
-        font-size: 1.2rem;
+        display: none;
+        /* Hide title on mobile to save space */
+    }
+
+    .header-right {
+        gap: 8px;
+    }
+
+    .stats-container {
+        gap: 8px;
+    }
+
+    .stat-item {
+        padding: 6px 10px;
+        font-size: 0.85rem;
     }
 
     .game-card {
-        padding: 25px 20px;
+        padding: 20px;
+        margin: 10px;
+        width: calc(100% - 20px);
     }
 
     .question-text {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        line-height: 1.6;
     }
 
-    .option-btn {
-        font-size: 1.2rem;
-        padding: 15px;
+    /* Modal Adjustments */
+    .modal-content {
+        width: 95%;
+        max-height: 85vh;
+        /* Allow some space */
+        margin: 0 10px;
     }
 
-    .result-stats {
-        gap: 20px;
+    .juz-selector {
+        grid-template-columns: repeat(2, 1fr);
+        /* Fixed 2 columns */
+        gap: 8px;
     }
 
-    .stat-value {
-        font-size: 2rem;
-    }
-
-    .dashboard-header {
-        padding: 15px 20px;
-    }
-
-    .dashboard-header h1 {
-        font-size: 1.2rem;
-    }
-
-    .dashboard-main {
-        padding: 15px;
-    }
-
-    .overview-cards {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .children-list {
-        grid-template-columns: 1fr;
-    }
-
-    .tab-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .filter-controls {
-        width: 100%;
-    }
-
-    .filter-controls select {
-        flex: 1;
-    }
-
-    .scores-table-container {
-        overflow-x: auto;
-    }
-
-    .scores-table th,
-    .scores-table td {
-        padding: 12px 15px;
-        white-space: nowrap;
+    .juz-checkbox {
+        padding: 10px;
+        font-size: 0.9rem;
+        justify-content: center;
     }
 }
 
 @media (max-width: 480px) {
+    .game-header {
+        height: auto;
+        min-height: 60px;
+    }
+
+    .child-name {
+        display: none;
+        /* Hide name on very small screens, show only avatar */
+    }
+
     .overview-cards {
         grid-template-columns: 1fr;
-    }
-
-    .overview-card {
-        padding: 20px;
-    }
-
-    .card-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.2rem;
-    }
-
-    .card-content h3 {
-        font-size: 1.5rem;
-    }
-
-    .nav-btn {
-        padding: 15px 18px;
-        font-size: 0.85rem;
     }
 
     .nav-btn span {
         display: none;
     }
 
-    .juz-selector {
-        grid-template-columns: 1fr 1fr;
+    .nav-btn {
+        padding: 12px;
+    }
+
+    /* Ensure achievements fit */
+    .achievements-list {
+        gap: 6px;
+    }
+
+    .achievement-badge {
+        padding: 6px 10px;
+        font-size: 0.75rem;
     }
 }
 
