@@ -1685,18 +1685,21 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 20px 25px;
-    border-bottom: 1px solid #EEE;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-bottom: none;
 }
 
 .modal-header h3 {
-    color: var(--text-dark);
+    color: white;
     display: flex;
     align-items: center;
     gap: 10px;
+    margin: 0;
 }
 
 .btn-close {
-    background: var(--bg-light);
+    background: rgba(255, 255, 255, 0.2);
     border: none;
     width: 35px;
     height: 35px;
@@ -1706,13 +1709,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-light);
+    color: white;
     transition: var(--transition-fast);
 }
 
 .btn-close:hover {
-    background: #E8E8E8;
-    color: var(--text-dark);
+    background: rgba(255, 255, 255, 0.4);
+    color: white;
+    transform: rotate(90deg);
 }
 
 .modal-body {
