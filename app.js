@@ -269,7 +269,7 @@ async function showChildGame() {
         `<span class="badge badge-level">Level ${currentLevel}</span>`;
 
     // Show Badges/Achievements
-    checkAndShowBadges();
+    // checkAndShowBadges(); // HAPUS: Button riwayat skor tidak diperlukan
     renderAchievements();
 
     showGameCard('game-start');
