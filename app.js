@@ -191,7 +191,7 @@ async function loginChild() {
             data: currentChild
         }));
 
-        showChildGame();
+        await showChildGame();
         showToast('Assalamualaikum, ' + currentChild.name + '! 👋', 'success');
     } catch (error) {
         console.error('Login error:', error);
@@ -214,17 +214,40 @@ function logoutChild() {
     document.getElementById('child-pin').value = '';
 }
 
-function showChildGame() {
+async function showChildGame() {
     showScreen('child-game-screen');
 
     // Update display
     document.getElementById('display-child-name').textContent = currentChild.name;
     document.getElementById('child-avatar').textContent = currentChild.avatar || '👶';
 
-    // Update Level and Total Score in Header
+    // Update Level in Header
     const currentLevel = currentChild.level || 1;
-    const totalScore = getTotalScore();
     document.getElementById('current-level').textContent = currentLevel;
+
+    // Calculate and Update Total Score in Header (async)
+    let totalScore = 0;
+    if (typeof db !== 'undefined' && db && currentChild.id) {
+        try {
+            const scoresSnapshot = await db.collection('scores')
+                .where('childId', '==', currentChild.id)
+                .get();
+            scoresSnapshot.forEach(doc => {
+                totalScore += doc.data().score || 0;
+            });
+        } catch (error) {
+            console.error('Error loading total score:', error);
+            // Fallback to localStorage
+            const scores = JSON.parse(localStorage.getItem('tekateki_scores') || '[]');
+            totalScore = scores.filter(s => s.childId === currentChild.id)
+                .reduce((total, s) => total + s.score, 0);
+        }
+    } else {
+        // Local storage
+        const scores = JSON.parse(localStorage.getItem('tekateki_scores') || '[]');
+        totalScore = scores.filter(s => s.childId === currentChild.id)
+            .reduce((total, s) => total + s.score, 0);
+    }
     document.getElementById('total-score-header').textContent = totalScore;
 
     // Show assigned juz
