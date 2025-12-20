@@ -2036,9 +2036,9 @@ body {
     }
 
     .option-btn {
-        font-size: 2.3rem;
-        /* BESAR di mobile, hampir sama pertanyaan */
-        padding: 14px;
+        font-size: 1.9rem;
+        /* Lebih kecil supaya tidak scroll */
+        padding: 12px;
     }
 
     /* Modal Adjustments - BETTER FIT MOBILE */
