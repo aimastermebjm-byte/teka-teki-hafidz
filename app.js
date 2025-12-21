@@ -1454,6 +1454,7 @@ function renderChildrenList(children, scores = []) {
         const juzBadges = (child.assignedJuz || [30]).map(j =>
             `<span class="child-juz-badge">Juz ${j}</span>`
         ).join('');
+        const voiceEnabled = child.voiceEnabled || false;
 
         return `
             <div class="child-card">
@@ -1477,6 +1478,13 @@ function renderChildrenList(children, scores = []) {
                 <div class="child-juz">
                     <p><i class="fas fa-book-quran"></i> Juz yang dipelajari:</p>
                     <div class="child-juz-badges">${juzBadges}</div>
+                </div>
+                <div class="voice-toggle-row">
+                    <span><i class="fas fa-microphone"></i> Mode Sambung Ayat (Beta)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" ${voiceEnabled ? 'checked' : ''} onchange="toggleChildVoice('${child.id}', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
                 </div>
                 <div class="child-actions">
                     <button class="btn-edit" onclick="editChildJuz('${child.id}')">
@@ -1963,6 +1971,33 @@ async function saveChildJuz() {
     }
 
     showLoading(false);
+}
+
+/**
+ * Toggle Voice Quiz setting for a child
+ */
+async function toggleChildVoice(childId, enabled) {
+    try {
+        if (typeof db !== 'undefined' && db) {
+            // Firebase update
+            await db.collection('children').doc(childId).update({
+                voiceEnabled: enabled
+            });
+        } else {
+            // Local storage update
+            const children = JSON.parse(localStorage.getItem('tekateki_children') || '[]');
+            const index = children.findIndex(c => c.id === childId);
+            if (index !== -1) {
+                children[index].voiceEnabled = enabled;
+                localStorage.setItem('tekateki_children', JSON.stringify(children));
+            }
+        }
+
+        showToast(enabled ? 'Mode Sambung Ayat diaktifkan!' : 'Mode Sambung Ayat dinonaktifkan', 'success');
+    } catch (error) {
+        console.error('Toggle voice error:', error);
+        showToast('Gagal mengubah setting!', 'error');
+    }
 }
 
 async function deleteChild(childId) {
