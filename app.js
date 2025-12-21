@@ -476,7 +476,7 @@ async function showChildGame() {
     checkAndShowBadges(); // Tampilkan badge level (tanpa button riwayat)
     renderAchievements();
 
-    showGameCard('game-start');
+    showGameCard('game-mode-select');
 }
 
 function renderAchievements() {
