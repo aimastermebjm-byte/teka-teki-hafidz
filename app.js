@@ -779,6 +779,16 @@ function showGameCard(cardId) {
     document.getElementById(cardId).classList.add('visible');
 }
 
+/**
+ * Show Mode Selection Screen
+ */
+function showModeSelect() {
+    showGameCard('game-mode-select');
+}
+
+/**
+ * Show Teka-Teki Start Screen
+ */
 function showGameStart() {
     resetGameState();
     showGameCard('game-start');

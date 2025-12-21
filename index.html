@@ -165,19 +165,31 @@
             </header>
 
             <main class="game-main">
-                <!-- Start Screen -->
-                <div id="game-start" class="game-card visible">
+                <!-- Mode Selection Screen -->
+                <div id="game-mode-select" class="game-card visible">
                     <div class="mascot-container">
                         <img src="assets/app-icon.jpg" alt="Quran" class="mascot bounce">
                     </div>
                     <h2 class="card-title rainbow-text">Assalamualaikum!</h2>
-                    <p class="card-subtitle">Siap uji hafalanmu hari ini?</p>
-                    <div class="difficulty-info" id="difficulty-info">
-                        <span class="badge badge-easy">Level: Mudah</span>
+                    <p class="card-subtitle">Pilih mode bermain:</p>
+
+                    <div class="mode-buttons">
+                        <button class="mode-btn teka-teki" onclick="showGameStart()">
+                            <div class="mode-icon">🧩</div>
+                            <div class="mode-info">
+                                <span class="mode-title">Teka-Teki</span>
+                                <small>Pilih lanjutan ayat yang benar</small>
+                            </div>
+                        </button>
+                        <button class="mode-btn sambung-ayat" onclick="startVoiceMode()">
+                            <div class="mode-icon">🎤</div>
+                            <div class="mode-info">
+                                <span class="mode-title">Sambung Ayat</span>
+                                <small>Lanjutkan ayat dengan suara</small>
+                            </div>
+                        </button>
                     </div>
-                    <button class="btn-play pulse" onclick="startGame()">
-                        <i class="fas fa-play"></i> Mulai Bermain!
-                    </button>
+
                     <div class="juz-info" id="juz-info">
                         <p><i class="fas fa-book-quran"></i> Juz yang dipelajari:</p>
                         <div class="juz-badges" id="juz-badges"></div>
@@ -186,10 +198,27 @@
                     <div class="achievements-section" id="achievements-section">
                         <p><i class="fas fa-medal"></i> Koleksi Hafalan Surah:</p>
                         <div class="achievements-list" id="achievements-list">
-                            <!-- Badges will appear here -->
                             <p class="empty-state-small">Belum ada surah yang hafal lengkap. Ayo main!</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- Start Screen (Teka-Teki) -->
+                <div id="game-start" class="game-card">
+                    <div class="mascot-container">
+                        <img src="assets/app-icon.jpg" alt="Quran" class="mascot bounce">
+                    </div>
+                    <h2 class="card-title">🧩 Mode Teka-Teki</h2>
+                    <p class="card-subtitle">Pilih lanjutan ayat yang benar!</p>
+                    <div class="difficulty-info" id="difficulty-info">
+                        <span class="badge badge-easy">Level: Mudah</span>
+                    </div>
+                    <button class="btn-play pulse" onclick="startGame()">
+                        <i class="fas fa-play"></i> Mulai!
+                    </button>
+                    <button class="btn-secondary" onclick="showModeSelect()">
+                        <i class="fas fa-arrow-left"></i> Kembali
+                    </button>
                 </div>
 
                 <!-- Quiz Screen -->
@@ -259,6 +288,80 @@
                                 <i class="fas fa-redo"></i> Main Lagi
                             </button>
                             <button class="btn-secondary" onclick="showGameStart()">
+                                <i class="fas fa-home"></i> Menu Utama
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Quiz Screen -->
+                <div id="voice-quiz-screen" class="game-card">
+                    <div class="voice-quiz-header">
+                        <div class="voice-progress">
+                            <span id="voice-progress">1/5</span>
+                        </div>
+                        <div class="voice-score-display">
+                            <i class="fas fa-star"></i>
+                            <span id="voice-score">0</span>
+                        </div>
+                        <button class="btn-icon" onclick="stopVoiceQuiz()" title="Berhenti">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="voice-status-container">
+                        <div class="voice-mic-indicator" id="voice-mic-indicator">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <p class="voice-status" id="voice-status">Memulai...</p>
+                    </div>
+
+                    <div class="voice-surah-badge">
+                        <i class="fas fa-bookmark"></i>
+                        <span id="voice-surah-name">Al-Fatihah</span>
+                    </div>
+
+                    <div class="voice-ayah-container">
+                        <p class="voice-ayah-text arabic-text" id="voice-ayah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ
+                            الرَّحِيمِ</p>
+                    </div>
+
+                    <div class="voice-spoken-container">
+                        <p class="voice-spoken-label">Yang kamu ucapkan:</p>
+                        <p class="voice-spoken-text arabic-text" id="voice-spoken-text"></p>
+                    </div>
+
+                    <div class="voice-feedback hidden" id="voice-feedback">
+                        <span class="voice-feedback-icon" id="voice-feedback-icon">✅</span>
+                        <span class="voice-feedback-text" id="voice-feedback-text">Benar!</span>
+                    </div>
+
+                    <div class="voice-correct-container hidden" id="voice-correct-container">
+                        <p class="voice-correct-label">Ayat yang benar:</p>
+                        <p class="voice-correct-ayah arabic-text" id="voice-correct-ayah"></p>
+                    </div>
+                </div>
+
+                <!-- Voice Result Screen -->
+                <div id="voice-result-screen" class="game-card">
+                    <div class="result-content">
+                        <div class="result-emoji">🎤</div>
+                        <h2 class="result-title">Sambung Ayat Selesai!</h2>
+                        <div class="result-stats">
+                            <div class="result-stat">
+                                <span class="stat-value" id="voice-final-score">0</span>
+                                <span class="stat-label">Skor</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="stat-value" id="voice-correct-count">0/0</span>
+                                <span class="stat-label">Benar</span>
+                            </div>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn-play" onclick="startVoiceMode()">
+                                <i class="fas fa-redo"></i> Main Lagi
+                            </button>
+                            <button class="btn-secondary" onclick="showModeSelect()">
                                 <i class="fas fa-home"></i> Menu Utama
                             </button>
                         </div>
@@ -565,8 +668,11 @@
 
             <!-- App Scripts -->
             <script src="firebase-config.js?v=2.2"></script>
-            <script src="quran-data.js?v=2.2"></script>
-            <script src="app.js?v=2.2"></script>
+            <script src="quran-data.js?v=2.3"></script>
+            <script src="elevenlabs-service.js?v=1.0"></script>
+            <script src="gemini-service.js?v=1.0"></script>
+            <script src="voice-quiz.js?v=1.0"></script>
+            <script src="app.js?v=2.3"></script>
             <script>
                 if ('serviceWorker' in navigator) {
                     window.addEventListener('load', () => {
