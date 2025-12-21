@@ -476,6 +476,13 @@ async function showChildGame() {
     checkAndShowBadges(); // Tampilkan badge level (tanpa button riwayat)
     renderAchievements();
 
+    // Show/hide Voice Mode button based on child setting
+    const voiceModeBtn = document.getElementById('voice-mode-btn');
+    if (voiceModeBtn) {
+        // Show if voiceEnabled is true, otherwise hide
+        voiceModeBtn.style.display = currentChild?.voiceEnabled ? 'flex' : 'none';
+    }
+
     showGameCard('game-mode-select');
 }
 

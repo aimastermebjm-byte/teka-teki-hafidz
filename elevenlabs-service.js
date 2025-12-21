@@ -22,6 +22,8 @@ async function speakWithElevenLabs(text) {
         return speakWithWebSpeech(text, 'ar-SA');
     }
 
+    console.log('🎤 Mencoba ElevenLabs TTS...');
+
     try {
         const response = await fetch(
             `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_CONFIG.voiceId}?output_format=mp3_44100_128`,
@@ -35,18 +37,22 @@ async function speakWithElevenLabs(text) {
                     text: text,
                     model_id: ELEVENLABS_CONFIG.modelId,
                     voice_settings: {
-                        stability: 0.75,        // Lebih stabil, tidak terlalu variasi
-                        similarity_boost: 0.75, // Natural voice
-                        style: 0.3,             // Sedikit ekspresif
-                        use_speaker_boost: true // Lebih jelas
+                        stability: 0.75,
+                        similarity_boost: 0.75,
+                        style: 0.3,
+                        use_speaker_boost: true
                     }
                 })
             }
         );
 
         if (!response.ok) {
+            const errorText = await response.text();
+            console.error('ElevenLabs error response:', errorText);
             throw new Error(`ElevenLabs API error: ${response.status}`);
         }
+
+        console.log('✅ ElevenLabs berhasil! Memainkan audio...');
 
         const audioBlob = await response.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
@@ -65,7 +71,7 @@ async function speakWithElevenLabs(text) {
             audio.play();
         });
     } catch (error) {
-        console.error('ElevenLabs error:', error);
+        console.error('❌ ElevenLabs gagal, fallback ke Web Speech:', error);
         // Fallback ke Web Speech API
         return speakWithWebSpeech(text, 'ar-SA');
     }
