@@ -5,7 +5,7 @@
 
 // API Configuration - User perlu isi API Key di sini
 const ELEVENLABS_CONFIG = {
-    apiKey: '', // ISI API KEY ELEVENLABS DI SINI
+    apiKey: 'sk_0fdb491b1d84ec617a40262c139625b15f6f6c3264ea37f9',
     voiceId: 'pNInz6obpgDQGcFmaJgB', // Adam - Arabic support
     modelId: 'eleven_multilingual_v2'
 };
