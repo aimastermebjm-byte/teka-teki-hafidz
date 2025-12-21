@@ -33,7 +33,13 @@ async function speakWithElevenLabs(text) {
                 },
                 body: JSON.stringify({
                     text: text,
-                    model_id: ELEVENLABS_CONFIG.modelId
+                    model_id: ELEVENLABS_CONFIG.modelId,
+                    voice_settings: {
+                        stability: 0.75,        // Lebih stabil, tidak terlalu variasi
+                        similarity_boost: 0.75, // Natural voice
+                        style: 0.3,             // Sedikit ekspresif
+                        use_speaker_boost: true // Lebih jelas
+                    }
                 })
             }
         );
@@ -47,6 +53,7 @@ async function speakWithElevenLabs(text) {
 
         return new Promise((resolve, reject) => {
             const audio = new Audio(audioUrl);
+            audio.playbackRate = 0.85; // Pelankan sedikit untuk lebih jelas
             audio.onended = () => {
                 URL.revokeObjectURL(audioUrl);
                 resolve();
