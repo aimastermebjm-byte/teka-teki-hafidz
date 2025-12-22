@@ -5,7 +5,7 @@
 
 // API Configuration
 const GOOGLE_TTS_CONFIG = {
-    apiKey: '', // ISI API KEY GOOGLE CLOUD DI SINI (sama dengan Gemini bisa dicoba)
+    apiKey: 'AIzaSyC7frwHrfuh_4QmBbpaevvcw0EIN5jQbN0', // API key dengan TTS enabled
     // Voice settings
     arabicVoice: {
         languageCode: 'ar-XA',

@@ -5,7 +5,7 @@
 
 // API Configuration - User perlu isi API Key di sini
 const GEMINI_CONFIG = {
-    apiKey: 'AIzaSyCrUkSH48kJY5BORIWl6REY9cUihxkhJVE',
+    apiKey: 'AIzaSyC7frwHrfuh_4QmBbpaevvcw0EIN5jQbN0',
     model: 'gemini-2.0-flash-exp',
     endpoint: 'https://generativelanguage.googleapis.com/v1beta/models'
 };
