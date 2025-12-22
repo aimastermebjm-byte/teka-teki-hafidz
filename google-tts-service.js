@@ -51,7 +51,7 @@ async function speakWithGoogleTTS(text, language = 'id') {
                     voice: voice,
                     audioConfig: {
                         audioEncoding: 'MP3',
-                        speakingRate: language === 'ar' ? 0.85 : 0.95, // Lebih pelan untuk Arab
+                        speakingRate: language === 'ar' ? 1.0 : 1.1, // Kecepatan normal
                         pitch: 0
                     }
                 })
@@ -73,7 +73,7 @@ async function speakWithGoogleTTS(text, language = 'id') {
 
         return new Promise((resolve, reject) => {
             const audio = new Audio(audioUrl);
-            audio.playbackRate = 0.9; // Sedikit lebih pelan
+            audio.playbackRate = 1.0; // Kecepatan normal
             audio.onended = () => {
                 URL.revokeObjectURL(audioUrl);
                 resolve();
