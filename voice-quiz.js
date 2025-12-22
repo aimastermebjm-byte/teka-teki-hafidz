@@ -218,8 +218,8 @@ async function listenForAnswer(retryCount = 0) {
         return;
     }
 
-    // Jeda sebentar sebelum mulai mendengarkan agar audio TTS tidak masuk
-    await delay(500);
+    // Jeda lebih lama agar audio output benar-benar berhenti dan mic siap
+    await delay(1500);
 
     updateVoiceStatus('Mendengarkan...');
     showMicActive(true);
@@ -227,6 +227,13 @@ async function listenForAnswer(retryCount = 0) {
 
     return new Promise((resolve) => {
         let hasResult = false;
+
+        // Pastikan stop dulu sebelum start baru untuk menghindari konflik
+        try {
+            recognition.stop();
+        } catch (e) {
+            // ignore
+        }
 
         recognition.onresult = async (event) => {
             hasResult = true;
