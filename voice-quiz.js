@@ -74,6 +74,18 @@ async function startVoiceMode() {
     // Start with greeting
     await greetChild();
 
+    // Add manual mic trigger for robustness
+    const micIndicator = document.getElementById('voice-mic-indicator');
+    if (micIndicator) {
+        micIndicator.onclick = () => {
+            // Only allow manual trigger if active and not already listening
+            if (voiceQuizState.isActive && !voiceQuizState.isListening) {
+                console.log('👆 Manual mic trigger');
+                listenForAnswer();
+            }
+        };
+    }
+
     // Start first question
     await showVoiceQuestion();
 }
@@ -218,8 +230,11 @@ async function listenForAnswer(retryCount = 0) {
         return;
     }
 
-    // Jeda lebih lama agar audio output benar-benar berhenti dan mic siap
-    await delay(1500);
+    // Stop previous instance to prevent conflicts
+    try { recognition.stop(); } catch (e) { }
+
+    // Delay to clear audio context
+    await delay(1000);
 
     updateVoiceStatus('Mendengarkan...');
     showMicActive(true);
@@ -228,19 +243,13 @@ async function listenForAnswer(retryCount = 0) {
     return new Promise((resolve) => {
         let hasResult = false;
 
-        // Pastikan stop dulu sebelum start baru untuk menghindari konflik
-        try {
-            recognition.stop();
-        } catch (e) {
-            // ignore
-        }
-
         recognition.onresult = async (event) => {
             hasResult = true;
             const transcript = event.results[0][0].transcript;
             showMicActive(false);
             voiceQuizState.isListening = false;
 
+            updateVoiceStatus('Memproses jawaban...');
             await verifyVoiceAnswer(transcript);
             resolve();
         };
@@ -251,50 +260,45 @@ async function listenForAnswer(retryCount = 0) {
             voiceQuizState.isListening = false;
 
             if (event.error === 'no-speech') {
-                await speak('Tidak terdengar suara. Coba lagi ya.');
-                await listenForAnswer(); // Retry
-            } else if ((event.error === 'network' || event.error === 'aborted') && retryCount < 2) {
-                // Retry for network errors
-                console.log(`Network error, retrying (${retryCount + 1}/2)...`);
-                await delay(2000); // Wait longer
-                await listenForAnswer(retryCount + 1);
+                if (retryCount < 1) {
+                    await speak('Tidak terdengar suara. Coba lagi ya.');
+                    await listenForAnswer(retryCount + 1);
+                } else {
+                    updateVoiceStatus('Klik mik untuk coba lagi');
+                }
             } else if (event.error === 'network') {
-                await speak('Koneksi internet bermasalah. Coba lagi ya.');
-                // Don't skip question, let them try again manually? Or skip?
-                // For now, skip to avoid getting stuck
-                nextVoiceQuestion();
+                updateVoiceStatus('Koneksi putus. Klik mik untuk ulang.');
+                await speak('Koneksi terputus. Klik ikon mikrofon untuk mencoba lagi.');
+                // No auto-retry for network to prevent loop
+            } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                showToast('Akses mikrofon ditolak. Izinkan di browser.', 'error');
+                updateVoiceStatus('Mikrofon diblokir');
             } else {
-                await speak('Maaf, ada masalah teknis. Lanjut ke ayat berikutnya.');
-                nextVoiceQuestion();
+                updateVoiceStatus('Error. Klik mik untuk ulang.');
             }
             resolve();
         };
 
         recognition.onend = () => {
-            // Jika berhenti tapi belum ada hasil dan masih listening state, restart
+            // If stopped without result and still "listening" state (unexpected end)
+            // We don't auto-restart here to avoid "network" loop.
+            // Rely on manual click if it wasn't a valid result.
             if (voiceQuizState.isListening && !hasResult) {
-                try {
-                    recognition.start();
-                } catch (e) {
-                    console.error('Restart recognition failed');
-                }
+                voiceQuizState.isListening = false;
+                showMicActive(false);
+                updateVoiceStatus('Klik mik untuk bicara');
             }
         };
 
         try {
             recognition.start();
         } catch (e) {
-            console.log('Recognition already started');
+            console.error('Failed to start recognition:', e);
+            voiceQuizState.isListening = false;
+            showMicActive(false);
+            updateVoiceStatus('Gagal memulai mik. Klik untuk coba.');
+            resolve();
         }
-
-        // Timeout after 15 seconds
-        setTimeout(() => {
-            if (voiceQuizState.isListening) {
-                recognition.stop();
-                voiceQuizState.isListening = false;
-                // Don't auto-resolve here, let onend/onerror handle it
-            }
-        }, 15000);
     });
 }
 

@@ -2613,6 +2613,12 @@ body {
     color: white;
     box-shadow: 0 4px 20px rgba(108, 99, 255, 0.3);
     transition: var(--transition-normal);
+    cursor: pointer; /* Clickable */
+}
+
+.voice-mic-indicator:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(108, 99, 255, 0.4);
 }
 
 .voice-mic-indicator.active {
