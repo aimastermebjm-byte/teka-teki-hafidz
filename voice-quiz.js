@@ -131,8 +131,8 @@ async function greetChild() {
         greeting = `Assalamualaikum ${childName}! Hari ini kita latihan sambung ayat dari Juz ${juzList.join(' dan ')} ya. Siap?`;
     }
 
-    // Speak greeting (Indonesian - use Web Speech)
-    await speakWithWebSpeech(greeting, 'id-ID');
+    // Speak greeting with ElevenLabs
+    await speakWithElevenLabs(greeting);
 
     // Small pause
     await delay(1000);
@@ -159,7 +159,7 @@ async function showVoiceQuestion() {
     updateVoiceStatus('Membaca ayat...');
 
     // Announce surah
-    await speakWithWebSpeech(`Dari Surah ${question.surah}`, 'id-ID');
+    await speakWithElevenLabs(`Dari Surah ${question.surah}`);
     await delay(500);
 
     // Read ayah with ElevenLabs (or fallback)
@@ -173,7 +173,7 @@ async function showVoiceQuestion() {
 
     // Prompt to continue
     const childName = currentChild?.name || 'Ananda';
-    await speakWithWebSpeech(`Silahkan ${childName} lanjutkan`, 'id-ID');
+    await speakWithElevenLabs(`Silahkan ${childName} lanjutkan`);
 
     // Start listening
     await listenForAnswer();
@@ -209,10 +209,10 @@ async function listenForAnswer() {
             voiceQuizState.isListening = false;
 
             if (event.error === 'no-speech') {
-                await speakWithWebSpeech('Tidak terdengar suara. Coba lagi ya.', 'id-ID');
+                await speakWithElevenLabs('Tidak terdengar suara. Coba lagi ya.');
                 await listenForAnswer(); // Retry
             } else {
-                await speakWithWebSpeech('Maaf, ada masalah. Lanjut ke ayat berikutnya.', 'id-ID');
+                await speakWithElevenLabs('Maaf, ada masalah. Lanjut ke ayat berikutnya.');
                 nextVoiceQuestion();
             }
             resolve();
@@ -281,7 +281,7 @@ async function verifyVoiceAnswer(spokenText) {
     }
 
     // Speak feedback
-    await speakWithWebSpeech(result.feedback, 'id-ID');
+    await speakWithElevenLabs(result.feedback);
 
     await delay(2000);
 
@@ -337,7 +337,7 @@ async function endVoiceQuiz() {
         `${voiceQuizState.correctCount}/${voiceQuizState.questions.length}`;
 
     // Speak feedback
-    await speakWithWebSpeech(feedback, 'id-ID');
+    await speakWithElevenLabs(feedback);
 }
 
 /**
