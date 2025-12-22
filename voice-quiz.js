@@ -160,7 +160,7 @@ async function showVoiceQuestion() {
 
     // Announce surah
     await speakWithElevenLabs(`Dari Surah ${question.surah}`);
-    await delay(500);
+    await delay(1500); // Jeda lebih lama setelah umumkan surah
 
     // Read ayah with ElevenLabs (or fallback)
     if (typeof speakWithElevenLabs === 'function') {
@@ -169,7 +169,7 @@ async function showVoiceQuestion() {
         await speakWithWebSpeech(question.question.text, 'ar-SA');
     }
 
-    await delay(500);
+    await delay(2000); // Jeda cukup lama sebelum minta anak menjawab
 
     // Prompt to continue
     const childName = currentChild?.name || 'Ananda';
