@@ -216,10 +216,15 @@ async function listenForAnswer(retryCount = 0) {
             } else if ((event.error === 'network' || event.error === 'aborted') && retryCount < 2) {
                 // Retry for network errors
                 console.log(`Network error, retrying (${retryCount + 1}/2)...`);
-                await delay(1000);
+                await delay(2000); // Wait longer
                 await listenForAnswer(retryCount + 1);
+            } else if (event.error === 'network') {
+                await speak('Koneksi internet bermasalah. Coba lagi ya.');
+                // Don't skip question, let them try again manually? Or skip?
+                // For now, skip to avoid getting stuck
+                nextVoiceQuestion();
             } else {
-                await speak('Maaf, ada masalah. Lanjut ke ayat berikutnya.');
+                await speak('Maaf, ada masalah teknis. Lanjut ke ayat berikutnya.');
                 nextVoiceQuestion();
             }
             resolve();
