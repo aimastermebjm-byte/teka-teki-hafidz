@@ -158,21 +158,54 @@ async function showVoiceQuestion() {
 
     updateVoiceStatus('Membaca ayat...');
 
-    // Announce surah
+    // Announce surah (Indonesian TTS)
     await speak(`Dari Surah ${question.surah}`);
-    await delay(1500); // Jeda lebih lama setelah umumkan surah
+    await delay(1000);
 
-    // Read ayah with Google TTS
-    await speak(question.question.text);
+    // Play Ayah Audio (Mishary Rashid Alafasy) - Natural Quran Recitation
+    await playQariAudio(question.surahNumber, question.question.num);
 
-    await delay(2000); // Jeda cukup lama sebelum minta anak menjawab
+    await delay(1000);
 
-    // Prompt to continue
+    // Prompt to continue (Indonesian TTS)
     const childName = currentChild?.name || 'Ananda';
     await speak(`Silahkan ${childName} lanjutkan`);
 
     // Start listening
     await listenForAnswer();
+}
+
+/**
+ * Play Quran Audio from Qari (Mishary Rashid Alafasy)
+ */
+function playQariAudio(surahNum, ayahNum) {
+    return new Promise((resolve, reject) => {
+        // Format numbers to 3 digits (e.g., 1 -> 001)
+        const s = surahNum.toString().padStart(3, '0');
+        const a = ayahNum.toString().padStart(3, '0');
+
+        // EveryAyah CDN (Mishary Alafasy 128kbps)
+        const url = `https://everyayah.com/data/Alafasy_128kbps/${s}${a}.mp3`;
+
+        console.log('▶️ Playing Qari Audio:', url);
+        updateVoiceStatus('Membaca ayat...');
+
+        const audio = new Audio(url);
+
+        audio.onended = () => resolve();
+        audio.onerror = (e) => {
+            console.error('Qari audio failed, fallback to TTS', e);
+            // Fallback to Google TTS if audio fails (e.g. offline)
+            speakWithGoogleTTS(voiceQuizState.questions[voiceQuizState.currentIndex].question.text, 'ar')
+                .then(resolve)
+                .catch(resolve);
+        };
+
+        audio.play().catch(e => {
+            console.error('Audio play error:', e);
+            resolve(); // Resolve anyway to continue flow
+        });
+    });
 }
 
 /**
