@@ -6,7 +6,7 @@
 // API Configuration - User perlu isi API Key di sini
 const ELEVENLABS_CONFIG = {
     apiKey: 'sk_0fdb491b1d84ec617a40262c139625b15f6f6c3264ea37f9',
-    voiceId: 'LjKPkQHpXCsWoy7Pjq4U', // Alice - Perempuan Arab, soft & warm
+    voiceId: 'OKanSStS6li6xyU1WdXa', // Meraki - Indonesian Female
     modelId: 'eleven_multilingual_v2'
 };
 
