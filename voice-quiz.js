@@ -131,8 +131,8 @@ async function greetChild() {
         greeting = `Assalamualaikum ${childName}! Hari ini kita latihan sambung ayat dari Juz ${juzList.join(' dan ')} ya. Siap?`;
     }
 
-    // Speak greeting with ElevenLabs
-    await speakWithElevenLabs(greeting);
+    // Speak greeting with Google TTS
+    await speak(greeting);
 
     // Small pause
     await delay(1000);
@@ -159,21 +159,17 @@ async function showVoiceQuestion() {
     updateVoiceStatus('Membaca ayat...');
 
     // Announce surah
-    await speakWithElevenLabs(`Dari Surah ${question.surah}`);
+    await speak(`Dari Surah ${question.surah}`);
     await delay(1500); // Jeda lebih lama setelah umumkan surah
 
-    // Read ayah with ElevenLabs (or fallback)
-    if (typeof speakWithElevenLabs === 'function') {
-        await speakWithElevenLabs(question.question.text);
-    } else {
-        await speakWithWebSpeech(question.question.text, 'ar-SA');
-    }
+    // Read ayah with Google TTS
+    await speak(question.question.text);
 
     await delay(2000); // Jeda cukup lama sebelum minta anak menjawab
 
     // Prompt to continue
     const childName = currentChild?.name || 'Ananda';
-    await speakWithElevenLabs(`Silahkan ${childName} lanjutkan`);
+    await speak(`Silahkan ${childName} lanjutkan`);
 
     // Start listening
     await listenForAnswer();
@@ -209,10 +205,10 @@ async function listenForAnswer() {
             voiceQuizState.isListening = false;
 
             if (event.error === 'no-speech') {
-                await speakWithElevenLabs('Tidak terdengar suara. Coba lagi ya.');
+                await speak('Tidak terdengar suara. Coba lagi ya.');
                 await listenForAnswer(); // Retry
             } else {
-                await speakWithElevenLabs('Maaf, ada masalah. Lanjut ke ayat berikutnya.');
+                await speak('Maaf, ada masalah. Lanjut ke ayat berikutnya.');
                 nextVoiceQuestion();
             }
             resolve();
@@ -281,7 +277,7 @@ async function verifyVoiceAnswer(spokenText) {
     }
 
     // Speak feedback
-    await speakWithElevenLabs(result.feedback);
+    await speak(result.feedback);
 
     await delay(2000);
 
@@ -337,7 +333,7 @@ async function endVoiceQuiz() {
         `${voiceQuizState.correctCount}/${voiceQuizState.questions.length}`;
 
     // Speak feedback
-    await speakWithElevenLabs(feedback);
+    await speak(feedback);
 }
 
 /**
