@@ -178,19 +178,25 @@ async function showVoiceQuestion() {
 /**
  * Listen for child's answer
  */
-async function listenForAnswer() {
+async function listenForAnswer(retryCount = 0) {
     const recognition = voiceQuizState.recognition;
     if (!recognition) {
         showToast('Speech recognition tidak tersedia', 'error');
         return;
     }
 
+    // Jeda sebentar sebelum mulai mendengarkan agar audio TTS tidak masuk
+    await delay(500);
+
     updateVoiceStatus('Mendengarkan...');
     showMicActive(true);
     voiceQuizState.isListening = true;
 
     return new Promise((resolve) => {
+        let hasResult = false;
+
         recognition.onresult = async (event) => {
+            hasResult = true;
             const transcript = event.results[0][0].transcript;
             showMicActive(false);
             voiceQuizState.isListening = false;
@@ -207,6 +213,11 @@ async function listenForAnswer() {
             if (event.error === 'no-speech') {
                 await speak('Tidak terdengar suara. Coba lagi ya.');
                 await listenForAnswer(); // Retry
+            } else if ((event.error === 'network' || event.error === 'aborted') && retryCount < 2) {
+                // Retry for network errors
+                console.log(`Network error, retrying (${retryCount + 1}/2)...`);
+                await delay(1000);
+                await listenForAnswer(retryCount + 1);
             } else {
                 await speak('Maaf, ada masalah. Lanjut ke ayat berikutnya.');
                 nextVoiceQuestion();
@@ -215,24 +226,33 @@ async function listenForAnswer() {
         };
 
         recognition.onend = () => {
-            if (voiceQuizState.isListening) {
-                // Restart if still listening
-                recognition.start();
+            // Jika berhenti tapi belum ada hasil dan masih listening state, restart
+            if (voiceQuizState.isListening && !hasResult) {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    console.error('Restart recognition failed');
+                }
             }
         };
 
-        recognition.start();
+        try {
+            recognition.start();
+        } catch (e) {
+            console.log('Recognition already started');
+        }
 
         // Timeout after 15 seconds
         setTimeout(() => {
             if (voiceQuizState.isListening) {
                 recognition.stop();
                 voiceQuizState.isListening = false;
-                showMicActive(false);
+                // Don't auto-resolve here, let onend/onerror handle it
             }
         }, 15000);
     });
 }
+
 
 /**
  * Verify the spoken answer

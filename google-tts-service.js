@@ -51,7 +51,7 @@ async function speakWithGoogleTTS(text, language = 'id') {
                     voice: voice,
                     audioConfig: {
                         audioEncoding: 'MP3',
-                        speakingRate: language === 'ar' ? 1.0 : 1.1, // Kecepatan normal
+                        speakingRate: language === 'ar' ? 0.85 : 1.1, // Arab lebih pelan untuk kejelasan tajwid
                         pitch: 0
                     }
                 })
