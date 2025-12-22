@@ -24,8 +24,8 @@ function initSpeechRecognition() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
 
-    recognition.lang = 'ar-SA'; // Arabic
-    recognition.continuous = false;
+    recognition.lang = 'ar-EG'; // Arabic (Egypt) - often more stable than SA
+    console.log('Speech Recognition Language:', recognition.lang); recognition.continuous = false;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
