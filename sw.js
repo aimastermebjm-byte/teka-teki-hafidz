@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hafidz-app-v4'; // Increment version to force update
+const CACHE_NAME = 'hafidz-app-v5'; // Force Update for CSS Fix
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
