@@ -1020,21 +1020,39 @@ function startTimer() {
         clearInterval(gameState.timer);
     }
 
-    // Timer based on Level or Parent Setting
-    let baseTime = 30;
+    // Timer Logic: Smart Scaling
+    // Default Base: 30s (if no parent setting)
+    // Custom Setting: overrides Base
 
-    // Check if parent set a custom timer for this child
+    let baseTime = 30; // Default
+
+    // 1. Check Parent Setting (Priority)
     if (currentChild && currentChild.timerDuration) {
         baseTime = parseInt(currentChild.timerDuration);
-    } else {
-        // Fallback or Scaling logic
+    }
+    // If no parent setting, use level-based default
+    else {
         const level = currentChild.level || 1;
         if (level < 5) baseTime = 30;
         else if (level < 10) baseTime = 25;
         else baseTime = 20;
     }
 
-    gameState.timeLeft = baseTime;
+    // 2. Apply Difficulty Modifiers
+    // Easy: Base Time
+    // Medium: Base - 2s
+    // Hard: Base - 5s
+
+    if (gameState.difficulty === 'medium') {
+        gameState.timeLeft = baseTime - 2;
+    } else if (gameState.difficulty === 'hard') {
+        gameState.timeLeft = baseTime - 5;
+    } else {
+        gameState.timeLeft = baseTime; // Easy
+    }
+
+    // 3. Safety Floor (Min 3 seconds)
+    if (gameState.timeLeft < 3) gameState.timeLeft = 3;
 
     document.getElementById('timer').textContent = gameState.timeLeft;
 
