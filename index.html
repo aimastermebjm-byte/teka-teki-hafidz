@@ -681,18 +681,31 @@
             <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
             <!-- App Scripts -->
-            <script src="firebase-config.js?v=2.2"></script>
-            <script src="quran-data.js?v=2.3"></script>
-            <script src="google-tts-service.js?v=1.0"></script>
-            <script src="gemini-service.js?v=1.0"></script>
+            <!-- App Scripts -->
+            <script src="assets/firebase-config.js?v=3.0"></script>
+            <script src="assets/quran-data.js?v=3.0"></script>
+            <script src="assets/google-tts-service.js?v=3.0"></script>
+            <script src="assets/gemini-service.js?v=3.0"></script>
             <script src="voice-quiz.js?v=1.0"></script>
-            <script src="app.js?v=2.3"></script>
+            <script src="assets/app.js?v=3.0"></script>
             <script>
+                // EMERGENCY FIX: Unregister old SW to stop flickering loops
                 if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                        for(let registration of registrations) {
+                            registration.unregister().then(function(boolean) {
+                                console.log('Service Worker unregistered: ', boolean);
+                            });
+                        }
+                    });
+
+                    // Re-register with correct path
                     window.addEventListener('load', () => {
-                        navigator.serviceWorker.register('./sw.js')
-                            .then(reg => console.log('SW registered'))
-                            .catch(err => console.log('SW failed', err));
+                        setTimeout(() => {
+                            navigator.serviceWorker.register('./sw.js')
+                                .then(reg => console.log('New SW registered'))
+                                .catch(err => console.log('SW failed', err));
+                        }, 2000); // Delay to ensure unregister completes
                     });
                 }
             </script>

@@ -1,14 +1,14 @@
-const CACHE_NAME = 'hafidz-app-v3'; // Increment version again
+const CACHE_NAME = 'hafidz-app-v4'; // Increment version to force update
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './style.css',
     './voice-quiz.js',
-    './app/src/main/assets/app.js',
-    './app/src/main/assets/firebase-config.js',
-    './app/src/main/assets/quran-data.js',
-    './app/src/main/assets/google-tts-service.js',
-    './app/src/main/assets/gemini-service.js',
+    './assets/app.js',
+    './assets/firebase-config.js',
+    './assets/quran-data.js',
+    './assets/google-tts-service.js',
+    './assets/gemini-service.js',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@300;400;500;600;700&display=swap',
     './assets/app-icon.jpg'
