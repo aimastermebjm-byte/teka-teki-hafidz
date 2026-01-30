@@ -1,11 +1,14 @@
-const CACHE_NAME = 'hafidz-app-v1';
+const CACHE_NAME = 'hafidz-app-v3'; // Increment version again
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './style.css',
-    './app.js',
-    './firebase-config.js',
-    './quran-data.js',
+    './voice-quiz.js',
+    './app/src/main/assets/app.js',
+    './app/src/main/assets/firebase-config.js',
+    './app/src/main/assets/quran-data.js',
+    './app/src/main/assets/google-tts-service.js',
+    './app/src/main/assets/gemini-service.js',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     'https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@300;400;500;600;700&display=swap',
     './assets/app-icon.jpg'
@@ -13,6 +16,7 @@ const ASSETS_TO_CACHE = [
 
 // Install Event
 self.addEventListener('install', (event) => {
+    self.skipWaiting(); // Force active immediately
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
@@ -32,12 +36,21 @@ self.addEventListener('activate', (event) => {
                     }
                 })
             );
-        })
+        }).then(() => self.clients.claim()) // Take control immediately
     );
 });
 
 // Fetch Event
 self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+
+    // IGNORE Firestore & Google API requests (let them go to network directly)
+    if (url.hostname.includes('firestore.googleapis.com') ||
+        url.hostname.includes('googleapis.com') ||
+        url.href.includes('firebase')) {
+        return; // Do not call respondWith, let browser handle it
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
