@@ -803,7 +803,9 @@ function showGameStart() {
 }
 
 function updateDifficultyDisplay() {
-    const totalScore = getTotalScore();
+    // FIX: Get score from UI (Firebase Source of Truth) instead of LocalStorage
+    const totalScoreElement = document.getElementById('total-score-header');
+    const totalScore = totalScoreElement ? parseInt(totalScoreElement.textContent.replace(/\./g, '') || '0') : getTotalScore();
     let difficulty = 'easy';
     let label = 'Mudah';
     let badgeClass = 'badge-easy';
