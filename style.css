@@ -1798,14 +1798,22 @@ body {
     font-family: 'Fredoka', sans-serif;
 }
 
+.child-juz-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 100%;
+}
+
 .child-juz-badge {
     background: var(--accent);
     color: white;
-    padding: 6px 14px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    box-shadow: 0 4px 0 #58B4E5;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    box-shadow: 0 2px 0 #58B4E5;
+    white-space: nowrap;
 }
 
 .child-actions {
