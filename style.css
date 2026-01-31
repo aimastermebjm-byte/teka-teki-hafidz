@@ -884,6 +884,18 @@ body {
     color: white;
 }
 
+.dashboard-header h1 {
+    color: #C6F6D5 !important;
+    /* Hijau mint terang */
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-header h1 i {
+    color: #C6F6D5 !important;
+}
+
 .dashboard-header .btn-icon {
     background: white !important;
     color: var(--primary-dark) !important;
