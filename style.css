@@ -1668,19 +1668,19 @@ body {
     color: var(--primary);
 }
 
-/* Header */
-.game-header,
-.dashboard-header {
+/* Header - Game Header Only (Dashboard header has jelly styling separately) */
+.game-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 30px;
-    background: white;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F0FFF4 100%);
     box-shadow: var(--shadow-sm);
     position: sticky;
     top: 0;
     z-index: 100;
-    height: 80px;
+    height: auto;
+    min-height: 70px;
 }
 
 .header-left,
