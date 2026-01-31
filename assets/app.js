@@ -1387,9 +1387,9 @@ function subscribeToDashboardData() {
             });
 
         // Listen to Scores Data - CLIENT SIDE SORTING (No Index Required)
+        // Note: Removed limit(100) to ensure ALL scores are fetched for accurate totals
         unsubscribeScores = db.collection('scores')
             .where('parentId', '==', currentParent.uid)
-            .limit(100)
             .onSnapshot((snapshot) => {
                 let scores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
