@@ -474,7 +474,7 @@ async function showChildGame() {
 
     // Show Badges/Achievements
     checkAndShowBadges(); // Tampilkan badge level (tanpa button riwayat)
-    renderAchievements();
+    // renderAchievements(); // CONFLICT: Overwrites Level Badges. Disabled to show 3D Level Badges.
 
     // Show/hide Voice Mode button based on child setting
     const voiceModeBtn = document.getElementById('voice-mode-btn');
@@ -541,52 +541,68 @@ async function reloadChildSession(childData) {
 function checkAndShowBadges() {
     const level = currentChild.level || 1;
 
-    // Get or create level badges container
-    let levelBadgesContainer = document.getElementById('level-badges-container');
+    // Use the existing Achievements Grid Container from HTML
+    // (This container is defined in index.html with id='achievements-list')
+    let levelBadgesContainer = document.getElementById('achievements-list');
+
+    // Safety fallback: if for some reason the HTML doesn't have it (e.g. cache issue), create it
     if (!levelBadgesContainer) {
-        // Create new container for level badges after juz badges
-        const juzInfo = document.querySelector('.juz-info');
-        if (juzInfo) {
+        // Try to find the section wrapper
+        const section = document.getElementById('achievements-section');
+        if (section) {
             levelBadgesContainer = document.createElement('div');
-            levelBadgesContainer.id = 'level-badges-container';
-            levelBadgesContainer.className = 'level-badges-container';
-            levelBadgesContainer.innerHTML = '<p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 12px;">🏅 Pencapaian:</p>';
-            juzInfo.appendChild(levelBadgesContainer);
+            levelBadgesContainer.id = 'achievements-list';
+            levelBadgesContainer.className = 'achievements-list';
+            section.appendChild(levelBadgesContainer);
+        } else {
+            // Last resort: append to juz info (old behavior fallback)
+            const juzInfo = document.querySelector('.juz-info');
+            if (juzInfo) {
+                levelBadgesContainer = document.createElement('div');
+                levelBadgesContainer.id = 'achievements-list';
+                levelBadgesContainer.className = 'achievements-list';
+                // Add margins if appending here
+                levelBadgesContainer.style.marginTop = "20px";
+                if (juzInfo.parentElement) juzInfo.parentElement.appendChild(levelBadgesContainer);
+            } else {
+                return; // Can't render
+            }
         }
-    } else {
-        // Clear existing badges (keep the title)
-        const badges = levelBadgesContainer.querySelectorAll('.level-badge');
-        badges.forEach(b => b.remove());
     }
 
-    // Add Level Badges based on milestones (VERTIKAL)
+    // Clear existing badges to re-render
+    levelBadgesContainer.innerHTML = '';
+
+    // Render Badges as 3D Cards
     if (level >= 3) {
         const b = document.createElement('div');
-        b.className = 'level-badge badge-bronze';
-        b.innerHTML = '🌟 Bintang Hafalan';
+        b.className = 'unlocked-badge';
+        b.innerHTML = '<i class="fas fa-star" style="color: #F59E0B;"></i><span>Bintang<br>Hafalan</span>';
         levelBadgesContainer.appendChild(b);
     }
     if (level >= 5) {
         const b = document.createElement('div');
-        b.className = 'level-badge badge-gold';
-        b.innerHTML = '🏆 Pejuang Hafalan';
+        b.className = 'unlocked-badge';
+        b.innerHTML = '<i class="fas fa-trophy" style="color: #D97706;"></i><span>Pejuang<br>Hafalan</span>';
         levelBadgesContainer.appendChild(b);
     }
     if (level >= 10) {
         const b = document.createElement('div');
-        b.className = 'level-badge badge-platinum';
-        b.innerHTML = '👑 Hafidz Cilik';
+        b.className = 'unlocked-badge';
+        b.innerHTML = '<i class="fas fa-crown" style="color: #B45309;"></i><span>Hafidz<br>Cilik</span>';
         levelBadgesContainer.appendChild(b);
     }
     if (level >= 15) {
         const b = document.createElement('div');
-        b.className = 'level-badge badge-diamond';
-        b.innerHTML = '💎 Master Quran';
+        b.className = 'unlocked-badge';
+        b.innerHTML = '<i class="fas fa-gem" style="color: #059669;"></i><span>Master<br>Quran</span>';
         levelBadgesContainer.appendChild(b);
     }
 
-    // HAPUS: Tidak buat button riwayat skor lagi
-    // Button sudah tidak diperlukan
+    // Empty State
+    if (levelBadgesContainer.children.length === 0) {
+        levelBadgesContainer.innerHTML = '<p class="empty-state-small" style="grid-column: span 2;">Belum ada lencana. Ayo main!</p>';
+    }
 }
 
 function showChildScoreHistory() {
@@ -878,25 +894,33 @@ function resetGameState() {
 
 function generateQuestions() {
     const assignedJuz = currentChild?.assignedJuz || [30];
+    const juzSettings = currentChild?.juzSettings || {};
     const allAyahs = [];
 
     // Collect all ayahs from assigned juz
     assignedJuz.forEach(juzNum => {
         const juz = quranData[juzNum];
         if (juz) {
+            // Check allowed surahs for this Juz
+            const allowedSurahs = juzSettings[juzNum] || ['All']; // Default to All if missing
+            const isAll = allowedSurahs.includes('All');
+
             juz.surahs.forEach(surah => {
-                surah.ayahs.forEach((ayah, index) => {
-                    if (index < surah.ayahs.length - 1) {
-                        allAyahs.push({
-                            surah: surah.surah,
-                            surahNumber: surah.number,
-                            juz: juzNum,
-                            question: ayah,
-                            answer: surah.ayahs[index + 1],
-                            otherAyahs: surah.ayahs.filter((_, i) => i !== index + 1)
-                        });
-                    }
-                });
+                // FILTER: Only include if All or specifically selected
+                if (isAll || allowedSurahs.includes(surah.number)) {
+                    surah.ayahs.forEach((ayah, index) => {
+                        if (index < surah.ayahs.length - 1) {
+                            allAyahs.push({
+                                surah: surah.surah,
+                                surahNumber: surah.number,
+                                juz: juzNum,
+                                question: ayah,
+                                answer: surah.ayahs[index + 1],
+                                otherAyahs: surah.ayahs.filter((_, i) => i !== index + 1)
+                            });
+                        }
+                    });
+                }
             });
         }
     });
@@ -938,7 +962,8 @@ function generateQuestions() {
     gameState.questions = selectedQuestions.map(q => {
         const options = [q.answer];
 
-        // Add wrong options from other ayahs
+        // Add wrong options from other ayahs (Global Pool to be harder, or Local Pool?)
+        // Let's use Global Pool of candidate ayahs for better distractors
         const wrongOptions = allAyahs
             .filter(a => a.answer.text !== q.answer.text)
             .map(a => a.answer);
@@ -1830,10 +1855,9 @@ function showAddChildModal() {
     document.getElementById('new-child-pin').value = '';
     document.getElementById('new-child-timer').value = '30';
 
-    // Reset checkboxes
-    document.querySelectorAll('#new-child-juz input').forEach(cb => {
-        cb.checked = cb.value === '30';
-    });
+    // Render Accordion
+    renderJuzSelection('new-child-juz', { '30': ['All'] }); // Default Juz 30 Selected
+
 
     // Reset avatar
     selectedAvatar = '👶';
@@ -1852,11 +1876,36 @@ async function addChild() {
     const pin = document.getElementById('new-child-pin').value.trim();
     const timerDuration = parseInt(document.getElementById('new-child-timer').value) || 30;
 
-    // Get selected juz from checkboxes
+    // SCRAPE JUZ SETTINGS from UI
+    const juzSettings = {};
     const selectedJuz = [];
-    document.querySelectorAll('#new-child-juz input:checked').forEach(cb => {
-        selectedJuz.push(parseInt(cb.value));
+
+    const container = document.getElementById('new-child-juz');
+    const items = container.querySelectorAll('.juz-accordion-item');
+
+    items.forEach(item => {
+        const juzVal = item.dataset.juz;
+        const mainCb = item.querySelector('.juz-main-cb');
+
+        if (mainCb.checked) {
+            // Juz is effectively selected
+            selectedJuz.push(parseInt(juzVal));
+
+            // Check specific surahs
+            const surahCbs = item.querySelectorAll('.surah-cb:checked');
+            const totalSurahs = item.querySelectorAll('.surah-cb').length;
+
+            if (surahCbs.length === totalSurahs || surahCbs.length === 0) {
+                // All selected or none specifically unchecked (implies all)
+                juzSettings[juzVal] = ['All'];
+            } else {
+                // Specific surahs selected
+                const selectedSurahNums = Array.from(surahCbs).map(cb => parseInt(cb.value));
+                juzSettings[juzVal] = selectedSurahNums;
+            }
+        }
     });
+
 
     if (!name || !username || !pin) {
         showToast('Lengkapi semua data!', 'error');
@@ -1881,7 +1930,8 @@ async function addChild() {
             username,
             pin,
             avatar: selectedAvatar,
-            assignedJuz: selectedJuz,
+            assignedJuz: selectedJuz, // Keep for backward compat
+            juzSettings: juzSettings, // NEW: Granular settings
             timerDuration: timerDuration,
             parentId: currentParent.uid || currentParent.id,
             createdAt: new Date().toISOString()
@@ -1931,30 +1981,74 @@ async function editChildJuz(childId) {
 
     // Use cached data from real-time listener instead of deprecated getChildren()
     const children = window.dashboardChildren || [];
-    const child = children.find(c => c.id === childId);
+    const child = currentRole === 'parent'
+        ? children.find(c => c.id === childId)
+        : currentChild;
 
-    if (!child) {
-        showToast('Data anak tidak ditemukan!', 'error');
-        return;
-    }
-
-    document.getElementById('edit-child-name').textContent = child.name;
-
-    // Set checkboxes
-    document.querySelectorAll('#edit-child-juz input').forEach(cb => {
-        cb.checked = (child.assignedJuz || []).includes(parseInt(cb.value));
-    });
+    if (!child) return;
 
     document.getElementById('edit-child-timer').value = child.timerDuration || 30;
+
+    // Prepare Settings for Renderer
+    let settings = child.juzSettings || {};
+    // Fallback for legacy data (assignedJuz array only)
+    if (Object.keys(settings).length === 0 && child.assignedJuz) {
+        child.assignedJuz.forEach(juz => {
+            settings[juz] = ['All'];
+        });
+    }
+
+    renderJuzSelection('edit-child-juz', settings);
 
     document.getElementById('edit-juz-modal').classList.remove('hidden');
 }
 
 async function saveChildJuz() {
-    // Get selected juz from checkboxes
+    // SCRAPE JUZ SETTINGS from UI
+    const juzSettings = {};
     const selectedJuz = [];
-    document.querySelectorAll('#edit-child-juz input:checked').forEach(cb => {
-        selectedJuz.push(parseInt(cb.value));
+
+    const container = document.getElementById('edit-child-juz');
+    const items = container.querySelectorAll('.juz-accordion-item');
+
+    items.forEach(item => {
+        const juzVal = item.dataset.juz;
+        const mainCb = item.querySelector('.juz-main-cb');
+
+        if (mainCb.checked) {
+            // Juz is effectively selected
+            selectedJuz.push(parseInt(juzVal));
+
+            // Check specific surahs
+            const surahCbs = item.querySelectorAll('.surah-cb:checked');
+            const totalSurahs = item.querySelectorAll('.surah-cb').length;
+
+            if (surahCbs.length === totalSurahs || surahCbs.length === 0) { // 0 checked but parent checked usually means UI glitch or init, treat as All for safety if UI forces checked? Or actually if 0 checked, technically none selected? 
+                // Logic check: if parent is checked, usually we auto-check all children. 
+                // If user unchecked all children, parent should uncheck.
+                // So if parent is checked, we assume at least one is checked or all.
+                // Let's rely on what's checked.
+                if (surahCbs.length === totalSurahs) {
+                    juzSettings[juzVal] = ['All'];
+                } else {
+                    const selectedSurahNums = Array.from(surahCbs).map(cb => parseInt(cb.value));
+                    // If really 0, but parent checked, this is weird state. Treat as none? 
+                    // But let's assume valid state.
+                    if (selectedSurahNums.length > 0) {
+                        juzSettings[juzVal] = selectedSurahNums;
+                    } else {
+                        // User checked header but unchecked all surah? 
+                        // Remove from selectedJuz to be safe? 
+                        // For now, let's assume 'All' if header checked but logic missed.
+                        // Better: just save what is explicitly checked.
+                        juzSettings[juzVal] = ['All']; // Fallback
+                    }
+                }
+            } else {
+                const selectedSurahNums = Array.from(surahCbs).map(cb => parseInt(cb.value));
+                juzSettings[juzVal] = selectedSurahNums;
+            }
+        }
     });
 
     const timerDuration = parseInt(document.getElementById('edit-child-timer').value) || 30;
@@ -1970,6 +2064,7 @@ async function saveChildJuz() {
         if (typeof db !== 'undefined' && db) {
             await db.collection('children').doc(editingChildId).update({
                 assignedJuz: selectedJuz,
+                juzSettings: juzSettings,
                 timerDuration: timerDuration
             });
         } else {
@@ -1977,6 +2072,7 @@ async function saveChildJuz() {
             const index = children.findIndex(c => c.id === editingChildId);
             if (index !== -1) {
                 children[index].assignedJuz = selectedJuz;
+                children[index].juzSettings = juzSettings;
                 children[index].timerDuration = timerDuration;
                 localStorage.setItem('tekateki_children', JSON.stringify(children));
             }
@@ -1991,6 +2087,109 @@ async function saveChildJuz() {
     }
 
     showLoading(false);
+}
+
+// ----------------------------------------------------
+// UI RENDER HELPER: JUZ SELECTION Accordion
+// ----------------------------------------------------
+function renderJuzSelection(containerId, savedSettings = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Available Juz (Dynamically get all keys from quranData)
+    // Sort them numerically to ensure order (e.g., 1, 2, 29, 30)
+    const availableJuz = Object.keys(quranData).map(Number).sort((a, b) => a - b);
+
+    availableJuz.forEach(juzNum => {
+        const juzData = quranData[juzNum];
+        if (!juzData) return;
+
+        // Check Saved Status
+        // savedSettings format: { "30": ["All"], "29": [1, 2] }
+        // OR legacy: array [30, 29] -> convert to {30: ['All'], ...} before calling this? No, caller handles.
+
+        let isJuzSelected = false;
+        let selectedSurahs = [];
+        let isAll = false;
+
+        if (savedSettings[juzNum]) {
+            isJuzSelected = true;
+            selectedSurahs = savedSettings[juzNum];
+            if (selectedSurahs.includes('All')) isAll = true;
+        }
+
+        // Create Item
+        const item = document.createElement('div');
+        item.className = 'juz-accordion-item';
+        item.dataset.juz = juzNum;
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'juz-accordion-header';
+
+        // Header Content
+        header.innerHTML = `
+            <div class="juz-title-group">
+                <input type="checkbox" class="juz-main-cb" value="${juzNum}" ${isJuzSelected ? 'checked' : ''}>
+                <span>${juzData.name}</span>
+            </div>
+            <i class="fas fa-chevron-down"></i>
+        `;
+
+        // Surah List Container
+        const surahList = document.createElement('div');
+        surahList.className = 'surah-list';
+        if (isJuzSelected) surahList.classList.add('active'); // Auto expand if selected
+
+        // Populate Surahs
+        juzData.surahs.forEach(surah => {
+            const isChecked = isAll || selectedSurahs.includes(surah.number);
+
+            const surahLabel = document.createElement('label');
+            surahLabel.className = 'surah-checkbox';
+            surahLabel.innerHTML = `
+                <input type="checkbox" class="surah-cb" value="${surah.number}" ${isChecked ? 'checked' : ''}>
+                ${surah.surah}
+            `;
+            surahList.appendChild(surahLabel);
+        });
+
+        // Event Listeners
+
+        // 1. Accordion Toggle
+        header.addEventListener('click', (e) => {
+            if (e.target.type !== 'checkbox') {
+                surahList.classList.toggle('active');
+            }
+        });
+
+        // 2. Main Checkbox (Select All)
+        const mainCb = header.querySelector('.juz-main-cb');
+        mainCb.addEventListener('change', (e) => {
+            const checked = e.target.checked;
+            // Check/Uncheck all surahs
+            surahList.querySelectorAll('.surah-cb').forEach(cb => cb.checked = checked);
+            // Expand if checked
+            if (checked) surahList.classList.add('active');
+        });
+
+        // 3. Child Checkbox (Update Main)
+        surahList.querySelectorAll('.surah-cb').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const total = surahList.querySelectorAll('.surah-cb').length;
+                const checkedCount = surahList.querySelectorAll('.surah-cb:checked').length;
+
+                mainCb.checked = checkedCount > 0;
+                // Optional: Indeterminate state if some checked? 
+                mainCb.indeterminate = checkedCount > 0 && checkedCount < total;
+            });
+        });
+
+        item.appendChild(header);
+        item.appendChild(surahList);
+        container.appendChild(item);
+    });
 }
 
 /**

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hafidz-app-v5'; // Force Update for CSS Fix
+const CACHE_NAME = 'hafidz-app-v6'; // Force Update for 3D Badges
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
