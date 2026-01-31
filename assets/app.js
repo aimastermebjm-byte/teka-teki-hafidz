@@ -606,12 +606,10 @@ function checkAndShowBadges() {
 }
 
 function showChildScoreHistory() {
-    // Show a modal with scores
-    // For simplicity, we can reuse logic or create a simple alert/modal
-    // Ideally, replicate the score table
-    showDashboardTab('scores'); // This is for parent. We need a child version.
-    // For now, let's use a simple alert or reuse the score tab logic but inside a modal?
-    // Let's build a quick modal for child scores
+    // Get score from the header which is already loaded from Firebase
+    const totalScoreElement = document.getElementById('total-score-header');
+    const totalScore = totalScoreElement ? totalScoreElement.textContent : '0';
+
     const modalHTML = `
         <div id="child-score-modal" class="modal active">
             <div class="modal-content">
@@ -620,7 +618,7 @@ function showChildScoreHistory() {
                     <button class="btn-close" onclick="closeModal('child-score-modal'); this.closest('.modal').remove();">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p>Total Skor: <strong>${getTotalScore()}</strong></p>
+                    <p>Total Skor: <strong>${totalScore}</strong></p>
                     <p>Level Saat Ini: <strong>${currentChild.level || 1}</strong></p>
                     <hr style="margin: 10px 0; opacity: 0.2">
                     <small>Terus bermain untuk menaikkan level!</small>
@@ -842,13 +840,20 @@ function updateDifficultyDisplay() {
     difficultyInfo.innerHTML = `<span class="badge ${badgeClass}">Level: ${label}</span>`;
 }
 
+/**
+ * Get total score from DOM element (which is already loaded from Firebase)
+ * This ensures consistency across all score displays
+ */
 function getTotalScore() {
-    if (!currentChild) return 0;
+    // Always get score from the header element which is the source of truth (loaded from Firebase)
+    const totalScoreElement = document.getElementById('total-score-header');
+    if (totalScoreElement) {
+        return parseInt(totalScoreElement.textContent.replace(/\./g, '') || '0');
+    }
 
-    const scores = JSON.parse(localStorage.getItem('tekateki_scores') || '[]');
-    const childScores = scores.filter(s => s.childId === currentChild.id);
-
-    return childScores.reduce((total, s) => total + s.score, 0);
+    // Fallback: if header not available, return 0 (should not happen normally)
+    console.warn('getTotalScore: Header element not found, returning 0');
+    return 0;
 }
 
 function startGame() {
