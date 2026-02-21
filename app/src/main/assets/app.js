@@ -854,6 +854,12 @@ function startGame() {
 }
 
 function resetGameState() {
+    // PENTING: Clear interval SEBELUM overwrite gameState
+    // agar referensi timer lama tidak hilang dan interval tidak menumpuk
+    if (gameState.timer) {
+        clearInterval(gameState.timer);
+    }
+
     gameState = {
         questions: [],
         currentIndex: 0,
@@ -868,10 +874,6 @@ function resetGameState() {
 
     document.getElementById('current-score').textContent = '0';
     document.getElementById('streak-count').textContent = '0';
-
-    if (gameState.timer) {
-        clearInterval(gameState.timer);
-    }
 }
 
 function generateQuestions() {
