@@ -1456,3 +1456,183 @@ body {
 
 /* 10. Floating stars - brighter */
 .floating-star { opacity: 0.6 !important; }
+
+/* ========================================
+   ABSOLUTE PIXEL PERFECT MOCKUP OVERRIDES
+   (Left Mockup: Navy top, teal wave bottom, hanging stars, gold text)
+======================================== */
+
+/* 1. Login Screen Exact Background */
+#login-screen {
+    background: #182548 !important; /* Base navy blue */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background Decorations Layer */
+.background-decorations {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    /* The Exact Wave using SVG data URI */
+    background-image: url('data:image/svg+xml;utf8,<svg width="1440" height="900" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,420 C350,580 950,480 1440,320 L1440,900 L0,900 Z" fill="%23bdead6"/></svg>');
+    background-size: cover;
+    background-position: bottom;
+}
+
+/* Base Card transparent */
+.login-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding-top: 60px !important;
+}
+
+/* 2. New Quran Icon (Matching mockup) */
+.login-icon {
+    width: 130px !important;
+    height: 130px !important;
+    border-radius: 30px !important;
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,0.4),
+        0 0 40px rgba(255, 215, 0, 0.4) !important;
+    margin-bottom: 25px !important;
+    animation: float 4s ease-in-out infinite !important;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* 3. Exact Title Styling (Bubbly Gold Text with Dark Shadow) */
+.app-title {
+    font-family: 'Fredoka One', cursive !important;
+    font-size: 2.8rem !important;
+    color: #FFD93D !important;
+    background: linear-gradient(180deg, #FFE566 0%, #FFD93D 50%, #F4BA1E 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    /* Creating the dark outline/shadow effect */
+    filter: drop-shadow(2px 2px 0 #2A3B66) drop-shadow(-1px -1px 0 #2A3B66) drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    margin-bottom: 10px !important;
+    letter-spacing: 1px;
+}
+
+.app-subtitle {
+    font-size: 1.1rem !important;
+    color: #e2e8f0 !important;
+    font-weight: 500 !important;
+}
+
+/* 4. Exact Role Buttons */
+.role-selector {
+    gap: 20px !important;
+    margin-top: 30px !important;
+    padding: 0 10px !important;
+}
+
+#btn-role-child {
+    background: linear-gradient(180deg, #FFC899 0%, #FFA875 100%) !important;
+    border: 3px solid #FFE2C8 !important;
+    box-shadow: 0 15px 35px rgba(255,168,117,0.4), inset 0 4px 0 rgba(255,255,255,0.4) !important;
+    border-radius: 28px !important;
+    padding: 35px 15px 25px 15px !important;
+}
+#btn-role-child span { color: #5D3A1A !important; font-size: 1.3rem !important; font-weight: 800 !important; margin-top: 10px !important; }
+#btn-role-child small { color: #8C5A35 !important; font-weight: 600 !important; }
+
+#btn-role-parent {
+    background: linear-gradient(180deg, #B5C6F4 0%, #95ABE8 100%) !important;
+    border: 3px solid #D9E4FF !important;
+    box-shadow: 0 15px 35px rgba(149,171,232,0.4), inset 0 4px 0 rgba(255,255,255,0.4) !important;
+    border-radius: 28px !important;
+    padding: 35px 15px 25px 15px !important;
+}
+#btn-role-parent span { color: #2A3B66 !important; font-size: 1.3rem !important; font-weight: 800 !important; margin-top: 10px !important; }
+#btn-role-parent small { color: #4A5B86 !important; font-weight: 600 !important; }
+
+/* 5. Pure CSS Hanging Stars & Moons */
+.hang-group {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: hangSwing 5s ease-in-out infinite alternate;
+    transform-origin: top center;
+}
+.hang-group .line {
+    width: 1px;
+    background: linear-gradient(180deg, rgba(255,215,0,0.8), rgba(255,215,0,0.1));
+}
+.hang-group .shape {
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 10px rgba(255,215,0,0.6));
+}
+/* Using SVG Data URIs for perfect shapes instead of emojis */
+.shape.star {
+    width: 24px; height: 24px;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="%23FFD700" xmlns="http://www.w3.org/2000/svg"><path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/></svg>');
+}
+.shape.moon {
+    width: 28px; height: 28px;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="%23FFD700" xmlns="http://www.w3.org/2000/svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>');
+}
+
+/* Positioning */
+.h1 { top: 0; left: 10%; animation-delay: 0s; }
+.h1 .line { height: 90px; }
+.h2 { top: 0; left: 25%; animation-delay: 1s; }
+.h2 .line { height: 140px; }
+.h3 { top: 0; right: 25%; animation-delay: 2s; }
+.h3 .line { height: 110px; }
+.h4 { top: 0; right: 8%; animation-delay: 0.5s; }
+.h4 .line { height: 70px; }
+.h5 { top: 0; left: 50%; animation-delay: 1.5s; }
+.h5 .line { height: 40px; }
+
+/* Faint Floating Stars */
+.faint-star {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #FFD700;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 2px rgba(255,215,0,0.4);
+    animation: twinkle 3s infinite alternate;
+}
+.s1 { top: 40%; left: 15%; animation-delay: 0s; }
+.s2 { top: 25%; left: 45%; animation-delay: 1s; }
+.s3 { top: 50%; right: 20%; animation-delay: 0.5s; }
+.s4 { top: 30%; right: 35%; animation-delay: 2s; }
+.s5 { top: 15%; right: 10%; animation-delay: 1.5s; }
+
+@keyframes twinkle {
+    0% { opacity: 0.3; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Islamic Geometric Patterns in Teal Area */
+.geo-pattern {
+    position: absolute;
+    width: 300px; height: 300px;
+    background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="none" stroke="%239ce3cd" stroke-width="2"/><circle cx="50" cy="50" r="30" fill="none" stroke="%239ce3cd" stroke-width="2"/></svg>');
+    background-size: 150px 150px;
+    opacity: 0.5;
+    bottom: -50px;
+    z-index: -1;
+}
+.geo-left { left: -50px; }
+.geo-right { right: -50px; }
+
+/* Remove previous conflicts */
+.background-decorations .floating-star,
+.background-decorations .hanging-decor,
+.background-decorations .islamic-pattern {
+    display: none !important;
+}
+
