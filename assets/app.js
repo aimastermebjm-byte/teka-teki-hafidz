@@ -476,6 +476,9 @@ async function showChildGame() {
     checkAndShowBadges(); // Tampilkan badge level (tanpa button riwayat)
     // renderAchievements(); // CONFLICT: Overwrites Level Badges. Disabled to show 3D Level Badges.
 
+    // Show Hafalan Progress per Surah
+    renderHafalanProgress();
+
     // Show/hide Voice Mode button based on child setting
     const voiceModeBtn = document.getElementById('voice-mode-btn');
     if (voiceModeBtn) {
@@ -515,6 +518,107 @@ function renderAchievements() {
             <span>${b.surahName}</span>
         </div>
     `).join('');
+}
+
+function renderHafalanProgress() {
+    const list = document.getElementById('hafalan-progress-list');
+    if (!list) return;
+
+    if (!currentChild || !currentChild.assignedJuz) {
+        list.innerHTML = '<p class="empty-state-small">Belum ada data hafalan. Ayo main!</p>';
+        return;
+    }
+
+    const assignedJuz = currentChild.assignedJuz || [30];
+    const juzSettings = currentChild.juzSettings || {};
+    const hafalanProgress = currentChild.hafalanProgress || {};
+    const surahList = [];
+
+    // Collect all assigned surahs with their total ayahs
+    assignedJuz.forEach(juzNum => {
+        const juz = quranData[juzNum];
+        if (!juz) return;
+
+        const allowedSurahs = juzSettings[juzNum] || ['All'];
+        const isAll = allowedSurahs.includes('All');
+
+        juz.surahs.forEach(surah => {
+            if (isAll || allowedSurahs.includes(surah.number)) {
+                // Avoid duplicate surahs (same surah can appear in multiple juz)
+                if (!surahList.find(s => s.number === surah.number)) {
+                    surahList.push({
+                        number: surah.number,
+                        name: surah.surah,
+                        totalAyahs: surah.ayahs.length
+                    });
+                }
+            }
+        });
+    });
+
+    if (surahList.length === 0) {
+        list.innerHTML = '<p class="empty-state-small">Belum ada data hafalan. Ayo main!</p>';
+        return;
+    }
+
+    // Build progress items
+    let html = '';
+    let hasAnyProgress = false;
+
+    surahList.forEach(surah => {
+        const totalTransitions = surah.totalAyahs - 1; // Transisi = totalAyahs - 1
+        if (totalTransitions <= 0) return;
+
+        const progress = hafalanProgress[surah.number];
+        let answeredCount = 0;
+
+        if (progress && progress.ayahs) {
+            for (const [ayahNum, ayahData] of Object.entries(progress.ayahs)) {
+                const count = (typeof ayahData === 'number') ? ayahData : (ayahData.count || 0);
+                if (count >= 1) {
+                    answeredCount++;
+                }
+            }
+        }
+
+        const percentage = Math.round((answeredCount / totalTransitions) * 100);
+        if (percentage > 0) hasAnyProgress = true;
+
+        // Determine color based on percentage
+        let barColor = 'var(--primary)';
+        let statusIcon = '';
+        if (percentage >= 100) {
+            barColor = 'linear-gradient(90deg, #43e97b, #38f9d7)';
+            statusIcon = ' ✅';
+        } else if (percentage >= 75) {
+            barColor = 'linear-gradient(90deg, #4facfe, #00f2fe)';
+        } else if (percentage >= 50) {
+            barColor = 'linear-gradient(90deg, #f093fb, #f5576c)';
+        } else if (percentage > 0) {
+            barColor = 'linear-gradient(90deg, #ffecd2, #fcb69f)';
+        }
+
+        html += `
+            <div class="hafalan-progress-item">
+                <div class="hafalan-progress-info">
+                    <span class="hafalan-surah-name">${surah.name}${statusIcon}</span>
+                    <span class="hafalan-percentage">${percentage}%</span>
+                </div>
+                <div class="hafalan-progress-bar">
+                    <div class="hafalan-progress-fill" style="width: ${percentage}%; background: ${barColor};"></div>
+                </div>
+                <div class="hafalan-progress-detail">${answeredCount}/${totalTransitions} ayat</div>
+            </div>`;
+    });
+
+    if (!hasAnyProgress && html) {
+        // All surahs at 0%, still show them
+        list.innerHTML = html;
+    } else if (html) {
+        list.innerHTML = html;
+    } else {
+        list.innerHTML = '<p class="empty-state-small">Belum ada data hafalan. Ayo main!</p>';
+    }
 }
 
 async function reloadChildSession(childData) {
@@ -2665,29 +2769,45 @@ function updateAyahProgress(surahNumber, ayahNumber, surahName, timeTaken) {
 
 function checkSurahCompletion(surahNumber) {
     const progress = currentChild.hafalanProgress[surahNumber];
-    if (!progress) return;
+    if (!progress || progress.isCompleted) return;
 
-    // Get total ayahs for this surah
+    // Get total ayahs for this surah from quranData
     let totalAyahs = 0;
-    // Let's assume completion if all N-1 transitions are correct >= 2 times.
+    for (const juzKey of Object.keys(quranData)) {
+        const juz = quranData[juzKey];
+        if (juz && juz.surahs) {
+            const surah = juz.surahs.find(s => s.number === parseInt(surahNumber));
+            if (surah) {
+                totalAyahs = surah.ayahs.length;
+                break;
+            }
+        }
+    }
 
-    let completedCount = 0;
-    const requiredCorrect = 2; // Threshold
+    if (totalAyahs <= 1) return; // Not enough ayahs for transitions
+
+    // Completion check: all N-1 transitions must be correct >= 2 times
+    // A "transition" is answering "what comes after ayah X?" correctly
+    // The ayah numbers tracked in progress.ayahs are the ANSWER ayah numbers (i.e., ayah 2, 3, ..., N)
+    const requiredCorrect = 2;
     const requiredTransitions = totalAyahs - 1;
+    let completedCount = 0;
 
-    for (let i = 2; i <= totalAyahs; i++) {
-        if (surahProgress.ayahs[i] && surahProgress.ayahs[i] >= requiredCorrect) {
+    // Count how many ayahs have been answered correctly enough times
+    for (const [ayahNum, ayahData] of Object.entries(progress.ayahs)) {
+        const count = (typeof ayahData === 'number') ? ayahData : (ayahData.count || 0);
+        if (count >= requiredCorrect) {
             completedCount++;
         }
     }
 
-    if (completedCount >= requiredTransitions && requiredTransitions > 0) {
+    if (completedCount >= requiredTransitions) {
         // SURAH COMPLETED!
-        surahProgress.isCompleted = true;
-        surahProgress.completedAt = new Date().toISOString();
+        progress.isCompleted = true;
+        progress.completedAt = new Date().toISOString();
 
         // Show Special Notification
-        showBadgeUnlockModal(surahProgress.surahName);
+        showBadgeUnlockModal(progress.surahName);
     }
 }
 
