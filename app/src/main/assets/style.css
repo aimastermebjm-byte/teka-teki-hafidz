@@ -1346,3 +1346,113 @@ body {
     box-shadow: 0 8px 20px rgba(78,205,196,0.25) !important;
     color: white !important;
 }
+
+/* ========================================
+   FINAL FIX - MATCH MOCKUP EXACTLY
+======================================== */
+
+/* 1. Login Card - TRANSPARENT/No visible card box */
+.login-card {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+.login-card::before { display: none !important; }
+
+/* 2. Title - Cream/White Bold (NOT teal gradient) like mockup */
+.app-title {
+    font-family: 'Fredoka One', cursive !important;
+    font-size: 2.2rem !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: #F5E6C8 !important;
+    background-clip: unset !important;
+    color: #F5E6C8 !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+    letter-spacing: 1px;
+}
+
+/* 3. Subtitle - lighter cream */
+.app-subtitle {
+    color: rgba(255,255,255,0.7) !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* 4. Login Screen - Wave Curve separating dark top from teal bottom */
+#login-screen {
+    background: linear-gradient(180deg,
+        #162040 0%,
+        #1a2d55 25%,
+        #1e3a5f 40%,
+        #2d8b7e 55%,
+        #4ECDC4 70%,
+        #7ee8d0 85%,
+        #a8e6cf 100%
+    ) !important;
+    overflow: hidden;
+}
+
+/* Wave overlay to create the curve effect */
+#login-screen::after {
+    content: '';
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    top: 42%;
+    height: 200px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(78,205,196,0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 5. Quran Icon - golden glow like mockup */
+.login-icon {
+    filter: drop-shadow(0 0 25px rgba(255,215,0,0.5)) drop-shadow(0 0 50px rgba(255,215,0,0.2)) !important;
+    border-radius: 20px !important;
+    width: 110px !important;
+    height: 110px !important;
+}
+
+/* 6. Role buttons - more rounded, softer like mockup */
+#btn-role-child {
+    border-radius: 22px !important;
+    padding: 30px 20px !important;
+}
+#btn-role-parent {
+    border-radius: 22px !important;
+    padding: 30px 20px !important;
+}
+.role-selector {
+    gap: 18px !important;
+    margin-top: 15px !important;
+}
+.role-icon { font-size: 3rem !important; }
+.role-btn span { font-size: 1.2rem !important; font-weight: 800 !important; }
+.role-btn small { font-size: 0.85rem !important; }
+
+/* 7. Keep login elements above the wave */
+.login-header, .role-selector, .login-form {
+    position: relative;
+    z-index: 2;
+}
+
+/* 8. Hanging decorations - more visible */
+.hang-moon { font-size: 2rem !important; }
+.hang-star { font-size: 1.5rem !important; }
+.hang-1 .hang-line { height: 70px !important; }
+.hang-2 .hang-line { height: 50px !important; }
+.hang-3 .hang-line { height: 90px !important; }
+.hang-line {
+    width: 2px !important;
+    background: linear-gradient(180deg, rgba(255,215,0,0.8), rgba(255,215,0,0.2)) !important;
+}
+
+/* 9. Islamic patterns - more visible in corners */
+.islamic-pattern { opacity: 0.2 !important; width: 140px !important; height: 140px !important; }
+
+/* 10. Floating stars - brighter */
+.floating-star { opacity: 0.6 !important; }
