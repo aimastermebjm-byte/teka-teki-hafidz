@@ -203,8 +203,11 @@
                     </div>
 
                     <div class="hafalan-progress-section" id="hafalan-progress-section">
-                        <p><i class="fas fa-chart-bar"></i> Progress Hafalan:</p>
-                        <div class="hafalan-progress-list" id="hafalan-progress-list">
+                        <div class="hafalan-progress-header" onclick="toggleHafalanProgress()">
+                            <p><i class="fas fa-chart-bar"></i> Progress Hafalan</p>
+                            <i class="fas fa-chevron-down hafalan-toggle-icon" id="hafalan-toggle-icon"></i>
+                        </div>
+                        <div class="hafalan-progress-list collapsed" id="hafalan-progress-list">
                             <p class="empty-state-small">Belum ada data hafalan. Ayo main!</p>
                         </div>
                     </div>

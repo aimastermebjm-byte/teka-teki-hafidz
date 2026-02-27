@@ -3582,7 +3582,16 @@ body {
     box-shadow: var(--shadow-soft);
 }
 
-.hafalan-progress-section p:first-child {
+.hafalan-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 0;
+}
+
+.hafalan-progress-header p {
     font-family: 'Fredoka', sans-serif;
     font-size: 1.1rem;
     font-weight: 800;
@@ -3590,13 +3599,34 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin: 0;
+}
+
+.hafalan-toggle-icon {
+    font-size: 1rem;
+    color: var(--text-light);
+    transition: transform 0.3s ease;
+}
+
+.hafalan-toggle-icon.rotated {
+    transform: rotate(180deg);
 }
 
 .hafalan-progress-list {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    max-height: 2000px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin-top 0.3s ease, opacity 0.3s ease;
+    margin-top: 20px;
+    opacity: 1;
+}
+
+.hafalan-progress-list.collapsed {
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
 }
 
 .hafalan-progress-item {

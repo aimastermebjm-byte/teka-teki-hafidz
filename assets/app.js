@@ -621,6 +621,17 @@ function renderHafalanProgress() {
     }
 }
 
+function toggleHafalanProgress() {
+    const list = document.getElementById('hafalan-progress-list');
+    const icon = document.getElementById('hafalan-toggle-icon');
+    if (!list) return;
+
+    list.classList.toggle('collapsed');
+    if (icon) {
+        icon.classList.toggle('rotated');
+    }
+}
+
 async function reloadChildSession(childData) {
     // Reload fresh data from DB if possible
     if (typeof db !== 'undefined' && db && childData.id) {
