@@ -3885,12 +3885,11 @@ body {
 
 /* 1. Login Screen Exact Background */
 #login-screen {
-    background: #111e3b !important;
-    /* Base very dark navy blue */
+    background: #CFF4E9 !important;
+    /* Make the whole base Mint Green */
     position: relative;
     overflow: hidden;
     z-index: 1;
-    /* Add z-index so child absolute elements with z-index work correctly */
 }
 
 /* Background Decorations Container - must be below login card but above base bg */
@@ -3905,22 +3904,23 @@ body {
     pointer-events: none;
 }
 
-/* The Exact Curve using CSS trick in ::after */
+/* The Exact Concave (U-Shaped) Sky using CSS trick in ::before or ::after */
 #login-screen::after {
     content: '';
     position: absolute;
-    bottom: -10%;
-    /* Ensure it absolutely covers the bottom edge */
+    top: -10%;
+    /* Start higher up so circle is smooth */
     left: -25%;
     /* Stretch it wider than screen */
     width: 150%;
-    height: 60%;
-    /* Controls how high the mint background goes */
-    background: #CFF4E9;
-    /* Exact mint green solid color */
-    border-radius: 50% 50% 0 0;
-    /* Makes a perfect hill shape ∩ at the top! */
+    height: 68%;
+    /* Controls how deep the navy sky dips down */
+    background: #111e3b;
+    /* Exact navy blue solid sky color */
+    border-radius: 0 0 50% 50%;
+    /* Makes a perfect U-shape dipping down! */
     z-index: -1;
+    /* Behind other login elements */
     pointer-events: none;
 }
 
@@ -3962,7 +3962,8 @@ body {
 /* 3. Exact Title Styling (Bubbly Gold Text with Dark Shadow & Stroke) */
 .app-title {
     font-family: 'Fredoka One', cursive !important;
-    font-size: 3.2rem !important;
+    font-size: 2.7rem !important;
+    /* Reduced from 3.2rem so it never wraps */
     color: #FFE66D !important;
     background: none !important;
     -webkit-background-clip: unset !important;
