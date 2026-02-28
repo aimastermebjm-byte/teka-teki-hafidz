@@ -3913,7 +3913,8 @@ body {
     left: -25%;
     /* Stretch it wider than screen */
     width: 150%;
-    height: 68%;
+    height: 55%;
+    /* Reduced from 68% so buttons sit comfortably below the curve */
     /* Controls how deep the navy sky dips down */
     background: #111e3b;
     /* Exact navy blue solid sky color */
@@ -3994,8 +3995,8 @@ body {
 
 /* 4. Exact Role Buttons (Squarish, soft glass glow) */
 .role-selector {
-    gap: 15px !important;
-    margin-top: 15vh !important;
+    gap: 20px !important;
+    margin-top: 18vh !important;
     padding: 0 10px !important;
     justify-content: center !important;
     position: relative;
@@ -4061,9 +4062,9 @@ body {
 }
 
 .role-icon-img {
-    width: clamp(120px, 38vw, 170px) !important;
-    height: clamp(120px, 38vw, 170px) !important;
-    border-radius: clamp(25px, 7vw, 35px) !important;
+    width: clamp(120px, 33vw, 155px) !important;
+    height: clamp(120px, 33vw, 155px) !important;
+    border-radius: clamp(25px, 6vw, 32px) !important;
     object-fit: cover !important;
     margin-bottom: 0 !important;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18) !important;
@@ -4071,15 +4072,9 @@ body {
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Gambar Anak punya lebih banyak padding bawaan, kompensasi ukuran lebih besar */
-#btn-role-child .role-icon-img {
-    width: clamp(135px, 42vw, 195px) !important;
-    height: clamp(135px, 42vw, 195px) !important;
-}
-
 /* Warna bingkai Orang Tua terlalu biru/toska, kita netralisasi agar lebih putih */
 #btn-role-parent .role-icon-img {
-    filter: saturate(0.7) brightness(1.05) !important;
+    filter: saturate(0.65) brightness(1.08) !important;
 }
 
 #btn-role-child:hover .role-icon-img,
@@ -4094,10 +4089,28 @@ body {
 }
 
 /* ===== MOBILE RESPONSIVE: Fit semua dalam 1 layar HP ===== */
-@media (max-height: 750px) {
+@media (max-height: 700px) {
+    .login-card {
+        padding-top: 30px !important;
+    }
+
+    .login-icon {
+        width: 90px !important;
+        height: 90px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .app-title {
+        font-size: 1.8rem !important;
+    }
+
+    .app-subtitle {
+        font-size: 0.9rem !important;
+    }
+
     .role-selector {
         margin-top: 12vh !important;
-        gap: 10px !important;
+        gap: 12px !important;
     }
 
     .role-icon-img {
@@ -4106,39 +4119,29 @@ body {
         border-radius: 22px !important;
     }
 
-    #btn-role-child .role-icon-img {
-        width: 125px !important;
-        height: 125px !important;
-    }
-
     #btn-role-child span,
     #btn-role-parent span {
-        font-size: 1.2rem !important;
-        margin-top: 8px !important;
+        font-size: 1.1rem !important;
+        margin-top: 6px !important;
     }
 
     #btn-role-child small,
     #btn-role-parent small {
-        font-size: 0.8rem !important;
+        font-size: 0.75rem !important;
         padding: 4px 10px !important;
-        margin-top: 5px !important;
+        margin-top: 4px !important;
     }
 }
 
 @media (max-width: 380px) {
     .role-selector {
-        gap: 8px !important;
+        gap: 10px !important;
     }
 
     .role-icon-img {
-        width: 110px !important;
-        height: 110px !important;
-        border-radius: 22px !important;
-    }
-
-    #btn-role-child .role-icon-img {
-        width: 125px !important;
-        height: 125px !important;
+        width: 105px !important;
+        height: 105px !important;
+        border-radius: 20px !important;
     }
 }
 
