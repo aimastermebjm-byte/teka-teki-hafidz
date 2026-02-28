@@ -4005,11 +4005,16 @@ body {
 
 .role-btn {
     width: 155px !important;
-    height: 165px !important;
+    height: auto !important;
+    /* Let content determine height */
+    min-height: 165px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
+    padding: 15px 10px 12px !important;
+    /* Top, sides, bottom padding */
+    overflow: visible !important;
 }
 
 #btn-role-child {
