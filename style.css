@@ -4034,43 +4034,30 @@ body {
     border-radius: 0 !important;
 }
 
-#btn-role-child span {
-    color: #1a365d !important;
-    font-size: 1.4rem !important;
-    font-weight: 800 !important;
-    margin-top: 15px !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.6) !important;
-}
-
-#btn-role-child small {
-    color: #8C4A1D !important;
-    font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    margin-top: 3px !important;
-}
-
-#btn-role-parent {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-}
-
+#btn-role-child span,
 #btn-role-parent span {
+    font-family: 'Fredoka One', cursive !important;
+    font-size: 1.8rem !important;
     color: #1a365d !important;
-    font-size: 1.4rem !important;
-    font-weight: 800 !important;
+    text-shadow: 2px 2px 0px #ffffff, -1px -1px 0px #ffffff, 0px 4px 10px rgba(0, 0, 0, 0.15) !important;
+    letter-spacing: 0.5px !important;
     margin-top: 15px !important;
     white-space: nowrap !important;
-    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.6) !important;
 }
 
+#btn-role-child small,
 #btn-role-parent small {
-    color: #3A4E8C !important;
-    font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    margin-top: 3px !important;
+    font-family: 'Quicksand', sans-serif !important;
+    color: #1a365d !important;
+    background: rgba(255, 255, 255, 0.45) !important;
+    padding: 6px 14px !important;
+    border-radius: 20px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    margin-top: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+    white-space: nowrap !important;
 }
 
 .role-icon-img {
@@ -4078,14 +4065,28 @@ body {
     height: 155px !important;
     border-radius: 35px !important;
     /* Match inner app icon curvature */
-    object-fit: cover !important;
+    object-fit: contain !important;
+    /* Since already square, contain is safer */
     margin-bottom: 0 !important;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
     border: 2px solid rgba(255, 255, 255, 0.5) !important;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-#btn-role-child:hover .role-icon-img,
+/* Because the Child Image source has inherent white space padded inside, we scale it to match the Parent */
+#btn-role-child .role-icon-img {
+    transform: scale(1.11) !important;
+}
+
+#btn-role-child:hover .role-icon-img {
+    transform: translateY(-8px) scale(1.15) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25) !important;
+}
+
+#btn-role-parent .role-icon-img {
+    transform: scale(1.0) !important;
+}
+
 #btn-role-parent:hover .role-icon-img {
     transform: translateY(-8px) scale(1.05) !important;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25) !important;
