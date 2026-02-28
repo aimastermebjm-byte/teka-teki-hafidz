@@ -3995,7 +3995,7 @@ body {
 /* 4. Exact Role Buttons (Squarish, soft glass glow) */
 .role-selector {
     gap: 25px !important;
-    margin-top: 20vh !important;
+    margin-top: 25vh !important;
     /* Pushed down further to avoid overlapping the top wave */
     padding: 0 10px !important;
     justify-content: center !important;
@@ -4062,32 +4062,19 @@ body {
 }
 
 .role-icon-img {
-    width: 155px !important;
-    height: 155px !important;
+    width: 170px !important;
+    height: 170px !important;
     border-radius: 35px !important;
-    /* Match inner app icon curvature */
-    object-fit: contain !important;
-    /* Since already square, contain is safer */
+    object-fit: cover !important;
+    /* Zoom into the characters, crop the built-in frame */
     margin-bottom: 0 !important;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
-    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    border: none !important;
+    /* No extra border - image has its own frame */
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Because the Child Image source has inherent white space padded inside, we scale it to match the Parent */
-#btn-role-child .role-icon-img {
-    transform: scale(1.11) !important;
-}
-
-#btn-role-child:hover .role-icon-img {
-    transform: translateY(-8px) scale(1.15) !important;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25) !important;
-}
-
-#btn-role-parent .role-icon-img {
-    transform: scale(1.0) !important;
-}
-
+#btn-role-child:hover .role-icon-img,
 #btn-role-parent:hover .role-icon-img {
     transform: translateY(-8px) scale(1.05) !important;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25) !important;
@@ -4095,7 +4082,6 @@ body {
 
 #btn-role-child:hover,
 #btn-role-parent:hover {
-    /* Button wrapper doesn't move, only image and text react */
     transform: none !important;
 }
 
