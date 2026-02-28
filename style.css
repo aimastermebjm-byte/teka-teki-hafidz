@@ -4004,17 +4004,19 @@ body {
 }
 
 .role-btn {
-    width: 170px !important;
-    /* Slightly wider */
-    height: 175px !important;
-    /* Slightly shorter */
+    width: 155px !important;
+    height: 155px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
-    padding: 10px 5px !important;
-    /* Less horizontal padding */
-    overflow: hidden !important;
+    padding: 45px 10px 15px !important;
+    /* Top padding makes room for floating avatar */
+    margin-top: 40px !important;
+    /* Push card down to fit avatar overflow */
+    position: relative !important;
+    overflow: visible !important;
+    /* CRITICAL: avatar overlaps top border */
 }
 
 #btn-role-child {
@@ -4026,9 +4028,9 @@ body {
 
 #btn-role-child span {
     color: #4A2B12 !important;
-    font-size: 1.25rem !important;
+    font-size: 1.35rem !important;
     font-weight: 800 !important;
-    margin-top: 8px !important;
+    margin-top: 5px !important;
     white-space: nowrap !important;
 }
 
@@ -4036,7 +4038,8 @@ body {
     color: #8C4A1D !important;
     font-weight: 600 !important;
     font-size: 0.85rem !important;
-    margin-top: 2px !important;
+    margin-top: 4px !important;
+    opacity: 0.9 !important;
     white-space: nowrap !important;
 }
 
@@ -4049,35 +4052,49 @@ body {
 
 #btn-role-parent span {
     color: #1E2954 !important;
-    font-size: 1.25rem !important;
+    font-size: 1.35rem !important;
     font-weight: 800 !important;
-    margin-top: 8px !important;
+    margin-top: 5px !important;
     white-space: nowrap !important;
 }
 
 #btn-role-parent small {
     color: #3A4E8C !important;
     font-weight: 600 !important;
-    font-size: 0.8rem !important;
-    /* Slightly smaller for 'Monitor & Setting' to fit */
-    margin-top: 2px !important;
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+    opacity: 0.9 !important;
     white-space: nowrap !important;
 }
 
 .role-icon-img {
-    width: 90px !important;
-    height: 90px !important;
-    border-radius: 20px !important;
-    object-fit: cover;
-    margin-bottom: 2px !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
-    border: 2px solid rgba(255, 255, 255, 0.8) !important;
-    transition: transform 0.3s ease;
+    width: 85px !important;
+    height: 85px !important;
+    border-radius: 50% !important;
+    /* Perfect circle */
+    object-fit: cover !important;
+    background: #fff !important;
+    /* Floating positioning */
+    position: absolute !important;
+    top: -42px !important;
+    /* Half of height to float on edge */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    /* Premium aesthetics */
+    border: 4px solid #fff !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18) !important;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#btn-role-child:hover .role-icon-img,
+#btn-role-parent:hover .role-icon-img {
+    transform: translateX(-50%) translateY(-5px) scale(1.05) !important;
 }
 
 #btn-role-child:hover,
 #btn-role-parent:hover {
-    transform: translateY(-8px) scale(1.02) !important;
+    transform: translateY(-5px) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* 5. Pure CSS Hanging Stars & Moons */
