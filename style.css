@@ -3995,7 +3995,8 @@ body {
 /* 4. Exact Role Buttons (Squarish, soft glass glow) */
 .role-selector {
     gap: 25px !important;
-    margin-top: 40px !important;
+    margin-top: 55px !important;
+    /* Increased from 40px down -> requested by user */
     padding: 0 10px !important;
     justify-content: center !important;
     position: relative;
@@ -4196,6 +4197,49 @@ body {
     top: 85%;
     right: 50%;
     animation-delay: 1.5s;
+}
+
+/* Extra Stars (User requested density) */
+.s6 {
+    top: 20%;
+    right: 15%;
+    animation-delay: 0.3s;
+}
+
+.s7 {
+    top: 35%;
+    left: 10%;
+    animation-delay: 1.8s;
+}
+
+.s8 {
+    top: 15%;
+    left: 40%;
+    animation-delay: 2.2s;
+}
+
+.s9 {
+    top: 45%;
+    right: 35%;
+    animation-delay: 0.9s;
+}
+
+.s10 {
+    top: 75%;
+    left: 25%;
+    animation-delay: 3s;
+}
+
+.s11 {
+    top: 90%;
+    right: 10%;
+    animation-delay: 2.5s;
+}
+
+.s12 {
+    top: 95%;
+    left: 45%;
+    animation-delay: 0.7s;
 }
 
 @keyframes twinkle {
