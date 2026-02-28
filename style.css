@@ -4072,21 +4072,22 @@ body {
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Zoom-in karakter di gambar Anak tanpa memperbesar bingkai */
-/* Scale memperbesar gambar, clip-path memotong kembali ke ukuran asli */
+/* Zoom-in karakter Anak: scale(1.18) diperbesar, lalu inset(7.6%) memotong kembali ke ukuran asli */
+/* Rumus: 155px * 1.18 * (1 - 2*0.076) = 155px */
 #btn-role-child .role-icon-img {
     transform: scale(1.18);
-    clip-path: inset(0 round 32px);
+    clip-path: inset(7.6% round 27px);
+    /* 27px * 1.18 = ~32px = sama dengan border-radius asli */
 }
 
-/* Warna bingkai Orang Tua terlalu biru/toska, kita netralisasi agar lebih putih */
+/* Warna bingkai Orang Tua terlalu biru/hijau, desaturasi kuat agar mendekati putih */
 #btn-role-parent .role-icon-img {
-    filter: saturate(0.65) brightness(1.08) !important;
+    filter: saturate(0.3) brightness(1.12) !important;
 }
 
 #btn-role-child:hover .role-icon-img {
     transform: translateY(-5px) scale(1.22) !important;
-    clip-path: inset(0 round 32px);
+    clip-path: inset(7.6% round 27px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.22) !important;
 }
 
