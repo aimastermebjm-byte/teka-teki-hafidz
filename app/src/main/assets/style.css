@@ -4280,3 +4280,54 @@ body {
 .background-decorations .islamic-pattern {
     display: none !important;
 }
+
+/* ========================================
+   Glassmorphism Login Form Overlay
+======================================== */
+.login-form {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    padding: 35px 25px 25px;
+    /* Extra top padding for title */
+    margin: 20px 15px 0;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 2px 10px rgba(255, 255, 255, 0.4);
+    position: relative;
+    z-index: 20;
+    /* Keep it ON TOP of everything */
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.login-form.hidden {
+    display: none !important;
+}
+
+.login-form h3 {
+    color: #FFE66D;
+    font-family: 'Fredoka One', cursive;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+}
+
+.login-form .form-group label {
+    color: #f1f5f9;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Override inputs inside glass card */
+.login-form input {
+    background: rgba(15, 23, 41, 0.7) !important;
+    border: 1px solid rgba(156, 227, 205, 0.3) !important;
+    color: white !important;
+    font-weight: 500;
+}
+
+.login-form input:focus {
+    background: rgba(15, 23, 41, 0.9) !important;
+    border-color: #FFE66D !important;
+    box-shadow: 0 0 15px rgba(255, 230, 109, 0.4) !important;
+}
