@@ -4004,17 +4004,15 @@ body {
 }
 
 .role-btn {
-    width: 155px !important;
-    height: auto !important;
-    /* Let content determine height */
-    min-height: 165px !important;
+    width: 160px !important;
+    height: 190px !important;
+    /* Fixed proportional height */
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
     padding: 15px 10px 12px !important;
-    /* Top, sides, bottom padding */
-    overflow: visible !important;
+    overflow: hidden !important;
 }
 
 #btn-role-child {
@@ -4022,14 +4020,13 @@ body {
     border: 3px solid #FFF1E6 !important;
     box-shadow: 0 15px 30px rgba(255, 153, 102, 0.4), inset 0 6px 15px rgba(255, 255, 255, 0.6) !important;
     border-radius: 35px !important;
-    padding: 0 !important;
 }
 
 #btn-role-child span {
     color: #4A2B12 !important;
-    font-size: 1.4rem !important;
+    font-size: 1.3rem !important;
     font-weight: 800 !important;
-    margin-top: 15px !important;
+    margin-top: 8px !important;
 }
 
 #btn-role-child small {
@@ -4044,14 +4041,13 @@ body {
     border: 3px solid #F0F5FF !important;
     box-shadow: 0 15px 30px rgba(138, 171, 255, 0.4), inset 0 6px 15px rgba(255, 255, 255, 0.6) !important;
     border-radius: 35px !important;
-    padding: 0 !important;
 }
 
 #btn-role-parent span {
     color: #1E2954 !important;
-    font-size: 1.4rem !important;
+    font-size: 1.3rem !important;
     font-weight: 800 !important;
-    margin-top: 15px !important;
+    margin-top: 8px !important;
 }
 
 #btn-role-parent small {
@@ -4062,15 +4058,14 @@ body {
 }
 
 .role-icon-img {
-    width: 100% !important;
-    height: auto !important;
-    border-radius: 20px !important;
-    /* Match button shape */
-    object-fit: contain;
-    /* Show FULL image, no cropping */
+    width: 95px !important;
+    height: 95px !important;
+    border-radius: 22px !important;
+    object-fit: cover;
+    /* Fill the square neatly */
     margin-bottom: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
+    border: 2px solid rgba(255, 255, 255, 0.8) !important;
     transition: transform 0.3s ease;
 }
 
