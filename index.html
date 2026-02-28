@@ -58,583 +58,523 @@
                 <div class="geo-pattern geo-left"></div>
                 <div class="geo-pattern geo-right"></div>
             </div>
-            <div id="login-screen" class="screen active">
-                <div class="login-card">
-                    <div class="login-header">
-                        <img src="assets/app-icon-quran.png" alt="Quran" class="login-icon">
-                        <h1 class="app-title">Teka-Teki Hafidz</h1>
-                        <p class="app-subtitle">Belajar Hafalan Sambil Bermain!</p>
-                    </div>
+            <div class="login-card">
+                <div class="login-header">
+                    <img src="assets/app-icon-quran.png" alt="Quran" class="login-icon">
+                    <h1 class="app-title">Teka-Teki Hafidz</h1>
+                    <p class="app-subtitle">Belajar Hafalan Sambil Bermain!</p>
+                </div>
 
-                    <div class="role-selector">
-                        <button class="role-btn" id="btn-role-child" onclick="selectRole('child')">
-                            <div class="role-icon">👶</div>
-                            <span>Anak</span>
-                            <small>Main & Belajar</small>
-                        </button>
-                        <button class="role-btn" id="btn-role-parent" onclick="selectRole('parent')">
-                            <div class="role-icon">👨‍👩‍👧</div>
-                            <span>Orang Tua</span>
-                            <small>Monitor & Setting</small>
-                        </button>
-                    </div>
+                <div class="role-selector">
+                    <button class="role-btn" id="btn-role-child" onclick="selectRole('child')">
+                        <div class="role-icon">👶</div>
+                        <span>Anak</span>
+                        <small>Main & Belajar</small>
+                    </button>
+                    <button class="role-btn" id="btn-role-parent" onclick="selectRole('parent')">
+                        <div class="role-icon">👨‍👩‍👧</div>
+                        <span>Orang Tua</span>
+                        <small>Monitor & Setting</small>
+                    </button>
+                </div>
 
-                    <!-- Child Login Form -->
-                    <div id="child-login-form" class="login-form hidden">
-                        <h3>🎮 Login Anak</h3>
-                        <div class="form-group">
-                            <label><i class="fas fa-user"></i> Username</label>
-                            <input type="text" id="child-username" placeholder="Masukkan username">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> PIN</label>
-                            <input type="password" id="child-pin" placeholder="Masukkan PIN" maxlength="6">
-                        </div>
-                        <button class="btn-primary btn-full" onclick="loginChild()">
-                            <i class="fas fa-play"></i> Mulai Bermain!
-                        </button>
+                <!-- Child Login Form -->
+                <div id="child-login-form" class="login-form hidden">
+                    <h3>🎮 Login Anak</h3>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="child-username" placeholder="Masukkan username">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> PIN</label>
+                        <input type="password" id="child-pin" placeholder="Masukkan PIN" maxlength="6">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="loginChild()">
+                        <i class="fas fa-play"></i> Mulai Bermain!
+                    </button>
+                    <button class="btn-link" onclick="selectRole(null)">← Kembali</button>
+                </div>
+
+                <!-- Parent Login Form -->
+                <div id="parent-login-form" class="login-form hidden">
+                    <h3>👨‍👩‍👧 Login Orang Tua</h3>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="parent-email" placeholder="email@contoh.com">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="parent-password" placeholder="Masukkan password">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="loginParent()">
+                        <i class="fas fa-sign-in-alt"></i> Masuk Dashboard
+                    </button>
+                    <div class="auth-links">
+                        <button class="btn-link" onclick="showRegisterParent()">Belum punya akun? Daftar</button>
                         <button class="btn-link" onclick="selectRole(null)">← Kembali</button>
                     </div>
+                </div>
 
-                    <!-- Parent Login Form -->
-                    <div id="parent-login-form" class="login-form hidden">
-                        <h3>👨‍👩‍👧 Login Orang Tua</h3>
-                        <div class="form-group">
-                            <label><i class="fas fa-envelope"></i> Email</label>
-                            <input type="email" id="parent-email" placeholder="email@contoh.com">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> Password</label>
-                            <input type="password" id="parent-password" placeholder="Masukkan password">
-                        </div>
-                        <button class="btn-primary btn-full" onclick="loginParent()">
-                            <i class="fas fa-sign-in-alt"></i> Masuk Dashboard
-                        </button>
-                        <div class="auth-links">
-                            <button class="btn-link" onclick="showRegisterParent()">Belum punya akun? Daftar</button>
-                            <button class="btn-link" onclick="selectRole(null)">← Kembali</button>
-                        </div>
+                <!-- Parent Register Form -->
+                <div id="parent-register-form" class="login-form hidden">
+                    <h3>📝 Daftar Orang Tua</h3>
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Nama Lengkap</label>
+                        <input type="text" id="register-name" placeholder="Nama Anda">
                     </div>
-
-                    <!-- Parent Register Form -->
-                    <div id="parent-register-form" class="login-form hidden">
-                        <h3>📝 Daftar Orang Tua</h3>
-                        <div class="form-group">
-                            <label><i class="fas fa-user"></i> Nama Lengkap</label>
-                            <input type="text" id="register-name" placeholder="Nama Anda">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-envelope"></i> Email</label>
-                            <input type="email" id="register-email" placeholder="email@contoh.com">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> Password</label>
-                            <input type="password" id="register-password" placeholder="Min. 6 karakter">
-                        </div>
-                        <button class="btn-primary btn-full" onclick="registerParent()">
-                            <i class="fas fa-user-plus"></i> Daftar Sekarang
-                        </button>
-                        <button class="btn-link" onclick="showLoginParent()">Sudah punya akun? Login</button>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="register-email" placeholder="email@contoh.com">
                     </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="register-password" placeholder="Min. 6 karakter">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="registerParent()">
+                        <i class="fas fa-user-plus"></i> Daftar Sekarang
+                    </button>
+                    <button class="btn-link" onclick="showLoginParent()">Sudah punya akun? Login</button>
                 </div>
             </div>
+        </div>
 
-            <!-- CHILD GAME SCREEN -->
-            <div id="child-game-screen" class="screen">
-                <header class="game-header child-dashboard-header">
-                    <div class="header-left">
-                        <div class="avatar-container">
-                            <div class="avatar" id="child-avatar">👶</div>
-                            <span class="child-name" id="display-child-name">Anak</span>
-                        </div>
+        <!-- CHILD GAME SCREEN -->
+        <div id="child-game-screen" class="screen">
+            <header class="game-header child-dashboard-header">
+                <div class="header-left">
+                    <div class="avatar-container">
+                        <div class="avatar" id="child-avatar">👶</div>
+                        <span class="child-name" id="display-child-name">Anak</span>
                     </div>
-                    <div class="header-center">
-                        <h1 class="game-title">🧩 Teka-Teki Hafidz</h1>
-                    </div>
-                    <div class="header-right">
-                        <div class="stats-container">
-                            <!-- Total Score - PALING DEPAN, LEBIH BESAR -->
-                            <div class="stat-item total-score-display">
-                                <i class="fas fa-trophy"></i>
-                                <span class="stat-label">Total</span>
-                                <span id="total-score-header">0</span>
-                            </div>
-                            <!-- Level -->
-                            <div class="stat-item level-display">
-                                <i class="fas fa-layer-group"></i>
-                                <span class="stat-label">Lv.</span>
-                                <span id="current-level">1</span>
-                            </div>
-                            <!-- Skor Game Saat Ini (Bintang) -->
-                            <div class="stat-item score-display">
-                                <i class="fas fa-star"></i>
-                                <span style="font-size: 0.7rem; opacity: 0.9; margin-right: 2px;">Skor</span>
-                                <span id="current-score">0</span>
-                            </div>
-                            <!-- Streak (Api) -->
-                            <div class="stat-item streak-display">
-                                <i class="fas fa-fire"></i>
-                                <span style="font-size: 0.7rem; opacity: 0.9; margin-right: 2px;">Streak</span>
-                                <span id="streak-count">0</span>
-                            </div>
-                        </div>
-                        <button class="btn-icon" onclick="showLeaderboard()" title="Peringkat Global"
-                            style="margin-right: 8px;">
+                </div>
+                <div class="header-center">
+                    <h1 class="game-title">🧩 Teka-Teki Hafidz</h1>
+                </div>
+                <div class="header-right">
+                    <div class="stats-container">
+                        <!-- Total Score - PALING DEPAN, LEBIH BESAR -->
+                        <div class="stat-item total-score-display">
                             <i class="fas fa-trophy"></i>
+                            <span class="stat-label">Total</span>
+                            <span id="total-score-header">0</span>
+                        </div>
+                        <!-- Level -->
+                        <div class="stat-item level-display">
+                            <i class="fas fa-layer-group"></i>
+                            <span class="stat-label">Lv.</span>
+                            <span id="current-level">1</span>
+                        </div>
+                        <!-- Skor Game Saat Ini (Bintang) -->
+                        <div class="stat-item score-display">
+                            <i class="fas fa-star"></i>
+                            <span style="font-size: 0.7rem; opacity: 0.9; margin-right: 2px;">Skor</span>
+                            <span id="current-score">0</span>
+                        </div>
+                        <!-- Streak (Api) -->
+                        <div class="stat-item streak-display">
+                            <i class="fas fa-fire"></i>
+                            <span style="font-size: 0.7rem; opacity: 0.9; margin-right: 2px;">Streak</span>
+                            <span id="streak-count">0</span>
+                        </div>
+                    </div>
+                    <button class="btn-icon" onclick="showLeaderboard()" title="Peringkat Global"
+                        style="margin-right: 8px;">
+                        <i class="fas fa-trophy"></i>
+                    </button>
+                    <button class="btn-icon" onclick="logoutChild()" title="Keluar">
+                        <i class="fas fa-door-open"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main class="game-main">
+                <!-- Mode Selection Screen -->
+                <div id="game-mode-select" class="game-card visible">
+                    <div class="mascot-container">
+                        <img src="assets/app-icon.jpg" alt="Quran" class="mascot bounce">
+                    </div>
+                    <h2 class="card-title rainbow-text">Assalamualaikum!</h2>
+                    <p class="card-subtitle">Pilih mode bermain:</p>
+
+                    <div class="mode-buttons">
+                        <button class="mode-btn teka-teki" onclick="showGameStart()">
+                            <div class="mode-icon">🧩</div>
+                            <div class="mode-info">
+                                <span class="mode-title">Teka-Teki</span>
+                                <small>Pilih lanjutan ayat yang benar</small>
+                            </div>
                         </button>
-                        <button class="btn-icon" onclick="logoutChild()" title="Keluar">
-                            <i class="fas fa-door-open"></i>
+                        <button id="voice-mode-btn" class="mode-btn sambung-ayat" onclick="startVoiceMode()"
+                            style="display: none;">
+                            <div class="mode-icon">🎤</div>
+                            <div class="mode-info">
+                                <span class="mode-title">Sambung Ayat</span>
+                                <small>Lanjutkan ayat dengan suara (Beta)</small>
+                            </div>
                         </button>
                     </div>
-                </header>
 
-                <main class="game-main">
-                    <!-- Mode Selection Screen -->
-                    <div id="game-mode-select" class="game-card visible">
-                        <div class="mascot-container">
-                            <img src="assets/app-icon.jpg" alt="Quran" class="mascot bounce">
-                        </div>
-                        <h2 class="card-title rainbow-text">Assalamualaikum!</h2>
-                        <p class="card-subtitle">Pilih mode bermain:</p>
+                    <div class="juz-info" id="juz-info">
+                        <p><i class="fas fa-book-quran"></i> Juz yang dipelajari:</p>
+                        <div class="juz-badges" id="juz-badges"></div>
+                    </div>
 
-                        <div class="mode-buttons">
-                            <button class="mode-btn teka-teki" onclick="showGameStart()">
-                                <div class="mode-icon">🧩</div>
-                                <div class="mode-info">
-                                    <span class="mode-title">Teka-Teki</span>
-                                    <small>Pilih lanjutan ayat yang benar</small>
-                                </div>
-                            </button>
-                            <button id="voice-mode-btn" class="mode-btn sambung-ayat" onclick="startVoiceMode()"
-                                style="display: none;">
-                                <div class="mode-icon">🎤</div>
-                                <div class="mode-info">
-                                    <span class="mode-title">Sambung Ayat</span>
-                                    <small>Lanjutkan ayat dengan suara (Beta)</small>
-                                </div>
-                            </button>
-                        </div>
-
-                        <div class="juz-info" id="juz-info">
-                            <p><i class="fas fa-book-quran"></i> Juz yang dipelajari:</p>
-                            <div class="juz-badges" id="juz-badges"></div>
-                        </div>
-
-                        <div class="achievements-section" id="achievements-section">
-                            <p><i class="fas fa-medal"></i> Pencapaian:</p>
-                            <div class="achievements-list" id="achievements-list">
-                                <p class="empty-state-small">Belum ada surah yang hafal lengkap. Ayo main!</p>
-                            </div>
-                        </div>
-
-                        <div class="hafalan-progress-section" id="hafalan-progress-section">
-                            <div class="hafalan-progress-header" onclick="toggleHafalanProgress()">
-                                <p><i class="fas fa-chart-bar"></i> Progress Hafalan</p>
-                                <i class="fas fa-chevron-down hafalan-toggle-icon" id="hafalan-toggle-icon"></i>
-                            </div>
-                            <div class="hafalan-progress-list collapsed" id="hafalan-progress-list">
-                                <p class="empty-state-small">Belum ada data hafalan. Ayo main!</p>
-                            </div>
+                    <div class="achievements-section" id="achievements-section">
+                        <p><i class="fas fa-medal"></i> Pencapaian:</p>
+                        <div class="achievements-list" id="achievements-list">
+                            <p class="empty-state-small">Belum ada surah yang hafal lengkap. Ayo main!</p>
                         </div>
                     </div>
 
-                    <!-- Start Screen (Teka-Teki) -->
-                    <div id="game-start" class="game-card">
-                        <div class="mascot-container">
-                            <img src="assets/app-icon.jpg" alt="Quran" class="mascot bounce">
+                    <div class="hafalan-progress-section" id="hafalan-progress-section">
+                        <div class="hafalan-progress-header" onclick="toggleHafalanProgress()">
+                            <p><i class="fas fa-chart-bar"></i> Progress Hafalan</p>
+                            <i class="fas fa-chevron-down hafalan-toggle-icon" id="hafalan-toggle-icon"></i>
                         </div>
-                        <h2 class="card-title">🧩 Mode Teka-Teki</h2>
-                        <p class="card-subtitle">Pilih lanjutan ayat yang benar!</p>
-                        <div class="difficulty-info" id="difficulty-info">
-                            <span class="badge badge-easy">Level: Mudah</span>
+                        <div class="hafalan-progress-list collapsed" id="hafalan-progress-list">
+                            <p class="empty-state-small">Belum ada data hafalan. Ayo main!</p>
                         </div>
-                        <div class="game-start-buttons">
-                            <button class="btn-jelly-green pulse" onclick="startGame()">
-                                🎮 Mulai!
-                            </button>
-                            <button class="btn-jelly-yellow" onclick="showModeSelect()">
-                                ← Kembali
-                            </button>
+                    </div>
+                </div>
+
+                <!-- Start Screen (Teka-Teki) -->
+                <div id="game-start" class="game-card">
+                    <div class="mascot-container">
+                        <img src="assets/app-icon.jpg" alt="Quran" class="mascot bounce">
+                    </div>
+                    <h2 class="card-title">🧩 Mode Teka-Teki</h2>
+                    <p class="card-subtitle">Pilih lanjutan ayat yang benar!</p>
+                    <div class="difficulty-info" id="difficulty-info">
+                        <span class="badge badge-easy">Level: Mudah</span>
+                    </div>
+                    <div class="game-start-buttons">
+                        <button class="btn-jelly-green pulse" onclick="startGame()">
+                            🎮 Mulai!
+                        </button>
+                        <button class="btn-jelly-yellow" onclick="showModeSelect()">
+                            ← Kembali
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Screen -->
+                <div id="game-quiz" class="game-card">
+                    <div class="quiz-header">
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <span class="progress-text" id="progress-text">1/10</span>
+                        </div>
+                        <div class="timer-container" id="timer-container">
+                            <i class="fas fa-clock"></i>
+                            <span id="timer">30</span>
                         </div>
                     </div>
 
-                    <!-- Quiz Screen -->
-                    <div id="game-quiz" class="game-card">
-                        <div class="quiz-header">
-                            <div class="progress-container">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="progress-fill"></div>
-                                </div>
-                                <span class="progress-text" id="progress-text">1/10</span>
-                            </div>
-                            <div class="timer-container" id="timer-container">
-                                <i class="fas fa-clock"></i>
-                                <span id="timer">30</span>
-                            </div>
-                        </div>
-
-                        <div class="question-container">
-                            <div class="surah-badge" id="surah-badge">
-                                <i class="fas fa-bookmark"></i>
-                                <span id="surah-name">Al-Fatihah</span>
-                            </div>
-                            <p class="instruction">Lanjutkan ayat berikut:</p>
-                            <div class="question-box">
-                                <p class="question-text arabic-text" id="question-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ
-                                    الرَّحِيمِ</p>
-                            </div>
-                        </div>
-
-                        <div class="options-container" id="options-container">
-                            <!-- Options will be generated here -->
-                        </div>
-
-                        <div class="feedback-overlay hidden" id="feedback-overlay">
-                            <div class="feedback-content">
-                                <div class="feedback-icon" id="feedback-icon">✅</div>
-                                <p class="feedback-text" id="feedback-text">Benar! Maa Syaa Allah!</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Result Screen -->
-                    <div id="game-result" class="game-card">
-                        <div class="result-animation" id="result-animation">
-                            <div class="confetti"></div>
-                        </div>
-                        <div class="result-content">
-                            <div class="result-emoji" id="result-emoji">🏆</div>
-                            <h2 class="result-title" id="result-title">Maa Syaa Allah!</h2>
-                            <div class="result-stats">
-                                <div class="result-stat">
-                                    <span class="stat-value" id="final-score">0</span>
-                                    <span class="stat-label">Skor</span>
-                                </div>
-                                <div class="result-stat">
-                                    <span class="stat-value" id="correct-count">0</span>
-                                    <span class="stat-label">Benar</span>
-                                </div>
-                                <div class="result-stat">
-                                    <span class="stat-value" id="best-streak">0</span>
-                                    <span class="stat-label">Streak</span>
-                                </div>
-                            </div>
-                            <p class="result-message" id="result-message">Hafalan kamu semakin lancar!</p>
-                            <div class="result-actions">
-                                <button class="btn-play" onclick="startGame()">
-                                    <i class="fas fa-redo"></i> Main Lagi
-                                </button>
-                                <button class="btn-secondary" onclick="showGameStart()">
-                                    <i class="fas fa-home"></i> Menu Utama
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Voice Quiz Screen -->
-                    <div id="voice-quiz-screen" class="game-card">
-                        <div class="voice-quiz-header">
-                            <div class="voice-progress">
-                                <span id="voice-progress">1/5</span>
-                            </div>
-                            <div class="voice-score-display">
-                                <i class="fas fa-star"></i>
-                                <span id="voice-score">0</span>
-                            </div>
-                            <button class="btn-icon" onclick="stopVoiceQuiz()" title="Berhenti">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-
-                        <div class="voice-status-container">
-                            <div class="voice-mic-indicator" id="voice-mic-indicator">
-                                <i class="fas fa-microphone"></i>
-                            </div>
-                            <p class="voice-status" id="voice-status">Memulai...</p>
-                        </div>
-
-                        <div class="voice-surah-badge">
+                    <div class="question-container">
+                        <div class="surah-badge" id="surah-badge">
                             <i class="fas fa-bookmark"></i>
-                            <span id="voice-surah-name">Al-Fatihah</span>
+                            <span id="surah-name">Al-Fatihah</span>
                         </div>
-
-                        <div class="voice-ayah-container">
-                            <p class="voice-ayah-text arabic-text" id="voice-ayah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ
+                        <p class="instruction">Lanjutkan ayat berikut:</p>
+                        <div class="question-box">
+                            <p class="question-text arabic-text" id="question-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ
                                 الرَّحِيمِ</p>
                         </div>
-
-                        <div class="voice-spoken-container">
-                            <p class="voice-spoken-label">Yang kamu ucapkan:</p>
-                            <p class="voice-spoken-text arabic-text" id="voice-spoken-text"></p>
-                        </div>
-
-                        <div class="voice-feedback hidden" id="voice-feedback">
-                            <span class="voice-feedback-icon" id="voice-feedback-icon">✅</span>
-                            <span class="voice-feedback-text" id="voice-feedback-text">Benar!</span>
-                        </div>
-
-                        <div class="voice-correct-container hidden" id="voice-correct-container">
-                            <p class="voice-correct-label">Ayat yang benar:</p>
-                            <p class="voice-correct-ayah arabic-text" id="voice-correct-ayah"></p>
-                        </div>
                     </div>
 
-                    <!-- Voice Result Screen -->
-                    <div id="voice-result-screen" class="game-card">
-                        <div class="result-content">
-                            <div class="result-emoji">🎤</div>
-                            <h2 class="result-title">Sambung Ayat Selesai!</h2>
-                            <div class="result-stats">
-                                <div class="result-stat">
-                                    <span class="stat-value" id="voice-final-score">0</span>
-                                    <span class="stat-label">Skor</span>
-                                </div>
-                                <div class="result-stat">
-                                    <span class="stat-value" id="voice-correct-count">0/0</span>
-                                    <span class="stat-label">Benar</span>
-                                </div>
-                            </div>
-                            <div class="result-actions">
-                                <button class="btn-play" onclick="startVoiceMode()">
-                                    <i class="fas fa-redo"></i> Main Lagi
-                                </button>
-                                <button class="btn-secondary" onclick="showModeSelect()">
-                                    <i class="fas fa-home"></i> Menu Utama
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-
-            <!-- PARENT DASHBOARD SCREEN -->
-            <div id="parent-dashboard-screen" class="screen">
-                <header class="dashboard-header">
-                    <div class="header-left">
-                        <h1><i class="fas fa-chart-line"></i> Dashboard Orang Tua</h1>
-                    </div>
-                    <div class="header-right">
-                        <span class="parent-name" id="parent-name">Orang Tua</span>
-                        <button class="btn-icon" onclick="showLeaderboard()" title="Peringkat Global">
-                            <i class="fas fa-globe"></i>
-                        </button>
-                        <button class="btn-icon" onclick="logoutParent()" title="Keluar">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
-                </header>
-
-                <nav class="dashboard-nav">
-                    <button class="nav-btn active" onclick="showDashboardTab('overview')" data-tab="overview">
-                        <i class="fas fa-home"></i> Overview
-                    </button>
-                    <button class="nav-btn" onclick="showDashboardTab('children')" data-tab="children">
-                        <i class="fas fa-users"></i> Anak-anak
-                    </button>
-                    <button class="nav-btn" onclick="showDashboardTab('scores')" data-tab="scores">
-                        <i class="fas fa-trophy"></i> Skor
-                    </button>
-                    <button class="nav-btn" onclick="showDashboardTab('settings')" data-tab="settings">
-                        <i class="fas fa-cog"></i> Setting
-                    </button>
-                </nav>
-
-                <main class="dashboard-main">
-                    <!-- Overview Tab -->
-                    <div id="tab-overview" class="dashboard-tab active">
-                        <div class="overview-cards">
-                            <div class="overview-card">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="card-content">
-                                    <h3 id="total-children">0</h3>
-                                    <p>Total Anak</p>
-                                </div>
-                            </div>
-                            <div class="overview-card">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
-                                    <i class="fas fa-gamepad"></i>
-                                </div>
-                                <div class="card-content">
-                                    <h3 id="total-games">0</h3>
-                                    <p>Total Permainan</p>
-                                </div>
-                            </div>
-                            <div class="overview-card">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <div class="card-content">
-                                    <h3 id="avg-score">0</h3>
-                                    <p>Rata-rata Skor</p>
-                                </div>
-                            </div>
-                            <div class="overview-card">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
-                                    <i class="fas fa-fire"></i>
-                                </div>
-                                <div class="card-content">
-                                    <h3 id="highest-streak">0</h3>
-                                    <p>Streak Tertinggi</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="recent-activity">
-                            <h3><i class="fas fa-history"></i> Aktivitas Terbaru</h3>
-                            <div class="activity-list" id="activity-list">
-                                <p class="empty-state">Belum ada aktivitas</p>
-                            </div>
-                        </div>
+                    <div class="options-container" id="options-container">
+                        <!-- Options will be generated here -->
                     </div>
 
-                    <!-- Children Tab -->
-                    <div id="tab-children" class="dashboard-tab">
-                        <div class="tab-header">
-                            <h2><i class="fas fa-users"></i> Daftar Anak</h2>
-                            <button class="btn-primary" onclick="showAddChildModal()">
-                                <i class="fas fa-plus"></i> Tambah Anak
-                            </button>
+                    <div class="feedback-overlay hidden" id="feedback-overlay">
+                        <div class="feedback-content">
+                            <div class="feedback-icon" id="feedback-icon">✅</div>
+                            <p class="feedback-text" id="feedback-text">Benar! Maa Syaa Allah!</p>
                         </div>
-                        <div class="children-list" id="children-list">
-                            <p class="empty-state">Belum ada anak terdaftar. Tambahkan anak untuk memulai!</p>
-                        </div>
-                    </div>
-
-                    <!-- Scores Tab -->
-                    <div id="tab-scores" class="dashboard-tab">
-                        <div class="tab-header">
-                            <h2><i class="fas fa-trophy"></i> Riwayat Skor</h2>
-                            <div class="filter-controls">
-                                <select id="score-filter-child" onchange="filterScores()">
-                                    <option value="all">Semua Anak</option>
-                                </select>
-                                <select id="score-filter-period" onchange="filterScores()">
-                                    <option value="all">Semua Waktu</option>
-                                    <option value="today">Hari Ini</option>
-                                    <option value="week">Minggu Ini</option>
-                                    <option value="month">Bulan Ini</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="scores-table-container">
-                            <table class="scores-table">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal</th>
-                                        <th>Anak</th>
-                                        <th>Skor</th>
-                                        <th>Benar</th>
-                                        <th>Level</th>
-                                        <th>Juz</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="scores-tbody">
-                                    <tr>
-                                        <td colspan="6" class="empty-state">Belum ada data skor</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Settings Tab -->
-                    <div id="tab-settings" class="dashboard-tab">
-                        <h2><i class="fas fa-cog"></i> Pengaturan</h2>
-                        <div class="settings-section">
-                            <h3>Setting Per Anak</h3>
-                            <p>Pilih anak untuk mengatur juz yang dipelajari:</p>
-                            <div class="child-settings-list" id="child-settings-list">
-                                <p class="empty-state">Belum ada anak terdaftar</p>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
-
-            <!-- ADD CHILD MODAL -->
-            <div id="add-child-modal" class="modal hidden">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-user-plus"></i> Tambah Anak Baru</h3>
-                        <button class="btn-close" onclick="closeModal('add-child-modal')">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label><i class="fas fa-user"></i> Nama Anak</label>
-                            <input type="text" id="new-child-name" placeholder="Masukkan nama anak">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-at"></i> Username</label>
-                            <input type="text" id="new-child-username" placeholder="Username untuk login">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-lock"></i> PIN (4-6 digit)</label>
-                            <input type="text" id="new-child-pin" placeholder="PIN angka" maxlength="6">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-book-quran"></i> Pilih Juz yang Dipelajari</label>
-                            <div class="juz-selector-grid" id="new-child-juz">
-                                <label class="juz-checkbox"><input type="checkbox" value="1"> Juz 1</label>
-                                <label class="juz-checkbox"><input type="checkbox" value="2"> Juz 2</label>
-                                <label class="juz-checkbox"><input type="checkbox" value="3"> Juz 3</label>
-                                <label class="juz-checkbox"><input type="checkbox" value="4"> Juz 4</label>
-                                <label class="juz-checkbox"><input type="checkbox" value="27"> Juz 27</label>
-                                <label class="juz-checkbox"><input type="checkbox" value="28"> Juz 28</label>
-                                <label class="juz-checkbox"><input type="checkbox" value="29"> Juz 29</label>
-                                <label class="juz-checkbox"><input type="checkbox" value="30" checked> Juz 30</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-clock"></i> Waktu Menjawab (detik)</label>
-                            <input type="number" id="new-child-timer" placeholder="Default: 30" min="10" max="300"
-                                value="30">
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-microphone"></i> Mode Sambung Ayat (Suara)</label>
-                            <div class="toggle-switch-container">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="new-child-voice-enabled">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <span class="toggle-label" id="voice-toggle-label">Nonaktif (Beta)</span>
-                            </div>
-                            <small style="color: var(--text-light); display: block; margin-top: 5px;">
-                                ⚠️ Fitur masih dalam pengembangan
-                            </small>
-                        </div>
-                        <div class="form-group">
-                            <label><i class="fas fa-smile"></i> Pilih Avatar</label>
-                            <div class="avatar-selector" id="avatar-selector">
-                                <button class="avatar-option selected" data-avatar="👶">👶</button>
-                                <button class="avatar-option" data-avatar="👦">👦</button>
-                                <button class="avatar-option" data-avatar="👧">👧</button>
-                                <button class="avatar-option" data-avatar="🧒">🧒</button>
-                                <button class="avatar-option" data-avatar="👼">👼</button>
-                                <button class="avatar-option" data-avatar="🌟">🌟</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn-secondary" onclick="closeModal('add-child-modal')">Batal</button>
-                        <button class="btn-primary" onclick="addChild()">
-                            <i class="fas fa-save"></i> Simpan
-                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- EDIT CHILD JUZ MODAL -->
-            <div id="edit-juz-modal" class="modal hidden">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-book-quran"></i> Setting Juz - <span id="edit-child-name"></span></h3>
-                        <button class="btn-close" onclick="closeModal('edit-juz-modal')">&times;</button>
+                <!-- Result Screen -->
+                <div id="game-result" class="game-card">
+                    <div class="result-animation" id="result-animation">
+                        <div class="confetti"></div>
                     </div>
-                    <div class="modal-body">
-                        <p>Pilih juz yang akan dipelajari anak ini:</p>
-                        <div class="juz-selector-grid" id="edit-child-juz">
+                    <div class="result-content">
+                        <div class="result-emoji" id="result-emoji">🏆</div>
+                        <h2 class="result-title" id="result-title">Maa Syaa Allah!</h2>
+                        <div class="result-stats">
+                            <div class="result-stat">
+                                <span class="stat-value" id="final-score">0</span>
+                                <span class="stat-label">Skor</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="stat-value" id="correct-count">0</span>
+                                <span class="stat-label">Benar</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="stat-value" id="best-streak">0</span>
+                                <span class="stat-label">Streak</span>
+                            </div>
+                        </div>
+                        <p class="result-message" id="result-message">Hafalan kamu semakin lancar!</p>
+                        <div class="result-actions">
+                            <button class="btn-play" onclick="startGame()">
+                                <i class="fas fa-redo"></i> Main Lagi
+                            </button>
+                            <button class="btn-secondary" onclick="showGameStart()">
+                                <i class="fas fa-home"></i> Menu Utama
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Quiz Screen -->
+                <div id="voice-quiz-screen" class="game-card">
+                    <div class="voice-quiz-header">
+                        <div class="voice-progress">
+                            <span id="voice-progress">1/5</span>
+                        </div>
+                        <div class="voice-score-display">
+                            <i class="fas fa-star"></i>
+                            <span id="voice-score">0</span>
+                        </div>
+                        <button class="btn-icon" onclick="stopVoiceQuiz()" title="Berhenti">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="voice-status-container">
+                        <div class="voice-mic-indicator" id="voice-mic-indicator">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <p class="voice-status" id="voice-status">Memulai...</p>
+                    </div>
+
+                    <div class="voice-surah-badge">
+                        <i class="fas fa-bookmark"></i>
+                        <span id="voice-surah-name">Al-Fatihah</span>
+                    </div>
+
+                    <div class="voice-ayah-container">
+                        <p class="voice-ayah-text arabic-text" id="voice-ayah-text">بِسْمِ اللَّهِ الرَّحْمَٰنِ
+                            الرَّحِيمِ</p>
+                    </div>
+
+                    <div class="voice-spoken-container">
+                        <p class="voice-spoken-label">Yang kamu ucapkan:</p>
+                        <p class="voice-spoken-text arabic-text" id="voice-spoken-text"></p>
+                    </div>
+
+                    <div class="voice-feedback hidden" id="voice-feedback">
+                        <span class="voice-feedback-icon" id="voice-feedback-icon">✅</span>
+                        <span class="voice-feedback-text" id="voice-feedback-text">Benar!</span>
+                    </div>
+
+                    <div class="voice-correct-container hidden" id="voice-correct-container">
+                        <p class="voice-correct-label">Ayat yang benar:</p>
+                        <p class="voice-correct-ayah arabic-text" id="voice-correct-ayah"></p>
+                    </div>
+                </div>
+
+                <!-- Voice Result Screen -->
+                <div id="voice-result-screen" class="game-card">
+                    <div class="result-content">
+                        <div class="result-emoji">🎤</div>
+                        <h2 class="result-title">Sambung Ayat Selesai!</h2>
+                        <div class="result-stats">
+                            <div class="result-stat">
+                                <span class="stat-value" id="voice-final-score">0</span>
+                                <span class="stat-label">Skor</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="stat-value" id="voice-correct-count">0/0</span>
+                                <span class="stat-label">Benar</span>
+                            </div>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn-play" onclick="startVoiceMode()">
+                                <i class="fas fa-redo"></i> Main Lagi
+                            </button>
+                            <button class="btn-secondary" onclick="showModeSelect()">
+                                <i class="fas fa-home"></i> Menu Utama
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- PARENT DASHBOARD SCREEN -->
+        <div id="parent-dashboard-screen" class="screen">
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1><i class="fas fa-chart-line"></i> Dashboard Orang Tua</h1>
+                </div>
+                <div class="header-right">
+                    <span class="parent-name" id="parent-name">Orang Tua</span>
+                    <button class="btn-icon" onclick="showLeaderboard()" title="Peringkat Global">
+                        <i class="fas fa-globe"></i>
+                    </button>
+                    <button class="btn-icon" onclick="logoutParent()" title="Keluar">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <nav class="dashboard-nav">
+                <button class="nav-btn active" onclick="showDashboardTab('overview')" data-tab="overview">
+                    <i class="fas fa-home"></i> Overview
+                </button>
+                <button class="nav-btn" onclick="showDashboardTab('children')" data-tab="children">
+                    <i class="fas fa-users"></i> Anak-anak
+                </button>
+                <button class="nav-btn" onclick="showDashboardTab('scores')" data-tab="scores">
+                    <i class="fas fa-trophy"></i> Skor
+                </button>
+                <button class="nav-btn" onclick="showDashboardTab('settings')" data-tab="settings">
+                    <i class="fas fa-cog"></i> Setting
+                </button>
+            </nav>
+
+            <main class="dashboard-main">
+                <!-- Overview Tab -->
+                <div id="tab-overview" class="dashboard-tab active">
+                    <div class="overview-cards">
+                        <div class="overview-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 id="total-children">0</h3>
+                                <p>Total Anak</p>
+                            </div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 id="total-games">0</h3>
+                                <p>Total Permainan</p>
+                            </div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 id="avg-score">0</h3>
+                                <p>Rata-rata Skor</p>
+                            </div>
+                        </div>
+                        <div class="overview-card">
+                            <div class="card-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3 id="highest-streak">0</h3>
+                                <p>Streak Tertinggi</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3><i class="fas fa-history"></i> Aktivitas Terbaru</h3>
+                        <div class="activity-list" id="activity-list">
+                            <p class="empty-state">Belum ada aktivitas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Children Tab -->
+                <div id="tab-children" class="dashboard-tab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-users"></i> Daftar Anak</h2>
+                        <button class="btn-primary" onclick="showAddChildModal()">
+                            <i class="fas fa-plus"></i> Tambah Anak
+                        </button>
+                    </div>
+                    <div class="children-list" id="children-list">
+                        <p class="empty-state">Belum ada anak terdaftar. Tambahkan anak untuk memulai!</p>
+                    </div>
+                </div>
+
+                <!-- Scores Tab -->
+                <div id="tab-scores" class="dashboard-tab">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-trophy"></i> Riwayat Skor</h2>
+                        <div class="filter-controls">
+                            <select id="score-filter-child" onchange="filterScores()">
+                                <option value="all">Semua Anak</option>
+                            </select>
+                            <select id="score-filter-period" onchange="filterScores()">
+                                <option value="all">Semua Waktu</option>
+                                <option value="today">Hari Ini</option>
+                                <option value="week">Minggu Ini</option>
+                                <option value="month">Bulan Ini</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="scores-table-container">
+                        <table class="scores-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Anak</th>
+                                    <th>Skor</th>
+                                    <th>Benar</th>
+                                    <th>Level</th>
+                                    <th>Juz</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scores-tbody">
+                                <tr>
+                                    <td colspan="6" class="empty-state">Belum ada data skor</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="tab-settings" class="dashboard-tab">
+                    <h2><i class="fas fa-cog"></i> Pengaturan</h2>
+                    <div class="settings-section">
+                        <h3>Setting Per Anak</h3>
+                        <p>Pilih anak untuk mengatur juz yang dipelajari:</p>
+                        <div class="child-settings-list" id="child-settings-list">
+                            <p class="empty-state">Belum ada anak terdaftar</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- ADD CHILD MODAL -->
+        <div id="add-child-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> Tambah Anak Baru</h3>
+                    <button class="btn-close" onclick="closeModal('add-child-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Nama Anak</label>
+                        <input type="text" id="new-child-name" placeholder="Masukkan nama anak">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-at"></i> Username</label>
+                        <input type="text" id="new-child-username" placeholder="Username untuk login">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> PIN (4-6 digit)</label>
+                        <input type="text" id="new-child-pin" placeholder="PIN angka" maxlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-book-quran"></i> Pilih Juz yang Dipelajari</label>
+                        <div class="juz-selector-grid" id="new-child-juz">
                             <label class="juz-checkbox"><input type="checkbox" value="1"> Juz 1</label>
                             <label class="juz-checkbox"><input type="checkbox" value="2"> Juz 2</label>
                             <label class="juz-checkbox"><input type="checkbox" value="3"> Juz 3</label>
@@ -642,112 +582,171 @@
                             <label class="juz-checkbox"><input type="checkbox" value="27"> Juz 27</label>
                             <label class="juz-checkbox"><input type="checkbox" value="28"> Juz 28</label>
                             <label class="juz-checkbox"><input type="checkbox" value="29"> Juz 29</label>
-                            <label class="juz-checkbox"><input type="checkbox" value="30"> Juz 30</label>
-                        </div>
-                        <div class="form-group" style="margin-top: 20px;">
-                            <label><i class="fas fa-clock"></i> Waktu Menjawab (detik)</label>
-                            <input type="number" id="edit-child-timer" placeholder="Default: 30" min="10" max="300">
+                            <label class="juz-checkbox"><input type="checkbox" value="30" checked> Juz 30</label>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn-secondary" onclick="closeModal('edit-juz-modal')">Batal</button>
-                        <button class="btn-primary" onclick="saveChildJuz()">
-                            <i class="fas fa-save"></i> Simpan
-                        </button>
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Waktu Menjawab (detik)</label>
+                        <input type="number" id="new-child-timer" placeholder="Default: 30" min="10" max="300"
+                            value="30">
                     </div>
-                </div>
-            </div>
-
-            <!-- TOAST NOTIFICATION -->
-            <div id="toast" class="toast hidden">
-                <div class="toast-content">
-                    <i class="toast-icon fas fa-check-circle"></i>
-                    <span class="toast-message">Pesan notifikasi</span>
-                </div>
-            </div>
-
-            <!-- LEADERBOARD MODAL -->
-            <div id="leaderboard-modal" class="modal hidden">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-trophy"></i> Peringkat Global</h3>
-                        <div class="leaderboard-tabs">
-                            <button class="tab-btn active" onclick="switchLeaderboardTab('hafalan')">Hafalan
-                                Surah</button>
-                            <button class="tab-btn" onclick="switchLeaderboardTab('score')">Skor Tertinggi</button>
+                    <div class="form-group">
+                        <label><i class="fas fa-microphone"></i> Mode Sambung Ayat (Suara)</label>
+                        <div class="toggle-switch-container">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="new-child-voice-enabled">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label" id="voice-toggle-label">Nonaktif (Beta)</span>
                         </div>
-                        <button class="btn-close" onclick="closeModal('leaderboard-modal')">&times;</button>
+                        <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                            ⚠️ Fitur masih dalam pengembangan
+                        </small>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group" id="leaderboard-filters">
-                            <label>Pilih Surah:</label>
-                            <select id="leaderboard-surah-select" onchange="renderGlobalLeaderboard(this.value)"
-                                style="width:100%; padding:10px; border-radius:8px;">
-                                <option value="1">1. Al-Fatihah</option>
-                            </select>
-                        </div>
-
-                        <div class="scores-table-container" style="margin-top:15px; max-height:400px; overflow-y:auto;">
-                            <table class="scores-table">
-                                <thead>
-                                    <tr>
-                                        <th width="15%">#</th>
-                                        <th>Nama</th>
-                                        <th width="20%">Hafal</th>
-                                        <th width="20%">Waktu</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="leaderboard-body">
-                                    <!-- Data rendered here -->
-                                </tbody>
-                            </table>
+                    <div class="form-group">
+                        <label><i class="fas fa-smile"></i> Pilih Avatar</label>
+                        <div class="avatar-selector" id="avatar-selector">
+                            <button class="avatar-option selected" data-avatar="👶">👶</button>
+                            <button class="avatar-option" data-avatar="👦">👦</button>
+                            <button class="avatar-option" data-avatar="👧">👧</button>
+                            <button class="avatar-option" data-avatar="🧒">🧒</button>
+                            <button class="avatar-option" data-avatar="👼">👼</button>
+                            <button class="avatar-option" data-avatar="🌟">🌟</button>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- LOADING OVERLAY -->
-            <div id="loading-overlay" class="loading-overlay hidden">
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <p>Memuat...</p>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeModal('add-child-modal')">Batal</button>
+                    <button class="btn-primary" onclick="addChild()">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Firebase SDK -->
-            <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-            <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-            <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+        <!-- EDIT CHILD JUZ MODAL -->
+        <div id="edit-juz-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-book-quran"></i> Setting Juz - <span id="edit-child-name"></span></h3>
+                    <button class="btn-close" onclick="closeModal('edit-juz-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Pilih juz yang akan dipelajari anak ini:</p>
+                    <div class="juz-selector-grid" id="edit-child-juz">
+                        <label class="juz-checkbox"><input type="checkbox" value="1"> Juz 1</label>
+                        <label class="juz-checkbox"><input type="checkbox" value="2"> Juz 2</label>
+                        <label class="juz-checkbox"><input type="checkbox" value="3"> Juz 3</label>
+                        <label class="juz-checkbox"><input type="checkbox" value="4"> Juz 4</label>
+                        <label class="juz-checkbox"><input type="checkbox" value="27"> Juz 27</label>
+                        <label class="juz-checkbox"><input type="checkbox" value="28"> Juz 28</label>
+                        <label class="juz-checkbox"><input type="checkbox" value="29"> Juz 29</label>
+                        <label class="juz-checkbox"><input type="checkbox" value="30"> Juz 30</label>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label><i class="fas fa-clock"></i> Waktu Menjawab (detik)</label>
+                        <input type="number" id="edit-child-timer" placeholder="Default: 30" min="10" max="300">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeModal('edit-juz-modal')">Batal</button>
+                    <button class="btn-primary" onclick="saveChildJuz()">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                </div>
+            </div>
+        </div>
 
-            <!-- App Scripts -->
-            <script src="assets/firebase-config.js?v=4.0"></script>
-            <script src="assets/quran-data.js?v=4.0"></script>
-            <script src="assets/google-tts-service.js?v=3.0"></script>
-            <script src="assets/gemini-service.js?v=3.0"></script>
-            <script src="voice-quiz.js?v=1.0"></script>
-            <script src="assets/app.js?v=4.0"></script>
+        <!-- TOAST NOTIFICATION -->
+        <div id="toast" class="toast hidden">
+            <div class="toast-content">
+                <i class="toast-icon fas fa-check-circle"></i>
+                <span class="toast-message">Pesan notifikasi</span>
+            </div>
+        </div>
 
-            <script>
-                // EMERGENCY FIX: Unregister old SW to stop flickering loops
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                        for (let registration of registrations) {
-                            registration.unregister().then(function (boolean) {
-                                console.log('Service Worker unregistered: ', boolean);
-                            });
-                        }
-                    });
+        <!-- LEADERBOARD MODAL -->
+        <div id="leaderboard-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-trophy"></i> Peringkat Global</h3>
+                    <div class="leaderboard-tabs">
+                        <button class="tab-btn active" onclick="switchLeaderboardTab('hafalan')">Hafalan
+                            Surah</button>
+                        <button class="tab-btn" onclick="switchLeaderboardTab('score')">Skor Tertinggi</button>
+                    </div>
+                    <button class="btn-close" onclick="closeModal('leaderboard-modal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" id="leaderboard-filters">
+                        <label>Pilih Surah:</label>
+                        <select id="leaderboard-surah-select" onchange="renderGlobalLeaderboard(this.value)"
+                            style="width:100%; padding:10px; border-radius:8px;">
+                            <option value="1">1. Al-Fatihah</option>
+                        </select>
+                    </div>
 
-                    // Re-register with correct path
-                    window.addEventListener('load', () => {
-                        setTimeout(() => {
-                            navigator.serviceWorker.register('./sw.js')
-                                .then(reg => console.log('New SW registered'))
-                                .catch(err => console.log('SW failed', err));
-                        }, 2000); // Delay to ensure unregister completes
-                    });
-                }
-            </script>
+                    <div class="scores-table-container" style="margin-top:15px; max-height:400px; overflow-y:auto;">
+                        <table class="scores-table">
+                            <thead>
+                                <tr>
+                                    <th width="15%">#</th>
+                                    <th>Nama</th>
+                                    <th width="20%">Hafal</th>
+                                    <th width="20%">Waktu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-body">
+                                <!-- Data rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOADING OVERLAY -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Memuat...</p>
+            </div>
+        </div>
+
+        <!-- Firebase SDK -->
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+        <!-- App Scripts -->
+        <script src="assets/firebase-config.js?v=4.0"></script>
+        <script src="assets/quran-data.js?v=4.0"></script>
+        <script src="assets/google-tts-service.js?v=3.0"></script>
+        <script src="assets/gemini-service.js?v=3.0"></script>
+        <script src="voice-quiz.js?v=1.0"></script>
+        <script src="assets/app.js?v=4.0"></script>
+
+        <script>
+            // EMERGENCY FIX: Unregister old SW to stop flickering loops
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    for (let registration of registrations) {
+                        registration.unregister().then(function (boolean) {
+                            console.log('Service Worker unregistered: ', boolean);
+                        });
+                    }
+                });
+
+                // Re-register with correct path
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        navigator.serviceWorker.register('./sw.js')
+                            .then(reg => console.log('New SW registered'))
+                            .catch(err => console.log('SW failed', err));
+                    }, 2000); // Delay to ensure unregister completes
+                });
+            }
+        </script>
 </body>
 
 </html>
