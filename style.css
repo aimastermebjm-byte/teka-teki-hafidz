@@ -3994,9 +3994,8 @@ body {
 
 /* 4. Exact Role Buttons (Squarish, soft glass glow) */
 .role-selector {
-    gap: 25px !important;
-    margin-top: 25vh !important;
-    /* Pushed down further to avoid overlapping the top wave */
+    gap: 15px !important;
+    margin-top: 15vh !important;
     padding: 0 10px !important;
     justify-content: center !important;
     position: relative;
@@ -4038,11 +4037,11 @@ body {
 #btn-role-child span,
 #btn-role-parent span {
     font-family: 'Fredoka One', cursive !important;
-    font-size: 1.8rem !important;
+    font-size: clamp(1.2rem, 4vw, 1.8rem) !important;
     color: #1a365d !important;
     text-shadow: 2px 2px 0px #ffffff, -1px -1px 0px #ffffff, 0px 4px 10px rgba(0, 0, 0, 0.15) !important;
     letter-spacing: 0.5px !important;
-    margin-top: 15px !important;
+    margin-top: 10px !important;
     white-space: nowrap !important;
 }
 
@@ -4062,33 +4061,85 @@ body {
 }
 
 .role-icon-img {
-    width: 170px !important;
-    height: 170px !important;
-    border-radius: 35px !important;
+    width: clamp(120px, 38vw, 170px) !important;
+    height: clamp(120px, 38vw, 170px) !important;
+    border-radius: clamp(25px, 7vw, 35px) !important;
     object-fit: cover !important;
-    /* Zoom into the characters, crop the built-in frame */
     margin-bottom: 0 !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18) !important;
     border: none !important;
-    /* No extra border - image has its own frame */
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Gambar Anak punya lebih banyak padding bawaan, kompensasi dengan ukuran lebih besar */
+/* Gambar Anak punya lebih banyak padding bawaan, kompensasi ukuran lebih besar */
 #btn-role-child .role-icon-img {
-    width: 180px !important;
-    height: 180px !important;
+    width: clamp(135px, 42vw, 195px) !important;
+    height: clamp(135px, 42vw, 195px) !important;
+}
+
+/* Warna bingkai Orang Tua terlalu biru/toska, kita netralisasi agar lebih putih */
+#btn-role-parent .role-icon-img {
+    filter: saturate(0.7) brightness(1.05) !important;
 }
 
 #btn-role-child:hover .role-icon-img,
 #btn-role-parent:hover .role-icon-img {
-    transform: translateY(-8px) scale(1.05) !important;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(-5px) scale(1.03) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.22) !important;
 }
 
 #btn-role-child:hover,
 #btn-role-parent:hover {
     transform: none !important;
+}
+
+/* ===== MOBILE RESPONSIVE: Fit semua dalam 1 layar HP ===== */
+@media (max-height: 750px) {
+    .role-selector {
+        margin-top: 12vh !important;
+        gap: 10px !important;
+    }
+
+    .role-icon-img {
+        width: 110px !important;
+        height: 110px !important;
+        border-radius: 22px !important;
+    }
+
+    #btn-role-child .role-icon-img {
+        width: 125px !important;
+        height: 125px !important;
+    }
+
+    #btn-role-child span,
+    #btn-role-parent span {
+        font-size: 1.2rem !important;
+        margin-top: 8px !important;
+    }
+
+    #btn-role-child small,
+    #btn-role-parent small {
+        font-size: 0.8rem !important;
+        padding: 4px 10px !important;
+        margin-top: 5px !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .role-selector {
+        gap: 8px !important;
+    }
+
+    .role-icon-img {
+        width: 110px !important;
+        height: 110px !important;
+        border-radius: 22px !important;
+    }
+
+    #btn-role-child .role-icon-img {
+        width: 125px !important;
+        height: 125px !important;
+    }
 }
 
 /* 5. Pure CSS Hanging Stars & Moons */
