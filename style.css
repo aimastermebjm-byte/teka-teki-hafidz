@@ -3995,8 +3995,8 @@ body {
 /* 4. Exact Role Buttons (Squarish, soft glass glow) */
 .role-selector {
     gap: 25px !important;
-    margin-top: 55px !important;
-    /* Increased from 40px down -> requested by user */
+    margin-top: 14vh !important;
+    /* Increased significantly and made responsive to height */
     padding: 0 10px !important;
     justify-content: center !important;
     position: relative;
