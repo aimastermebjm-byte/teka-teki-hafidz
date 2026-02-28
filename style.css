@@ -3913,7 +3913,7 @@ body {
     left: -25%;
     /* Stretch it wider than screen */
     width: 150%;
-    height: 55%;
+    height: 60%;
     /* Reduced from 68% so buttons sit comfortably below the curve */
     /* Controls how deep the navy sky dips down */
     background: #111e3b;
