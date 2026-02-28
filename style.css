@@ -4059,10 +4059,10 @@ body {
 .role-icon-img {
     width: 100% !important;
     height: auto !important;
-    max-height: 120px !important;
-    border-radius: 25px !important;
+    border-radius: 20px !important;
     /* Match button shape */
-    object-fit: cover;
+    object-fit: contain;
+    /* Show FULL image, no cropping */
     margin-bottom: 0 !important;
     box-shadow: none !important;
     border: none !important;
