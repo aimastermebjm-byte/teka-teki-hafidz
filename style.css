@@ -4056,12 +4056,18 @@ body {
     margin-top: 3px !important;
 }
 
-.role-icon {
-    font-size: 3.5rem !important;
-    line-height: 1;
-    /* Force cross-platform COLOR emoji rendering instead of monochrome text */
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "Twemoji Mozilla", "Segoe UI Symbol", sans-serif !important;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+.role-icon-img {
+    width: 85px !important;
+    height: 85px !important;
+    border-radius: 22px !important;
+    /* Squircle look */
+    object-fit: contain;
+    margin-bottom: 8px !important;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15) !important;
+    border: 2px solid rgba(255, 255, 255, 0.9) !important;
+    background: #fff;
+    /* In case the generated images are not transparent */
+    transition: transform 0.3s ease;
 }
 
 #btn-role-child:hover,
