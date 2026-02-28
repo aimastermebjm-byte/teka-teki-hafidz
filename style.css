@@ -4004,14 +4004,16 @@ body {
 }
 
 .role-btn {
-    width: 160px !important;
-    height: 190px !important;
-    /* Fixed proportional height */
+    width: 170px !important;
+    /* Slightly wider */
+    height: 175px !important;
+    /* Slightly shorter */
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
-    padding: 15px 10px 12px !important;
+    padding: 10px 5px !important;
+    /* Less horizontal padding */
     overflow: hidden !important;
 }
 
@@ -4024,16 +4026,18 @@ body {
 
 #btn-role-child span {
     color: #4A2B12 !important;
-    font-size: 1.3rem !important;
+    font-size: 1.25rem !important;
     font-weight: 800 !important;
     margin-top: 8px !important;
+    white-space: nowrap !important;
 }
 
 #btn-role-child small {
     color: #8C4A1D !important;
     font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    margin-top: 3px !important;
+    font-size: 0.85rem !important;
+    margin-top: 2px !important;
+    white-space: nowrap !important;
 }
 
 #btn-role-parent {
@@ -4045,25 +4049,27 @@ body {
 
 #btn-role-parent span {
     color: #1E2954 !important;
-    font-size: 1.3rem !important;
+    font-size: 1.25rem !important;
     font-weight: 800 !important;
     margin-top: 8px !important;
+    white-space: nowrap !important;
 }
 
 #btn-role-parent small {
     color: #3A4E8C !important;
     font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    margin-top: 3px !important;
+    font-size: 0.8rem !important;
+    /* Slightly smaller for 'Monitor & Setting' to fit */
+    margin-top: 2px !important;
+    white-space: nowrap !important;
 }
 
 .role-icon-img {
-    width: 95px !important;
-    height: 95px !important;
-    border-radius: 22px !important;
+    width: 90px !important;
+    height: 90px !important;
+    border-radius: 20px !important;
     object-fit: cover;
-    /* Fill the square neatly */
-    margin-bottom: 0 !important;
+    margin-bottom: 2px !important;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
     border: 2px solid rgba(255, 255, 255, 0.8) !important;
     transition: transform 0.3s ease;
