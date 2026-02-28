@@ -4059,6 +4059,8 @@ body {
 .role-icon {
     font-size: 3.5rem !important;
     line-height: 1;
+    /* Force cross-platform COLOR emoji rendering instead of monochrome text */
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "Twemoji Mozilla", "Segoe UI Symbol", sans-serif !important;
     filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
 }
 
