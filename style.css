@@ -4057,14 +4057,15 @@ body {
 }
 
 .role-icon-img {
-    width: 110px !important;
-    height: 110px !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 120px !important;
     border-radius: 25px !important;
-    /* Squircle look */
+    /* Match button shape */
     object-fit: cover;
-    margin-bottom: 5px !important;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15) !important;
-    border: 2px solid rgba(255, 255, 255, 0.9) !important;
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
     transition: transform 0.3s ease;
 }
 
