@@ -4373,21 +4373,19 @@ body {
 }
 
 /* ========================================
-   Glassmorphism Login Form Overlay
+   Premium Solid White Login Form Card
 ======================================== */
 .login-form {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 30px;
-    padding: 35px 25px 25px;
-    /* Extra top padding for title */
-    margin: 20px 15px 0;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 2px 10px rgba(255, 255, 255, 0.4);
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    border-radius: 28px;
+    padding: 30px 25px 25px;
+    margin: 15px 15px 0;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
     position: relative;
     z-index: 20;
-    /* Keep it ON TOP of everything */
     animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -4396,29 +4394,104 @@ body {
 }
 
 .login-form h3 {
-    color: #FFE66D;
+    color: #1a2540 !important;
     font-family: 'Fredoka One', cursive;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    margin-bottom: 25px;
-    font-size: 1.6rem;
+    text-shadow: none !important;
+    margin-bottom: 22px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.login-form .form-group {
+    margin-bottom: 18px !important;
 }
 
 .login-form .form-group label {
-    color: #f1f5f9;
-    font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    color: #1a2540 !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    text-shadow: none !important;
+    margin-bottom: 6px !important;
+    display: block !important;
 }
 
-/* Override inputs inside glass card */
+.login-form .form-group label i {
+    color: #4ecdc4 !important;
+    margin-right: 6px !important;
+}
+
+/* Input fields - Light gray, dark text, very readable */
 .login-form input {
-    background: rgba(15, 23, 41, 0.7) !important;
-    border: 1px solid rgba(156, 227, 205, 0.3) !important;
-    color: white !important;
-    font-weight: 500;
+    background: #f0f2f5 !important;
+    border: 2px solid #e2e6ec !important;
+    border-radius: 14px !important;
+    color: #1a2540 !important;
+    font-weight: 500 !important;
+    font-size: 1rem !important;
+    padding: 14px 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.login-form input::placeholder {
+    color: #9ca3b0 !important;
+    font-weight: 400 !important;
 }
 
 .login-form input:focus {
-    background: rgba(15, 23, 41, 0.9) !important;
-    border-color: #FFE66D !important;
-    box-shadow: 0 0 15px rgba(255, 230, 109, 0.4) !important;
+    background: #ffffff !important;
+    border-color: #4ecdc4 !important;
+    box-shadow: 0 0 0 4px rgba(78, 205, 196, 0.15) !important;
+    outline: none !important;
+}
+
+/* Primary button - Gradient teal */
+.login-form .btn-primary {
+    background: linear-gradient(135deg, #4ecdc4 0%, #44b09e 100%) !important;
+    border: none !important;
+    border-radius: 14px !important;
+    color: white !important;
+    font-family: 'Fredoka One', cursive !important;
+    font-size: 1.15rem !important;
+    padding: 14px 20px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.35) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    margin-top: 8px !important;
+}
+
+.login-form .btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(78, 205, 196, 0.45) !important;
+}
+
+.login-form .btn-primary:active {
+    transform: translateY(0) !important;
+}
+
+/* Link buttons */
+.login-form .btn-link {
+    color: #4ecdc4 !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    background: none !important;
+    border: none !important;
+    padding: 10px !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    display: block !important;
+    text-align: center !important;
+    margin-top: 5px !important;
+}
+
+.login-form .btn-link:hover {
+    color: #38b2a8 !important;
+    text-decoration: underline !important;
+}
+
+.login-form .auth-links {
+    margin-top: 8px !important;
+    text-align: center !important;
 }
