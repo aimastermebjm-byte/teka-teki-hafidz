@@ -1101,7 +1101,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: linear-gradient(180deg, #e8f6f3 0%, #f0faf8 50%, #f5f7fa 100%) !important;
+    background: linear-gradient(180deg, #b8e6de 0%, #c5ece6 40%, #d5f0ec 100%) !important;
 }
 
 /* Game Cards - Navy Dark (for quiz/start/result screens) */
