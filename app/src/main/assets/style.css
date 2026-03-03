@@ -1104,24 +1104,49 @@ body {
     background: linear-gradient(180deg, #e8f6f3 0%, #f0faf8 50%, #f5f7fa 100%) !important;
 }
 
-/* Game Cards - Transparent container, content flows on mint bg */
+/* Game Cards - Navy Dark (for quiz/start/result screens) */
 .game-card {
+    background: linear-gradient(135deg, #1a2540, #243056);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(78, 205, 196, 0.15);
+    border-radius: 28px;
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: none;
+    animation: cardAppear 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+    border-radius: 28px 28px 50% 50%;
+    pointer-events: none;
+}
+
+/* Dashboard Mode Select: TRANSPARENT - content flows on mint bg */
+#game-mode-select {
+    text-align: center;
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: none !important;
-    border-radius: 0;
-    padding: 25px 20px;
-    width: 100%;
-    max-width: 600px;
+    border-radius: 0 !important;
+    padding: 25px 20px !important;
     box-shadow: none !important;
-    display: none;
-    animation: cardAppear 0.4s ease;
-    position: relative;
-    overflow: visible;
+    overflow: visible !important;
 }
 
-.game-card::before {
+#game-mode-select::before {
     display: none !important;
 }
 
@@ -1146,15 +1171,11 @@ body {
     display: block;
 }
 
-#game-mode-select {
-    text-align: center;
-}
-
 .card-title {
     font-family: 'Fredoka One', cursive;
     font-size: 2.2rem;
     margin-bottom: 10px;
-    color: #1a2540 !important;
+    color: white;
     font-weight: 900;
     letter-spacing: 0.5px;
 }
@@ -1167,10 +1188,19 @@ body {
 }
 
 .card-subtitle {
-    color: #2d3748 !important;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 1.1rem;
     margin-bottom: 25px;
     font-weight: 600;
+}
+
+/* Dashboard override - text dark on mint bg */
+#game-mode-select .card-title {
+    color: #1a2540 !important;
+}
+
+#game-mode-select .card-subtitle {
+    color: #2d3748 !important;
 }
 
 /* Mode Buttons Grid */
