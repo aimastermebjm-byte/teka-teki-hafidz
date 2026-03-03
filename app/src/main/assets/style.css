@@ -1125,16 +1125,17 @@ body {
     display: none !important;
 }
 
-/* Mascot Quran icon gets its own mini card */
+/* Mascot Quran icon - SAME style as login icon */
 .mascot-container {
     margin-bottom: 15px;
 }
 
 .mascot {
-    width: 100px;
-    height: 100px;
-    border-radius: 22px;
-    filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
+    width: 140px !important;
+    height: 140px !important;
+    border-radius: 35px !important;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4), 0 0 45px rgba(255, 215, 0, 0.4) !important;
+    animation: float 4s ease-in-out infinite !important;
 }
 
 .game-card.visible {
