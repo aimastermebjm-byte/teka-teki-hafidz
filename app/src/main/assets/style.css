@@ -1152,17 +1152,17 @@ body {
 
 /* Mascot Quran icon - SAME style as login icon */
 .mascot-container {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
 
 .mascot {
-    width: 120px !important;
-    height: 120px !important;
-    border-radius: 30px !important;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3), 0 0 35px rgba(255, 215, 0, 0.3) !important;
+    width: 90px !important;
+    height: 90px !important;
+    border-radius: 22px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
     animation: float 4s ease-in-out infinite !important;
     background: transparent !important;
 }
@@ -1315,47 +1315,54 @@ body {
 /* ========================================
    JUZ INFO, ACHIEVEMENTS, HAFALAN PROGRESS
 ======================================== */
+/* Juz Info - Compact horizontal bar */
 .juz-info {
-    background: rgba(15, 23, 41, 0.6) !important;
-    backdrop-filter: blur(5px) !important;
+    background: linear-gradient(135deg, #1a2540, #243056) !important;
+    backdrop-filter: none !important;
     border: 1px solid rgba(78, 205, 196, 0.2) !important;
-    border-radius: 20px;
-    padding: 18px;
-    margin-top: 20px;
+    border-radius: 50px;
+    padding: 10px 20px;
+    margin-top: 15px;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px;
+    justify-content: center;
 }
 
 .juz-info p {
-    color: rgba(255, 255, 255, 0.9) !important;
-    margin-bottom: 10px;
-    font-size: 0.95rem;
+    color: white !important;
+    margin-bottom: 0 !important;
+    font-size: 0.85rem;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .juz-badges {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-wrap: nowrap;
+    gap: 6px;
     justify-content: center;
 }
 
 .juz-badge {
-    background: rgba(78, 205, 196, 0.2) !important;
+    background: rgba(78, 205, 196, 0.25) !important;
     color: #7ee8dd !important;
-    padding: 8px 16px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border: 1px solid rgba(78, 205, 196, 0.35) !important;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid rgba(78, 205, 196, 0.4) !important;
 }
 
 /* Achievements Section */
 .achievements-section {
-    background: rgba(15, 23, 41, 0.6) !important;
-    backdrop-filter: blur(5px) !important;
-    border: 1px solid rgba(255, 215, 0, 0.15) !important;
-    border-radius: 20px;
-    padding: 18px;
-    margin-top: 18px;
+    background: linear-gradient(135deg, #1a2540, #243056) !important;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(78, 205, 196, 0.15) !important;
+    border-radius: 22px;
+    padding: 16px;
+    margin-top: 12px;
 }
 
 .achievements-section p:first-child {
@@ -1439,8 +1446,8 @@ body {
 }
 
 .unlocked-badge i {
-    font-size: 2.2rem;
-    margin-bottom: 8px;
+    font-size: 2.5rem;
+    margin-bottom: 6px;
     color: #FFD700;
 }
 
@@ -1486,12 +1493,12 @@ body {
 
 /* Hafalan Progress */
 .hafalan-progress-section {
-    background: rgba(15, 23, 41, 0.6) !important;
-    backdrop-filter: blur(5px) !important;
-    border: 1px solid rgba(79, 172, 254, 0.15) !important;
-    border-radius: 20px;
-    padding: 18px;
-    margin-top: 18px;
+    background: linear-gradient(135deg, #1a2540, #243056) !important;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(78, 205, 196, 0.15) !important;
+    border-radius: 50px;
+    padding: 12px 22px;
+    margin-top: 12px;
 }
 
 .hafalan-progress-header {
